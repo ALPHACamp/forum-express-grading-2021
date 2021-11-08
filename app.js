@@ -5,11 +5,14 @@ const exphbs = require('express-handlebars')
 const db = require('./models')
 const session = require('express-session')
 const flash = require('connect-flash')
+const passport = require('./config/passport')
 
 app.engine('hbs', exphbs({ extname: '.hbs', defaultLayout: 'main' }))
 app.set('view engine', 'hbs')
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(flash())
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
@@ -17,7 +20,7 @@ app.use((req, res, next) => {
   next()
 })
 
-require('./routes')(app)
+require('./routes')(app, passport)
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
