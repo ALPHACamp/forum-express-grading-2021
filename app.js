@@ -4,6 +4,7 @@ const db = require('./models')
 const bodyParser = require('body-parser')
 const flash = require('connect-flash')
 const session = require('express-session')
+const passport = require('./config/passport')
 
 const app = express()
 const port = 3000
@@ -12,6 +13,11 @@ const port = 3000
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 app.use(bodyParser.urlencoded({extended: true}))
+
+// setup passport
+app.use(passport.initialize())
+app.use(passport.session())
+
 // setup session and flash
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
