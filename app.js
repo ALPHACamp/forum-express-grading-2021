@@ -9,6 +9,9 @@ const methodOverride = require('method-override')
 
 const app = express()
 const port = process.env.PORT || 3000
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 // 設定:樣板引擎
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
