@@ -31,6 +31,11 @@ module.exports = (app, passport) => {
     authenticatedAdmin,
     adminController.getRestaurants
   );
+  app.post(
+    "/admin/restaurants",
+    authenticatedAdmin,
+    adminController.postRestaurant
+  );
   app.get(
     "/admin/restaurants/create",
     authenticatedAdmin,
