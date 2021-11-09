@@ -1,6 +1,7 @@
 // 載入所需套件
 const db = require('../models')
 const Restaurant = db.Restaurant
+const User = db.User
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
@@ -121,7 +122,26 @@ const adminController = {
             res.redirect('/admin/restaurants')
           })
       })
-  }
+  },
+
+  getUsers: (req, res) => {
+    return User.findAll({ raw: true }).then(users => {
+      return res.render('admin/users', { users })
+    })
+  },
+
+  toggleAdmin: (req, res) => {
+    const id = req.params.id
+    return User.findByPk(id).then(user => {
+      if (user.isAdmin) {
+        req.flash('error_messages', '禁止變更管理者權限')
+        return res.redirect('back')
+      }
+      user.update({ isAdmin: true })
+      req.flash('success_messages', '使用者權限變更成功')
+      return res.redirect('/admin/users')
+    })
+  },
 }
 
 module.exports = adminController
