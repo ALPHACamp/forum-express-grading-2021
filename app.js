@@ -14,12 +14,14 @@ app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 app.use(bodyParser.urlencoded({extended: true}))
 
+// setup session
+app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
+
 // setup passport
 app.use(passport.initialize())
 app.use(passport.session())
 
-// setup session and flash
-app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
+// setup flash
 app.use(flash())
 
 // 把 req.flash 放到 res.locals 裡面
@@ -34,6 +36,6 @@ app.listen(port, () => {
 })
 
 // 引入 routes 並將 app 傳進去，讓 routes 可以用 app 這個物件來指定路由
-require('./routes')(app)
+require('./routes')(app, passport)
 
 module.exports = app
