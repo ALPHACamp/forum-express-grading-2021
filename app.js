@@ -6,6 +6,7 @@ const db = require('./models')
 const session = require('express-session')
 const flash = require('connect-flash')
 const passport = require('./config/passport')
+const methodOverride = require('method-override')
 
 app.engine('hbs', exphbs({ extname: '.hbs', defaultLayout: 'main' }))
 app.set('view engine', 'hbs')
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
   res.locals.user = req.user
   next()
 })
+app.use(methodOverride('_method'))
 
 require('./routes')(app, passport)
 
