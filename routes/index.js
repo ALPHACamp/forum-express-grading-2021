@@ -1,3 +1,6 @@
+const multer = require("multer");
+const upload = multer({ dest: "temp/" });
+
 const restController = require("../controllers/restController.js");
 const adminController = require("../controllers/adminController.js");
 const userController = require("../controllers/userController.js");
@@ -34,6 +37,7 @@ module.exports = (app, passport) => {
   app.post(
     "/admin/restaurants",
     authenticatedAdmin,
+    upload.single("image"),
     adminController.postRestaurant
   );
   app.get(
@@ -54,6 +58,7 @@ module.exports = (app, passport) => {
   app.put(
     "/admin/restaurants/:id",
     authenticatedAdmin,
+    upload.single("image"),
     adminController.putRestaurant
   );
   app.delete(
