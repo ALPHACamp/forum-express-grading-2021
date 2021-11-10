@@ -66,6 +66,7 @@ module.exports = (app, passport) => {
     authenticatedAdmin,
     adminController.deleteRestaurant
   );
+  app.get("/admin/users", authenticatedAdmin, adminController.getUsers);
 
   app.get("/signin", userController.signInPage);
   app.post(

@@ -1,7 +1,10 @@
 const db = require("../models");
 const Restaurant = db.Restaurant;
+const User = db.User;
 const fs = require("fs");
 const imgur = require("imgur-node-api");
+const { useFakeServer } = require("sinon");
+const helpers = require("../_helpers");
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -119,6 +122,11 @@ const adminController = {
       restaurant.destroy().then((restaurant) => {
         res.redirect("/admin/restaurants");
       });
+    });
+  },
+  getUsers: (req, res) => {
+    return User.findAll({ raw: true }).then((users) => {
+      return res.render("admin/users", { users: users });
     });
   },
 };
