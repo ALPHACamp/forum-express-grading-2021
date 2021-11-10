@@ -129,6 +129,22 @@ const adminController = {
       return res.render("admin/users", { users: users });
     });
   },
+  toggleAdmin: (req, res) => {
+    return User.findByPk(req.params.id, { raw: true }).then((user) => {
+      if (user.isAdmin) {
+        req.flash("error_messages", "禁止變更管理者權限");
+        return res.redirect("back");
+      }
+      return user
+        .update({
+          isAdmin: !user.isAdmin,
+        })
+        .then((user) => {
+          req.flash("success_messages", "使用者權限變更成功");
+          res.redirect("/admin/users");
+        });
+    });
+  },
 };
 
 module.exports = adminController;
