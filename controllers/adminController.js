@@ -1,7 +1,9 @@
 const db = require('../models')
 const Restaurant = db.Restaurant
+const User = db.User
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const helper = require('../_helpers')
 
 const adminController = {
   getRestaurants: async (req, res) => {
@@ -96,6 +98,21 @@ const adminController = {
     const restaurant = await Restaurant.findByPk(req.params.id)
     await restaurant.destroy()
     return res.redirect('/admin/restaurants')
+  },
+  getUsers: async (req, res) => {
+    const users = await User.findAll({ raw: true })
+    return res.render('admin/users', { users })
+  },
+  toggleAdmin: async (req, res) => {
+    const user = await User.findByPk(req.params.id)
+    if (user.isAdmin === true) {
+      req.flash('error_messages', '禁止變更管理者權限')
+      res.redirect('back')
+    } else {
+      await user.update({ isAdmin: true })
+      req.flash('success_messages', '使用者權限變更成功')
+      res.redirect('/admin/users')
+    }
   },
 }
 module.exports = adminController

@@ -11,7 +11,21 @@ const flash = require('connect-flash')
 const passport = require('./config/passport')
 const methodOverride = require('method-override')
 
-app.engine('hbs', exphbs({ extname: '.hbs', defaultLayout: 'main' }))
+app.engine(
+  'hbs',
+  exphbs({
+    extname: '.hbs',
+    defaultLayout: 'main',
+    helpers: {
+      identityCheck: function (a) {
+        if (a === 0) {
+          return false
+        }
+        return true
+      },
+    },
+  })
+)
 app.set('view engine', 'hbs')
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
