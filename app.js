@@ -2,6 +2,7 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const db = require('./models')
 const session = require('express-session')
+const passport = require('./config/passport')
 const flash = require('connect-flash')
 
 const app = express()
@@ -16,6 +17,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(flash())
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
@@ -28,6 +31,6 @@ app.listen(port, () => {
 })
 
 // 引入 routes 並將 app 傳進去，讓 routes 可以用 app 這個物件來指定路由
-require('./routes')(app)
+require('./routes')(app, passport)
 
 module.exports = app
