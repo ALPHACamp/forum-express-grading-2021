@@ -4,18 +4,18 @@ const upload = multer({ dest: "temp/" });
 const restController = require("../controllers/restController.js");
 const adminController = require("../controllers/adminController.js");
 const userController = require("../controllers/userController.js");
-const user = require("../models/user.js");
+const helpers = require("../_helpers.js");
 
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated(req)) {
       return next();
     }
     res.redirect("/signin");
   };
   const authenticatedAdmin = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      if (req.user.isAdmin) {
+    if (helpers.ensureAuthenticated(req)) {
+      if (helpers.getUser(req).isAdmin) {
         return next();
       }
       return res.redirect("/");
