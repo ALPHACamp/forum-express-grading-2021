@@ -1,9 +1,11 @@
+const helpers = require('../_helpers')
+
 const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
 
 const multer = require('multer')
-const { helpers } = require('faker')
+// const { helpers } = require('faker')
 const upload = multer({ dest: 'temp/' })
 
 module.exports = (app, passport) => {
