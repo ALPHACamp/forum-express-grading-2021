@@ -16,14 +16,6 @@ app.engine(
   exphbs({
     extname: '.hbs',
     defaultLayout: 'main',
-    helpers: {
-      identityCheck: function (a) {
-        if (a === 0) {
-          return false
-        }
-        return true
-      },
-    },
   })
 )
 app.set('view engine', 'hbs')
