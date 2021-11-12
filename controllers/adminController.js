@@ -13,12 +13,13 @@ const adminController = {
   },
 
   postRestaurant: (req, res) => {
-    const { name, tel, address, opening_hours, description } =req.body
-    
+    const { name, tel, address, opening_hours, description } = req.body
+
     if (!name) {
       req.flash('error_messages', "name didn't exist")
       return res.redirect('back')
     }
+    
     return Restaurant
       .create({ name, tel, address, opening_hours, description })
       .then(() => {
