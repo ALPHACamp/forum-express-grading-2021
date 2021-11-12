@@ -29,9 +29,19 @@ const adminController = {
 
   getRestaurant: (req, res) => {
     const id = req.params.id
+
     return Restaurant
       .findByPk(id, { raw: true })
       .then(restaurant => res.render('admin/restaurant', { restaurant }))
+  },
+
+  editRestaurant: (req, res) => {
+    const id = req.params.id
+
+    return Restaurant
+      .findByPk(id, { raw: true })
+      .then(restaurant => res.render('admin/create', { restaurant }))
+
   }
 }
 
