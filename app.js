@@ -9,6 +9,8 @@ const session = require('express-session')
 const methodOverride = require('method-override')
 const passport = require('./config/passport')
 const db = require('./models')
+const helpers = require('./_helpers')
+
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -22,7 +24,7 @@ app.use(passport.session())
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
-  res.locals.user = req.user
+  res.locals.user = helpers.getUser(req) // 取代 req.user
   next()
 })
 app.use(methodOverride('_method'))
