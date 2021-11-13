@@ -45,4 +45,10 @@ module.exports = (app, passport) => {
   app.get('/signin', userController.signInPage)
   app.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
   app.get('/logout', userController.logout)
+
+  // 顯示使用者清單
+  app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
+  // 修改使用者權限
+  app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)
+
 }

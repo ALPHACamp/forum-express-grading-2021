@@ -1,8 +1,9 @@
+// const fs = require('fs')
+const db = require('../models')
+const Restaurant = db.Restaurant
+const User = db.User
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
-const db = require('../models') 
-const Restaurant = db.Restaurant
-const fs = require('fs')
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -50,7 +51,7 @@ const adminController = {
       return res.redirect('/admin/restaurants')
     })
    }
-},
+  },
 
   getRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id, {raw:true}).then(restaurant => {
@@ -67,33 +68,32 @@ const adminController = {
   },
 
   putRestaurant: (req, res) => {
-  if(!req.body.name){
-    req.flash('error_messages', "name didn't exist")
-    return res.redirect('back')
-  }
+    if(!req.body.name){
+      req.flash('error_messages', "name didn't exist")
+      return res.redirect('back')
+    }
 
-  const { file } = req
+    const { file } = req
     if (file) {
-    imgur.setClientID(IMGUR_CLIENT_ID);
-    imgur.upload(file.path, (err, img) => {
-      return Restaurant.findByPk(req.params.id)
-        .then((restaurant) => {
-          restaurant.update({
-            name: req.body.name,
-            tel: req.body.tel,
-            address: req.body.address,
-            opening_hours: req.body.opening_hours,
-            description: req.body.description,
-            image: file ? img.data.link : restaurant.image,
-          })
+      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.upload(file.path, (err, img) => {
+        return Restaurant.findByPk(req.params.id)
           .then((restaurant) => {
-            req.flash('success_messages', 'restaurant was successfully to update')
-            res.redirect('/admin/restaurants')
+            restaurant.update({
+              name: req.body.name,
+              tel: req.body.tel,
+              address: req.body.address,
+              opening_hours: req.body.opening_hours,
+              description: req.body.description,
+              image: file ? img.data.link : restaurant.image,
+            })
+            .then((restaurant) => {
+              req.flash('success_messages', 'restaurant was successfully to update')
+              res.redirect('/admin/restaurants')
+            })
           })
-        })
-    })
-  }
-  else {
+      })
+    } else {
     return Restaurant.findByPk(req.params.id)
       .then((restaurant) => {
         restaurant.update({
@@ -109,8 +109,8 @@ const adminController = {
           res.redirect('/admin/restaurants')
         })
       })
-  }
-},
+    }
+  },  
 
   deleteRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id)
@@ -120,6 +120,29 @@ const adminController = {
             res.redirect('/admin/restaurants')
           })
       })
+  },
+  // 顯示使用者清單
+  getUsers: (req, res) => {
+    return User.findAll({raw: true}).then(users => {
+      return res.render('admin/users', { users })
+    })
+  },
+  // 修改使用者權限
+  toggleAdmin: (req, res) => {
+    return User.findByPk(req.params.id)
+      .then(user => {
+        if (user.email === 'root@example.com') {
+          req.flash('error_messages','禁止變更管理者權限')
+          return res.redirect('back')
+        }
+        user.isAdmin === false ? (user.isAdmin = true) : (user.isAdmin = false)
+        return user.update({isAdmin: user.isAdmin})
+          .then(user => {
+            req.flash('success_messages', '使用者權限變更成功')
+            res.redirect('/admin/users')
+          })
+      })
+      .catch(e => console.log(e))
   }
 
 }
