@@ -1,6 +1,11 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const db = require('./models')
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 const session = require('express-session')
 const passport = require('./config/passport')
 const flash = require('connect-flash')
@@ -14,7 +19,7 @@ app.set('view engine', 'hbs')
 
 app.use(express.urlencoded({extended: true}))
 app.use(session({
-  secret: 'secret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }))
