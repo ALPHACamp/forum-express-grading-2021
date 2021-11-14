@@ -6,7 +6,6 @@ const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 const helpers = require('../_helpers')
 
-
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
     // if(req.isAuthenticated)
@@ -41,12 +40,15 @@ module.exports = (app, passport) => {
   app.get('/admin/restaurants/:id/edit', authenticatedAdmin, adminController.editRestaurant)
   app.put('/admin/restaurants/:id', authenticatedAdmin, upload.single('image'), adminController.putRestaurant)
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
-  
+
+  app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
+  app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)
+
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.sugnUp)
 
   app.get('/signin', userController.signInPage)
-  app.post('/signin', passport.authenticate('local', { failureRedirect: 'signin', failureFlash: true }), userController.signIn)
-  
+  app.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
+
   app.get('/logout', userController.logout)
 }

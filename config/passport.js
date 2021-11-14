@@ -8,9 +8,9 @@ const User = db.User
 passport.use(new LocalStrategy(
   {
   // customize user field
-  usernameField: 'email',
-  passwordField: 'password',
-  passReqToCallback: true
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
   },
   // authenticate user
   (req, username, password, cb) => {
