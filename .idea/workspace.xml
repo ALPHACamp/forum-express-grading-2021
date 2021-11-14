@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="fix conflict">
-      <change afterPath="$PROJECT_DIR$/views/admin/users.handlebars" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/adminController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/adminController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/restaurants.handlebars" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/restaurants.handlebars" afterDir="false" />
-    </list>
+    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="fix conflict" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
