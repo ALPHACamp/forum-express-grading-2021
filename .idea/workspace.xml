@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Confirm user password and unique email">
-      <change afterPath="$PROJECT_DIR$/config/passport.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-    </list>
+    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Add navbar to show login status" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,7 +40,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1636880826937</updated>
-      <workItem from="1636880830705" duration="7107000" />
+      <workItem from="1636880830705" duration="7408000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1636881433860</created>
@@ -103,7 +98,21 @@
       <option name="project" value="LOCAL" />
       <updated>1636889387422</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Add signInPage, signIn and logout">
+      <created>1636889834112</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1636889834112</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Add navbar to show login status">
+      <created>1636889905399</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1636889905399</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -128,6 +137,8 @@
     <MESSAGE value="Create user model" />
     <MESSAGE value="Add userController and signup page" />
     <MESSAGE value="Confirm user password and unique email" />
-    <option name="LAST_COMMIT_MESSAGE" value="Confirm user password and unique email" />
+    <MESSAGE value="Add signInPage, signIn and logout" />
+    <MESSAGE value="Add navbar to show login status" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add navbar to show login status" />
   </component>
 </project>
