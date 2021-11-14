@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Add navbar to show login status" />
+    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Add authentication before rendering pages" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,7 +40,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1636880826937</updated>
-      <workItem from="1636880830705" duration="7408000" />
+      <workItem from="1636880830705" duration="8115000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1636881433860</created>
@@ -112,7 +112,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636889905399</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Add authentication before rendering pages">
+      <created>1636890084864</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1636890084864</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -139,6 +146,7 @@
     <MESSAGE value="Confirm user password and unique email" />
     <MESSAGE value="Add signInPage, signIn and logout" />
     <MESSAGE value="Add navbar to show login status" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add navbar to show login status" />
+    <MESSAGE value="Add authentication before rendering pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add authentication before rendering pages" />
   </component>
 </project>
