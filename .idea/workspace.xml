@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Add admin restaurant index page" />
+    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Initialize sequelize and connect to database">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,7 +46,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1636880826937</updated>
-      <workItem from="1636880830705" duration="5241000" />
+      <workItem from="1636880830705" duration="6189000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1636881433860</created>
@@ -70,7 +76,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636887616536</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Initialize sequelize and connect to database">
+      <created>1636887896981</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1636887896981</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -91,6 +104,7 @@
     <MESSAGE value="Initialize project" />
     <MESSAGE value="Add restaurant index page" />
     <MESSAGE value="Add admin restaurant index page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add admin restaurant index page" />
+    <MESSAGE value="Initialize sequelize and connect to database" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initialize sequelize and connect to database" />
   </component>
 </project>
