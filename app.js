@@ -3,6 +3,7 @@ const handlebars  = require('express-handlebars');
 const db = require('./models') // 引入資料庫
 const app = express()
 const port = 3000
+app.use(express.urlencoded({extended: true}))
 
 const hbs = handlebars.create({ /* config */ });
 app.engine('handlebars', hbs.engine);
