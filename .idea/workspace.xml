@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Install pg and update production config">
-      <change afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.json" afterDir="false" />
+    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Listen to process.env.PORT &amp; define Procfile">
+      <change beforePath="$PROJECT_DIR$/controllers/adminController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/adminController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +52,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1636880826937</updated>
-      <workItem from="1636880830705" duration="10495000" />
+      <workItem from="1636880830705" duration="10900000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1636881433860</created>
@@ -216,7 +215,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636893398740</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Listen to process.env.PORT &amp; define Procfile">
+      <created>1636894293554</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1636894293554</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -255,6 +261,7 @@
     <MESSAGE value="Install multer and add image upload feature" />
     <MESSAGE value="Add seed data" />
     <MESSAGE value="Install pg and update production config" />
-    <option name="LAST_COMMIT_MESSAGE" value="Install pg and update production config" />
+    <MESSAGE value="Listen to process.env.PORT &amp; define Procfile" />
+    <option name="LAST_COMMIT_MESSAGE" value="Listen to process.env.PORT &amp; define Procfile" />
   </component>
 </project>
