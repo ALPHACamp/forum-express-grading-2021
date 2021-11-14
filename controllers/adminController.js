@@ -1,7 +1,6 @@
 const fs = require('fs')
 const db = require('../models')
 const imgur = require('imgur-node-api')
-const { userInfo } = require('os')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const Restaurant = db.Restaurant
 const User = db.User
@@ -127,18 +126,17 @@ const adminController = {
   },
 
   toggleAdmin: (req, res) => {
-    User.findByPk(req.params.id).then(user => {
-      if (user.email === 'user@example.com') {
+    return User.findByPk(req.params.id).then(user => {
+      if (user.email === 'root@example.com') {
         req.flash('error_messages', '禁止變更管理者權限')
         return res.redirect('back')
       }
-
-      return user.update({
-        isAdmin: !user.isAdmin
-      }).then(user => {
-        req.flash('success_messages', '使用者權限變更成功')
-        res.redirect('/admin/users')
-      })
+        return user.update({
+          isAdmin: !user.isAdmin
+        }).then(user => {
+          req.flash('success_messages', '使用者權限變更成功')
+          res.redirect('/admin/users')
+        })
     })
   }
 }
