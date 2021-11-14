@@ -9,7 +9,7 @@
   "test": {
     "username": "root",
     "password": "password",
-    "database": "forum_test",
+    "database": "forum",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "logging": false
@@ -19,7 +19,7 @@
   },
   "travis": {
     "username": "travis",
-    "database": "forum_test",
+    "database": "forum",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "logging": false
