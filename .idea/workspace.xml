@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Listen to process.env.PORT &amp; define Procfile">
-      <change beforePath="$PROJECT_DIR$/controllers/adminController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/adminController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-    </list>
+    <list default="true" id="bb5854d8-7335-46b8-abad-2be8a8bd8105" name="Default Changelist" comment="Add dotenv" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,7 +48,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1636880826937</updated>
-      <workItem from="1636880830705" duration="10900000" />
+      <workItem from="1636880830705" duration="11217000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1636881433860</created>
@@ -222,7 +218,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636894293554</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Add dotenv">
+      <created>1636894951685</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1636894951685</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,6 +265,7 @@
     <MESSAGE value="Add seed data" />
     <MESSAGE value="Install pg and update production config" />
     <MESSAGE value="Listen to process.env.PORT &amp; define Procfile" />
-    <option name="LAST_COMMIT_MESSAGE" value="Listen to process.env.PORT &amp; define Procfile" />
+    <MESSAGE value="Add dotenv" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add dotenv" />
   </component>
 </project>
