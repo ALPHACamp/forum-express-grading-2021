@@ -16,6 +16,7 @@ app.engine('hbs', exhbs({
 }))
 app.set('view engine', 'hbs')
 app.use(express.urlencoded({ extended: true }))
+app.use('/upload', express.static(__dirname + '/upload'))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(passport.initialize())
 app.use(passport.session())
