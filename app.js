@@ -11,6 +11,12 @@ const port = process.env.PORT || 3000
 // 設定 view engine 使用 handlebars
 app.engine('handlebars', handlebars({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
+
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
 app.use('/upload', express.static(__dirname + '/upload'))
@@ -33,14 +39,7 @@ app.use((req, res, next) => {
 console.log(port)
 console.log(port)
 console.log(port)
-console.log(port)
-console.log(port)
-console.log(port)
-console.log(port)
-console.log(port)
-console.log(port)
-console.log(port)
-console.log(port)
+
 
 require('./routes')(app, passport)
 

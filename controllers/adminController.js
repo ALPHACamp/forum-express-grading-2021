@@ -1,6 +1,9 @@
 const db = require('../models') 
 const Restaurant = db.Restaurant
+const User = db.User
 const fs = require('fs')
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = 'your_client_id'
 
 const adminController = {
     getRestaurants: (req, res) => {
@@ -20,23 +23,40 @@ const adminController = {
     
         const { file } = req // equal to const file = req.file
         if (file) {
-            fs.readFile(file.path, (err, data) => {
-            if (err) console.log('Error: ', err)
-            fs.writeFile(`upload/${file.originalname}`, data, () => {
+            imgur.setClientID(IMGUR_CLIENT_ID);
+            imgur.upload(file.path, (err, img) => {
               return Restaurant.create({
                 name: req.body.name,
                 tel: req.body.tel,
                 address: req.body.address,
                 opening_hours: req.body.opening_hours,
                 description: req.body.description,
-                image: file ? `/upload/${file.originalname}` : null
+                image: file ? img.data.link : null,
               }).then((restaurant) => {
                 req.flash('success_messages', 'restaurant was successfully created')
                 return res.redirect('/admin/restaurants')
               })
             })
-          })
-        } else {
+        }
+        // if (file) {
+        //     fs.readFile(file.path, (err, data) => {
+        //     if (err) console.log('Error: ', err)
+        //     fs.writeFile(`upload/${file.originalname}`, data, () => {
+        //       return Restaurant.create({
+        //         name: req.body.name,
+        //         tel: req.body.tel,
+        //         address: req.body.address,
+        //         opening_hours: req.body.opening_hours,
+        //         description: req.body.description,
+        //         image: file ? `/upload/${file.originalname}` : null
+        //       }).then((restaurant) => {
+        //         req.flash('success_messages', 'restaurant was successfully created')
+        //         return res.redirect('/admin/restaurants')
+        //       })
+        //     })
+        //   })
+        // } 
+        else {
           return Restaurant.create({
             name: req.body.name,
             tel: req.body.tel,
@@ -72,9 +92,8 @@ const adminController = {
     
         const { file } = req
         if (file) {
-          fs.readFile(file.path, (err, data) => {
-            if (err) console.log('Error: ', err)
-            fs.writeFile(`upload/${file.originalname}`, data, () => {
+            imgur.setClientID(IMGUR_CLIENT_ID);
+            imgur.upload(file.path, (err, img) => {
               return Restaurant.findByPk(req.params.id)
                 .then((restaurant) => {
                   restaurant.update({
@@ -83,15 +102,16 @@ const adminController = {
                     address: req.body.address,
                     opening_hours: req.body.opening_hours,
                     description: req.body.description,
-                    image: file ? `/upload/${file.originalname}` : restaurant.image
-                  }).then((restaurant) => {
+                    image: file ? img.data.link : restaurant.image,
+                  })
+                  .then((restaurant) => {
                     req.flash('success_messages', 'restaurant was successfully to update')
                     res.redirect('/admin/restaurants')
                   })
                 })
             })
-          })
-        } else {
+        } 
+        else {
           return Restaurant.findByPk(req.params.id)
             .then((restaurant) => {
               restaurant.update({
@@ -116,6 +136,28 @@ const adminController = {
                 res.redirect('/admin/restaurants')
             })
         })
+    },
+    getUsers: async (req, res) => {
+        const users = await User.findAll({ raw: true })
+        return res.render('admin/users', { users })
+    },
+    toggleAdmin: async (req, res) => {
+        return User.findByPk(req.params.id)
+        .then((user) => {
+            if (user.email === 'root@example.com'){
+                req.flash('error_messages', '禁止變更管理者權限')
+                return res.redirect('back')
+            }
+            else{
+                return user.update({ isAdmin: !user.isAdmin })
+                .then(user => {
+                    req.flash('success_messages', '使用者權限變更成功')
+                    res.redirect('/admin/users')
+                })
+                .catch(error => console.log(error))
+            }
+        })
+        .catch(error => console.log(error))
     }
 }
 module.exports = adminController
