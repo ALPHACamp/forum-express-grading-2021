@@ -105,9 +105,10 @@ describe('# R01', () => {
         // toggleAdmin 正確執行的話，應呼叫 req.flash
         // req.flash 的參數應該要與下列字串一致
         req.flash.calledWith('error_messages','禁止變更管理者權限').should.be.true
-
+        
         // toggleAdmin 執行完畢後，應呼叫 res.redirect 並重新導向上一頁 
         res.redirect.calledWith('back').should.be.true
+        
       })
     })
 

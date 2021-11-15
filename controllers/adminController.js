@@ -125,19 +125,36 @@ const adminController = {
     })
   },
 
-  toggleAdmin: (req, res) => {
-    return User.findByPk(req.params.id).then(user => {
+  // //toggleAdmin Promise寫法
+  // toggleAdmin: (req, res) => { 
+  //   return User.findByPk(req.params.id).then(user => { //拿掉這行的return會導致R01測試失敗
+  //     if (user.email === 'root@example.com') {
+  //       req.flash('error_messages', '禁止變更管理者權限')
+  //       console.log("finish calling error_messages")
+  //       return res.redirect('back')
+  //     }
+  //       return user.update({
+  //         isAdmin: !user.isAdmin
+  //       }).then(user => {
+  //         req.flash('success_messages', '使用者權限變更成功')
+  //         console.log("finish calling success_messages")
+  //         res.redirect('/admin/users')
+  //       })
+  //   })
+  // }
+
+  //toggleAdmin Async await寫法
+    toggleAdmin: async (req, res) => {
+    let user = await User.findByPk(req.params.id)
       if (user.email === 'root@example.com') {
         req.flash('error_messages', '禁止變更管理者權限')
+        console.log("finish calling error_messages")
         return res.redirect('back')
       }
-        return user.update({
-          isAdmin: !user.isAdmin
-        }).then(user => {
-          req.flash('success_messages', '使用者權限變更成功')
-          res.redirect('/admin/users')
-        })
-    })
+      user = await user.update({isAdmin: !user.isAdmin})
+      req.flash('success_messages', '使用者權限變更成功')
+      console.log("finish calling succes_messages")
+      res.redirect('/admin/users')
   }
 }
 
