@@ -14,8 +14,9 @@ const adminController = {
     })
     return res.render('admin/restaurants', { restaurants })
   },
-  createRestaurant: (req, res) => {
-    return res.render('admin/create')
+  createRestaurant: async (req, res) => {
+    const categories = await Category.findAll({ raw: true, nest: true })
+    return res.render('admin/create', { categories })
   },
 
   postRestaurant: async (req, res) => {
@@ -35,6 +36,7 @@ const adminController = {
           opening_hours: req.body.opening_hours,
           description: req.body.description,
           image: file ? img.data.link : null,
+          CategoryId: req.body.categoryId,
         })
         req.flash('success_messages', 'restaurant was successfully created')
         return res.redirect('/admin/restaurants')
@@ -47,6 +49,7 @@ const adminController = {
         opening_hours: req.body.opening_hours,
         description: req.body.description,
         image: null,
+        CategoryId: req.body.categoryId,
       })
       req.flash('success_messages', 'restaurant was successfully created')
       return res.redirect('/admin/restaurants')
@@ -61,7 +64,8 @@ const adminController = {
   },
   editRestaurant: async (req, res) => {
     const restaurant = await Restaurant.findByPk(req.params.id, { raw: true })
-    return res.render('admin/create', { restaurant })
+    const categories = await Category.findAll({ raw: true, nest: true })
+    return res.render('admin/create', { restaurant, categories })
   },
 
   putRestaurant: async (req, res) => {
@@ -82,6 +86,7 @@ const adminController = {
           opening_hours: req.body.opening_hours,
           description: req.body.description,
           image: file ? img.data.link : restaurant.image,
+          CategoryId: req.body.categoryId,
         })
         req.flash('success_messages', 'restaurant was successfully to update')
         res.redirect('/admin/restaurants')
@@ -95,6 +100,7 @@ const adminController = {
         opening_hours: req.body.opening_hours,
         description: req.body.description,
         image: restaurant.image,
+        CategoryId: req.body.categoryId,
       })
       req.flash('success_messages', 'restaurant was successfully to update')
       res.redirect('/admin/restaurants')
