@@ -1,4 +1,3 @@
-const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
@@ -47,11 +46,8 @@ const adminController = {
   },
 
   getRestaurant: (req, res) => {
-    const id = req.params.id
-
-    return Restaurant
-      .findByPk(id, { raw: true })
-      .then(restaurant => res.render('admin/restaurant', { restaurant }))
+    const restaurant = Restaurant.findByPk(req.params.id, { include: [Category] })
+    return res.render('admin/restaurant', { restaurant: restaurant.toJSON() })
   },
 
   editRestaurant: (req, res) => {
@@ -119,7 +115,7 @@ const adminController = {
         req.flash('error_messages', '禁止變更管理者權限')
         return res.redirect('back')
       }
-      
+
       if (user.isAdmin) {
         await user.update({ isAdmin: false })
       } else {
