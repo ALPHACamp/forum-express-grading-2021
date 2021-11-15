@@ -22,7 +22,7 @@ const adminController = {
     const { file } = req
 
     if (!name) {
-      req.flash('error_messages', "name didn't exist")
+      req.flash('error_messages', 'name didn\'t exist')
       return res.redirect('back')
     }
 
@@ -72,7 +72,7 @@ const adminController = {
     const { file } = req
 
     if (!name) {
-      req.flash('error_messages', "name didn't exist")
+      req.flash('error_messages', 'name didn\'t exist')
       return res.redirect('back')
     }
 
