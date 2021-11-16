@@ -43,6 +43,11 @@ module.exports = (app, passport) => {
   app.post('/signup', userController.signUp)
   app.get('/logout', userController.logout)
   app.post('/comments', authenticated, commentController.postComment)
+  app.delete(
+    '/comments/:id',
+    adminAuthenticated,
+    commentController.deleteComment
+  )
 
   app.get('/admin', (req, res) => res.redirect('/admin/restaurants'))
   app.get(

@@ -10,6 +10,11 @@ const commentController = {
     })
     res.redirect(`/restaurants/${req.body.restaurantId}`)
   },
+  deleteComment: async (req, res) => {
+    let comment = await Comment.findByPk(req.params.id)
+    await comment.destroy()
+    res.redirect(`/restaurants/${comment.RestaurantId}`)
+  },
 }
 
 module.exports = commentController
