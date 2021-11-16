@@ -18,6 +18,7 @@ const port = process.env.PORT || 3000
 app.engine('hbs', exhbs({
   defaultLayout: 'main',
   extname: 'hbs',
+  helpers: require('./config/handlebars-helper')
 }))
 app.set('view engine', 'hbs')
 app.use(express.urlencoded({ extended: true }))
