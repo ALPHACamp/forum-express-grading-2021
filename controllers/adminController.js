@@ -111,7 +111,7 @@ const adminController = {
   deleteRestaurant: async (req, res) => {
     const restaurant = await Restaurant.findByPk(req.params.id)
     await restaurant.destroy()
-    req.flash('success_messages', 'restaurant was successfully destroyed')
+    req.flash('success_messages', 'restaurant was successfully deleted')
     return res.redirect('/admin/restaurants')
   },
 
