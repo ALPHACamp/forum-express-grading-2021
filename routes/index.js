@@ -5,6 +5,7 @@ const helpers = require('../_helpers')
 const restController = require('../controllers/restController')
 const adminController = require('../controllers/adminController')
 const userController = require('../controllers/userController')
+const categoryController = require('../controllers/categoryController')
 
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
@@ -39,6 +40,8 @@ module.exports = (app, passport) => {
 
   app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)
+
+  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
 
 
   app.get('/signup', userController.signUpPage)
