@@ -3,7 +3,7 @@ const faker = require('faker')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Restaurants', 
+    await queryInterface.bulkInsert('Restaurants',
       Array.from({ length: 50 }, (d, i) => ({ //回傳資料物件時，有包了一個括號回傳物件
         name: faker.name.findName(),
         tel: faker.phone.phoneNumber(),
@@ -12,7 +12,8 @@ module.exports = {
         image: `https://loremflickr.com/320/240/restaurant,food/?random=${Math.random() * 100}`,
         description: faker.lorem.text(),
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        CategoryId: Math.floor(Math.random() * 6) * 10 + 1
       }))
     )
   },
