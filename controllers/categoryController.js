@@ -29,6 +29,11 @@ let categoryController = {
     await category.update(req.body)
     res.redirect('/admin/categories')
   },
+  deleteCategory: async (req, res) => {
+    let category = await Category.findByPk(req.params.id)
+    await category.destroy()
+    res.redirect('/admin/categories')
+  },
 }
 
 module.exports = categoryController

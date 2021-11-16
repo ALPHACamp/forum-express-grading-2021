@@ -101,4 +101,9 @@ module.exports = (app, passport) => {
     adminAuthenticated,
     categoryController.putCategory
   )
+  app.delete(
+    '/admin/categories/:id',
+    adminAuthenticated,
+    categoryController.deleteCategory
+  )
 }
