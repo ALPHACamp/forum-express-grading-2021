@@ -3,47 +3,64 @@ const Category = db.Category
 
 const categoryController = {
   getCategories: async (req, res) => {
-    const categories = await Category.findAll({ raw: true, nest: true })
+    try {
+      const categories = await Category.findAll({ raw: true, nest: true })
 
-    if (req.params.id) {
-      const category = await Category.findByPk(req.params.id)
-      return res.render('admin/categories', { categories, category: category.toJSON() })
-    } else {
+      if (req.params.id) {
+        const category = await Category.findByPk(req.params.id)
+        return res.render('admin/categories', { categories, category: category.toJSON() })
+      }
+
       return res.render('admin/categories', { categories })
+    } catch (err) {
+      console.error(err)
     }
   },
 
   postCategory: async (req, res) => {
-    const { name } = req.body
+    try {
+      const { name } = req.body
 
-    if (!name) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
+      if (!name) {
+        req.flash('error_messages', 'name didn\'t exist')
+        return res.redirect('back')
+      }
+
+      await Category.create({ name })
+      req.flash('success_messages', 'category was successfully created')
+      return res.redirect('/admin/categories')
+    } catch (err) {
+      console.error(err)
     }
-
-    await Category.create({ name })
-    req.flash('success_messages', 'category was successfully created')
-    return res.redirect('/admin/categories')
   },
 
   putCategory: async (req, res) => {
-    const { name } = req.body
+    try {
+      const { name } = req.body
 
-    if (!name) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
+      if (!name) {
+        req.flash('error_messages', 'name didn\'t exist')
+        return res.redirect('back')
+      }
+
+      const category = await Category.findByPk(req.params.id)
+      await category.update({ name })
+      req.flash('success_messages', 'category was successfully edited')
+      return res.redirect('/admin/categories')
+    } catch (err) {
+      console.error(err)
     }
-
-    const category = await Category.findByPk(req.params.id)
-    await category.update({ name })
-    return res.redirect('/admin/categories')
   },
 
   deleteCategory: async (req, res) => {
-    const category = await Category.findByPk(req.params.id)
-    await category.destroy()
-    req.flash('success_messages', 'category was successfully deleted')
-    return res.redirect('/admin/categories')
+    try {
+      const category = await Category.findByPk(req.params.id)
+      await category.destroy()
+      req.flash('success_messages', 'category was successfully deleted')
+      return res.redirect('/admin/categories')
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 

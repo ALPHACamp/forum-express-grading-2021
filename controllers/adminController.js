@@ -8,77 +8,119 @@ const User = db.User
 
 const adminController = {
   getRestaurants: async (req, res) => {
-    const restaurants = await Restaurant.findAll({ raw: true, nest: true, include: [Category] })
-    return res.render('admin/restaurants', { restaurants })
+    try {
+      const restaurants = await Restaurant.findAll({
+        raw: true,
+        nest: true,
+        include: [Category]
+      })
+      return res.render('admin/restaurants', { restaurants })
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   createRestaurant: async (req, res) => {
-    const categories = await Category.findAll({ raw: true, nest: true })
-    return res.render('admin/create', { categories })
+    try {
+      const categories = await Category.findAll({
+        raw: true,
+        nest: true
+      })
+      return res.render('admin/create', { categories })
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   postRestaurant: async (req, res) => {
-    const { name, tel, address, opening_hours, description, categoryId } = req.body
-    const { file } = req
+    try {
+      const { name, tel, address, opening_hours, description, categoryId } = req.body
+      const { file } = req
 
-    if (!name) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
-    }
+      if (!name) {
+        req.flash('error_messages', 'name didn\'t exist')
+        return res.redirect('back')
+      }
 
-    if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID)
-      imgur.upload(file.path, async (err, img) => {
+      if (file) {
+        imgur.setClientID(IMGUR_CLIENT_ID)
+        imgur.upload(file.path, async (err, img) => {
+          await Restaurant.create({
+            name,
+            tel,
+            address,
+            opening_hours,
+            description,
+            image: file ? img.data.link : null,
+            CategoryId: categoryId
+          })
+        })
+      } else {
         await Restaurant.create({
           name,
           tel,
           address,
           opening_hours,
           description,
-          image: file ? img.data.link : null,
+          image: null,
           CategoryId: categoryId
         })
-        req.flash('success_messages', 'restaurant was successfully created')
-        return res.redirect('/admin/restaurants')
-      })
-    } else {
-      await Restaurant.create({
-        name,
-        tel,
-        address,
-        opening_hours,
-        description,
-        image: null,
-        CategoryId: categoryId
-      })
+      }
+
       req.flash('success_messages', 'restaurant was successfully created')
       return res.redirect('/admin/restaurants')
+    } catch (err) {
+      console.error(err)
     }
   },
 
   getRestaurant: async (req, res) => {
-    const restaurant = await Restaurant.findByPk(req.params.id, { include: [Category] })
-    return res.render('admin/restaurant', { restaurant: restaurant.toJSON() })
+    try {
+      const restaurant = await Restaurant.findByPk(req.params.id, { include: [Category] })
+      return res.render('admin/restaurant', { restaurant: restaurant.toJSON() })
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   editRestaurant: async (req, res) => {
-    const categories = await Category.findAll({ raw: true, nest: true })
-    const restaurant = await Restaurant.findByPk(req.params.id)
-    return res.render('admin/create', { categories, restaurant: restaurant.toJSON() })
+    try {
+      const categories = await Category.findAll({
+        raw: true,
+        nest: true
+      })
+      const restaurant = await Restaurant.findByPk(req.params.id)
+      return res.render('admin/create', { categories, restaurant: restaurant.toJSON() })
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   putRestaurant: async (req, res) => {
-    const { name, tel, address, opening_hours, description, categoryId } = req.body
-    const { file } = req
+    try {
+      const { name, tel, address, opening_hours, description, categoryId } = req.body
+      const { file } = req
 
-    if (!name) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
-    }
+      if (!name) {
+        req.flash('error_messages', 'name didn\'t exist')
+        return res.redirect('back')
+      }
 
-    if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID)
-      imgur.upload(file.path, async (err, img) => {
+      if (file) {
+        imgur.setClientID(IMGUR_CLIENT_ID)
+        imgur.upload(file.path, async (err, img) => {
+          const restaurant = await Restaurant.findByPk(req.params.id)
+          await restaurant.update({
+            name,
+            tel,
+            address,
+            opening_hours,
+            description,
+            image: file ? img.data.link : restaurant.image,
+            CategoryId: categoryId
+          })
+        })
+      } else {
         const restaurant = await Restaurant.findByPk(req.params.id)
         await restaurant.update({
           name,
@@ -86,38 +128,36 @@ const adminController = {
           address,
           opening_hours,
           description,
-          image: file ? img.data.link : restaurant.image,
+          image: restaurant.image,
           CategoryId: categoryId
         })
-        req.flash('success_messages', 'restaurant was successfully to update')
-        return res.redirect('/admin/restaurants')
-      })
-    } else {
-      const restaurant = await Restaurant.findByPk(req.params.id)
-      await restaurant.update({
-        name,
-        tel,
-        address,
-        opening_hours,
-        description,
-        image: restaurant.image,
-        CategoryId: categoryId
-      })
+      }
+
       req.flash('success_messages', 'restaurant was successfully to update')
       return res.redirect('/admin/restaurants')
+    } catch (err) {
+      console.error(err)
     }
   },
 
   deleteRestaurant: async (req, res) => {
-    const restaurant = await Restaurant.findByPk(req.params.id)
-    await restaurant.destroy()
-    req.flash('success_messages', 'restaurant was successfully deleted')
-    return res.redirect('/admin/restaurants')
+    try {
+      const restaurant = await Restaurant.findByPk(req.params.id)
+      await restaurant.destroy()
+      req.flash('success_messages', 'restaurant was successfully deleted')
+      return res.redirect('/admin/restaurants')
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   getUsers: async (req, res) => {
-    const users = await User.findAll({ raw: true })
-    return res.render('admin/users', { users })
+    try {
+      const users = await User.findAll({ raw: true })
+      return res.render('admin/users', { users })
+    } catch (err) {
+      console.error(err)
+    } 
   },
 
   toggleAdmin: async (req, res) => {
