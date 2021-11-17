@@ -4,6 +4,7 @@ const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
 const categoryController = require('../controllers/categoryController.js')
+const commentController = require('../controllers/commentController.js')
 
 const multer = require('multer')
 // const { helpers } = require('faker')
@@ -59,5 +60,7 @@ module.exports = (app, passport) => {
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
 
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
+  
+  app.post('/comments', authenticated, commentController.postComment)
 
 }
