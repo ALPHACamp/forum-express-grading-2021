@@ -1,0 +1,58 @@
+<style>
+  @media (min-width: 425px) {
+    .card-columns {
+      column-count: 2;
+    }
+  }
+
+  @media (min-width: 576px) {
+    .card-columns {
+      column-count: 3;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .card-columns {
+      column-count: 4;
+    }
+  }
+</style>
+
+<div class="row">
+  <div class="col-md-4">
+    {{#if user.image}}
+    <img class="img-responsive center-block" src="{{user.image}}" style="width: 250x;margin-bottom: 25px;">
+    {{else}}
+    <div class=" center-block" style="width: 250px; height:250px;margin-bottom: 25px;background-color:darkgrey"></div>
+    {{/if}}
+  </div>
+  <div class="col-md-8">
+    <h1>{{user.name}}</h1>
+    <p>{{user.email}}</p>
+    <p><strong>{{count}}</strong> 已評論餐廳</p>
+    <a href="/users/{{user.id}}/edit" class="btn btn-primary">編輯</a>
+  </div>
+</div>
+<br />
+<div class="card">
+  <div class="card-header">
+    <strong>{{count}}</strong> 已評論餐廳
+  </div>
+  <div class="card-columns">
+    {{#ifCond 0 count}}
+    <h5 class="card-title">沒有評論</h5>
+    {{/ifCond}}
+    {{#each comments}}
+    <div class="card border rounded" style="box-sizing: border-box;">
+      <a href="/restaurants/{{this.Restaurant.id}}">
+        <img class="card-img-top p-1" src="{{this.Restaurant.image}}">
+        <div class="card-body">
+          <h5 class="card-title">{{this.Restaurant.name}}</h5>
+        </div>
+      </a>
+    </div>
+    {{/each}}
+  </div>
+</div>
+<br />
+<a class="d-block text-center" href="javascript:history.back()">回上一頁</a>
