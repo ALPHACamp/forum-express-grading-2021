@@ -17,42 +17,50 @@ const restController = {
       categoryId = Number(req.query.categoryId)
       whereQuery.CategoryId = categoryId
     }
-    let result = await Restaurant.findAndCountAll({
-      include: Category,
-      where: whereQuery,
-      offset,
-      limit: pageLimit,
-    })
-    const page = Number(req.query.page)
-    const pages = Math.ceil(result.count / pageLimit)
-    const totalPage = Array.from({ length: pages }).map(
-      (item, index) => index + 1
-    )
-    const prev = page - 1 < 1 ? 1 : page - 1
-    const next = page + 1 > pages ? pages : page + 1
-    const data = result.rows.map((r) => ({
-      ...r.dataValues,
-      description: r.dataValues.description.substring(0, 50),
-    }))
-    let categories = await Category.findAll({
-      raw: true,
-      nest: true,
-    })
-    return res.render('restaurants', {
-      restaurants: data,
-      categories,
-      categoryId,
-      page,
-      totalPage,
-      prev,
-      next,
-    })
+    try {
+      let result = await Restaurant.findAndCountAll({
+        include: Category,
+        where: whereQuery,
+        offset,
+        limit: pageLimit,
+      })
+      const page = Number(req.query.page)
+      const pages = Math.ceil(result.count / pageLimit)
+      const totalPage = Array.from({ length: pages }).map(
+        (item, index) => index + 1
+      )
+      const prev = page - 1 < 1 ? 1 : page - 1
+      const next = page + 1 > pages ? pages : page + 1
+      const data = result.rows.map((r) => ({
+        ...r.dataValues,
+        description: r.dataValues.description.substring(0, 50),
+      }))
+      let categories = await Category.findAll({
+        raw: true,
+        nest: true,
+      })
+      return res.render('restaurants', {
+        restaurants: data,
+        categories,
+        categoryId,
+        page,
+        totalPage,
+        prev,
+        next,
+      })
+    } catch (err) {
+      console.log(err)
+    }
   },
   getRestaurant: async (req, res) => {
-    let restaurant = await Restaurant.findByPk(req.params.id, {
-      include: [Category, { model: Comment, include: [User] }],
-    })
-    return res.render('restaurant', { restaurant: restaurant.toJSON() })
+    try {
+      let restaurant = await Restaurant.findByPk(req.params.id, {
+        include: [Category, { model: Comment, include: [User] }],
+      })
+      return res.render('restaurant', { restaurant: restaurant.toJSON() })
+    } catch (err) {
+      console.log(err)
+    }
   },
 }
 module.exports = restController

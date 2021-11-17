@@ -3,17 +3,25 @@ const Comment = db.Comment
 
 const commentController = {
   postComment: async (req, res) => {
-    await Comment.create({
-      text: req.body.text,
-      RestaurantId: req.body.restaurantId,
-      UserId: req.user.id,
-    })
-    res.redirect(`/restaurants/${req.body.restaurantId}`)
+    try {
+      await Comment.create({
+        text: req.body.text,
+        RestaurantId: req.body.restaurantId,
+        UserId: req.user.id,
+      })
+      res.redirect(`/restaurants/${req.body.restaurantId}`)
+    } catch (err) {
+      console.log(err)
+    }
   },
   deleteComment: async (req, res) => {
-    let comment = await Comment.findByPk(req.params.id)
-    await comment.destroy()
-    res.redirect(`/restaurants/${comment.RestaurantId}`)
+    try {
+      let comment = await Comment.findByPk(req.params.id)
+      await comment.destroy()
+      res.redirect(`/restaurants/${comment.RestaurantId}`)
+    } catch (err) {
+      console.log(err)
+    }
   },
 }
 
