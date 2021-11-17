@@ -2,6 +2,9 @@
   "name": "forum-express-grading",
   "version": "2.0.0",
   "main": "_helpers.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
