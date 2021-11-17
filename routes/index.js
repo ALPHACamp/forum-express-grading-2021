@@ -114,4 +114,12 @@ module.exports = (app, passport) => {
     adminAuthenticated,
     categoryController.deleteCategory
   )
+  app.get('/users/:id', authenticated, userController.getUser)
+  app.get('/users/:id/edit', authenticated, userController.editUser)
+  app.put(
+    '/users/:id',
+
+    upload.single('image'),
+    userController.putUser
+  )
 }
