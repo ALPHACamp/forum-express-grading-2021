@@ -1,6 +1,7 @@
 const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
+const categoryController = require('../controllers/categoryController.js')
 const helpers = require('../_helpers')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/'})
@@ -8,7 +9,7 @@ const upload = multer({ dest: 'temp/'})
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
     // if(req.isAuthenticated)
-    if (helpers.ensureAuthenticated(req)) {
+    if (helpers.ensureAuthenticated(req)) { //配合run test，使用涵式包住
       return next()
     }
     res.redirect('/signin')
@@ -16,7 +17,7 @@ module.exports = (app, passport) => {
 
   const authenticatedAdmin = (req, res, next) => {
     // if(req.isAuthenticated)
-    if (helpers.ensureAuthenticated(req)) {
+    if (helpers.ensureAuthenticated(req)) { //配合run test，使用涵式包住
       if (helpers.getUser(req).isAdmin) { return next() }
       return res.redirect('/')
     }
@@ -37,6 +38,8 @@ module.exports = (app, passport) => {
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
   app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)
+  //admin category
+  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
 
   //account login & register
   app.get('/signup', userController.signUpPage)
