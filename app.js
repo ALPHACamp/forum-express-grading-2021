@@ -22,10 +22,9 @@ app.engine('hbs', exphbs({
   extname: '.hbs',
   helpers: require('./config/handlebars-helpers') 
 }))
-
-app.use(express.static(__dirname + '../public'));
-
 app.set('view engine', 'hbs')
+
+
 app.use(bodyParser.urlencoded({extended: true}))
 // setup session
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
