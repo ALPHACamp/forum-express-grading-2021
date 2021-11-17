@@ -13,6 +13,16 @@ const commentController = {
     } catch (err) {
       console.error(err)
     }
+  },
+
+  deleteComment: async (req, res) => {
+    try {
+      const comment = await Comment.findByPk(req.params.id)
+      await comment.destroy()
+      return res.redirect(`/restaurants/${comment.RestaurantId}`)
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 
