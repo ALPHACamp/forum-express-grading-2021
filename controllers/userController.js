@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
+const Comment = db.Comment
 const User = db.User
+const Restaurant = db.Restaurant
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
@@ -53,8 +55,12 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: async (req, res) => {
-    const user = await User.findByPk(req.params.id)
-    return res.render('profile', { user: user.toJSON() })
+    const user = (
+      await User.findByPk(req.params.id, {
+        include: { model: Comment, include: Restaurant },
+      })
+    ).toJSON()
+    return res.render('profile', { user: user })
   },
   editUser: async (req, res) => {
     const user = await User.findByPk(req.params.id)

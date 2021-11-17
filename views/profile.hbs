@@ -9,4 +9,17 @@
       </div>
     </div>
   </div>
+
+  <div class="card mt-2">
+    <h3 class="mx-auto mb-3 mt-2">評論過的餐廳</h3>
+    <div class="d-flex">
+      {{#if user.Comments}}
+      {{#each user.Comments}}
+      <a href="/restaurants/{{this.RestaurantId}}" class="ml-2">
+        <img src="{{this.Restaurant.image}}" alt="" style="width: 100px; height: 100px; border-radius:50%">
+      </a>
+      {{/each}}
+      {{/if}}
+    </div>
+  </div>
 </div>
