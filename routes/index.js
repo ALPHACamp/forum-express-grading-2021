@@ -14,14 +14,14 @@ module.exports = (app, passport) => {
     if (helpers.ensureAuthenticated(req)) {
       return next()
     }
-    res.redirect('/signin')
+    return res.redirect('/signin')
   }
   const authenticatedAdmin = (req, res, next) => {
     if (helpers.ensureAuthenticated(req)) {
       if (helpers.getUser(req).isAdmin) { return next() }
       return res.redirect('/')
     }
-    res.redirect('/signin')
+    return res.redirect('/signin')
   }
 
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
@@ -30,6 +30,10 @@ module.exports = (app, passport) => {
   
   app.post('/comments', authenticated, commentController.postComment)
   app.delete('/comments/:id', authenticated, commentController.deleteComment)
+
+  app.get('/users/:id', authenticated, userController.getUser)
+  app.get('/users/:id/edit', authenticated, userController.editUser)
+  app.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
 
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
   app.get('/admin/restaurants', authenticatedAdmin, adminController.getRestaurants)
