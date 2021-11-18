@@ -1,11 +1,15 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require("express");
+const exphbs = require("express-handlebars"); // 引入 handlebars
+const app = express();
+const port = 3000;
+
+app.engine("hbs", exphbs({ defaultLayout: "main", extname: "hbs" })); // Handlebars 註冊樣板引擎
+app.set("view engine", "hbs"); // 設定使用 Handlebars 做為樣板引擎
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+	console.log(`Example app listening on port ${port}!`);
+});
 
-require('./routes')(app)
+require("./routes")(app);
 
-module.exports = app
+module.exports = app;
