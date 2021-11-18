@@ -57,6 +57,8 @@ const restController = {
       let restaurant = await Restaurant.findByPk(req.params.id, {
         include: [Category, { model: Comment, include: [User] }],
       })
+      let viewCounts = restaurant.viewCounts + 1
+      await restaurant.update({ viewCounts })
       return res.render('restaurant', { restaurant: restaurant.toJSON() })
     } catch (err) {
       console.log(err)
@@ -79,6 +81,18 @@ const restController = {
         include: [User, Restaurant],
       })
       return res.render('feeds', { restaurants, comments })
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  getDashBoard: async (req, res) => {
+    try {
+      const restaurant = (
+        await Restaurant.findByPk(req.params.id, {
+          include: [Comment, Category],
+        })
+      ).toJSON()
+      res.render('dashboard', { restaurant })
     } catch (err) {
       console.log(err)
     }

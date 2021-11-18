@@ -28,6 +28,11 @@ module.exports = (app, passport) => {
   app.get('/restaurants/feeds', authenticated, restController.getFeeds)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   app.get(
+    '/restaurants/:id/dashboard',
+    authenticated,
+    restController.getDashBoard
+  )
+  app.get(
     '/signin',
 
     userController.signInPage
