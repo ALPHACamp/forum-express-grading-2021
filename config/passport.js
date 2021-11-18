@@ -11,6 +11,7 @@ passport.use(
       passwordField: 'password',
       passReqToCallback: true,
     },
+
     async (req, username, password, cb) => {
       const user = await User.findOne({ where: { email: username } })
       if (!user)
