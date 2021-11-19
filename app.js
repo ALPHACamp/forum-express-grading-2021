@@ -9,7 +9,10 @@ const app = express()
 const port = process.env.PORT || 3000
 
 // 設定 view engine 使用 handlebars
-app.engine('handlebars', handlebars({defaultLayout: 'main'}))
+app.engine('handlebars', handlebars({
+  defaultLayout: 'main',
+  helpers: require('./config/handlebars-helpers')
+}))
 app.set('view engine', 'handlebars')
 
 
@@ -30,7 +33,7 @@ app.use(flash())
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
-  console.log(req.user)
+  // console.log(req.user)
   res.locals.user = req.user
   next()
 })

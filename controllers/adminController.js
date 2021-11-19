@@ -1,5 +1,6 @@
 const db = require('../models') 
 const Restaurant = db.Restaurant
+const Category = db.Category
 const User = db.User
 const fs = require('fs')
 const imgur = require('imgur-node-api')
@@ -7,20 +8,31 @@ const IMGUR_CLIENT_ID = 'your_client_id'
 
 const adminController = {
     getRestaurants: (req, res) => {
-        return Restaurant.findAll({raw: true})
-        .then(restaurants => {
-          return res.render('admin/restaurants', {restaurants: restaurants })
-        })
+      return Restaurant.findAll({
+        raw: true,
+        nest: true, 
+        include: [Category]
+      })
+      .then(restaurants => {
+        // console.log(restaurants[0]) // 加入 console 觀察資料的變化
+        return res.render('admin/restaurants', {restaurants: restaurants })
+      })
     },
     createRestaurant: (req, res) => {
-        return res.render('admin/create')
+      Category.findAll({ 
+        raw: true,
+        nest: true
+      }).then(categories => {
+        return res.render('admin/create', {
+          categories: categories
+        })
+      })
     },
     postRestaurant: (req, res) => {
         if (!req.body.name) {
           req.flash('error_messages', "name didn't exist")
           return res.redirect('back')
         }
-    
         const { file } = req // equal to const file = req.file
         if (file) {
             imgur.setClientID(IMGUR_CLIENT_ID);
@@ -32,30 +44,13 @@ const adminController = {
                 opening_hours: req.body.opening_hours,
                 description: req.body.description,
                 image: file ? img.data.link : null,
+                CategoryId: req.body.categoryId
               }).then((restaurant) => {
                 req.flash('success_messages', 'restaurant was successfully created')
                 return res.redirect('/admin/restaurants')
               })
             })
         }
-        // if (file) {
-        //     fs.readFile(file.path, (err, data) => {
-        //     if (err) console.log('Error: ', err)
-        //     fs.writeFile(`upload/${file.originalname}`, data, () => {
-        //       return Restaurant.create({
-        //         name: req.body.name,
-        //         tel: req.body.tel,
-        //         address: req.body.address,
-        //         opening_hours: req.body.opening_hours,
-        //         description: req.body.description,
-        //         image: file ? `/upload/${file.originalname}` : null
-        //       }).then((restaurant) => {
-        //         req.flash('success_messages', 'restaurant was successfully created')
-        //         return res.redirect('/admin/restaurants')
-        //       })
-        //     })
-        //   })
-        // } 
         else {
           return Restaurant.create({
             name: req.body.name,
@@ -63,7 +58,8 @@ const adminController = {
             address: req.body.address,
             opening_hours: req.body.opening_hours,
             description: req.body.description,
-            image: null
+            image: null,
+            CategoryId: req.body.categoryId
           }).then((restaurant) => {
             req.flash('success_messages', 'restaurant was successfully created')
             return res.redirect('/admin/restaurants')
@@ -71,25 +67,40 @@ const adminController = {
         }
     },
     getRestaurant: (req, res) => {
-        return Restaurant.findByPk(req.params.id, {raw:true})
-        .then(restaurant => {
-            return res.render('admin/restaurant', {
-                restaurant: restaurant
-            })
+      return Restaurant.findByPk(req.params.id, {
+        raw:true,
+        nest: true, 
+        include: [Category]
+      })
+      .then(restaurant => {
+        // console.log(restaurant)
+        return res.render('admin/restaurant', {
+          restaurant: restaurant
         })
+      })
     },
     editRestaurant: (req, res) => {
-        return Restaurant.findByPk(req.params.id, {raw:true})
-        .then(restaurant => {
-            res.render('admin/create', { restaurant: restaurant } )
+      Category.findAll({
+        raw: true,
+        nest: true
+      })
+      .then(categories => {
+        return Restaurant.findByPk(req.params.id, {
+          raw: true,
         })
+        .then(restaurant => {
+          return res.render('admin/create', {
+            categories: categories, 
+            restaurant: restaurant
+          })
+        })
+      })
     },
     putRestaurant: (req, res) => {
         if (!req.body.name) {
           req.flash('error_messages', "name didn't exist")
           return res.redirect('back')
         }
-    
         const { file } = req
         if (file) {
             imgur.setClientID(IMGUR_CLIENT_ID);
@@ -103,6 +114,7 @@ const adminController = {
                     opening_hours: req.body.opening_hours,
                     description: req.body.description,
                     image: file ? img.data.link : restaurant.image,
+                    CategoryId: req.body.categoryId
                   })
                   .then((restaurant) => {
                     req.flash('success_messages', 'restaurant was successfully to update')
@@ -120,7 +132,8 @@ const adminController = {
                 address: req.body.address,
                 opening_hours: req.body.opening_hours,
                 description: req.body.description,
-                image: restaurant.image
+                image: restaurant.image,
+                CategoryId: req.body.categoryId
               }).then((restaurant) => {
                 req.flash('success_messages', 'restaurant was successfully to update')
                 res.redirect('/admin/restaurants')
