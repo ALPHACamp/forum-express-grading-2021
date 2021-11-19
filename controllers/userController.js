@@ -88,7 +88,7 @@ const userController = {
               email: req.body.email,
               image: file ? img.data.link : user.image
             }).then(user => {
-              req.flash('success_messages', 'user was successfully to update')
+              req.flash('success_messages', '使用者資料編輯成功')
               return res.redirect(`/users/${req.params.id}`)
             })
           })
@@ -102,7 +102,7 @@ const userController = {
             image: user.image
           })
             .then(user => {
-              req.flash('success_messages', 'user was successfully to update')
+              req.flash('success_messages', '使用者資料編輯成功')
               return res.redirect(`/users/${req.params.id}`)
             })
         })
