@@ -16,7 +16,7 @@ app.engine(
   exphbs({
     extname: '.hbs',
     defaultLayout: 'main',
-    helpers: require('./config/handlebars-helpers'),
+    helpers: require('./config/handlebars-helpers')
   })
 )
 app.set('view engine', 'hbs')

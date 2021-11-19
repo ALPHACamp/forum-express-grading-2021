@@ -7,12 +7,12 @@ module.exports = {
       allowNull: false,
       references: {
         model: 'Categories',
-        key: 'id',
-      },
+        key: 'id'
+      }
     })
   },
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn('Restaurants', 'CategoryId')
-  },
+  }
 }

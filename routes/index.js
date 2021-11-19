@@ -41,7 +41,7 @@ module.exports = (app, passport) => {
     '/signin',
     passport.authenticate('local', {
       failureRedirect: '/signin',
-      failureFlash: true,
+      failureFlash: true
     }),
     userController.signIn
   )

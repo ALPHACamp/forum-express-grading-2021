@@ -11,7 +11,7 @@ const adminController = {
       const restaurants = await Restaurant.findAll({
         raw: true,
         nest: true,
-        include: [Category],
+        include: [Category]
       })
       return res.render('admin/restaurants', { restaurants })
     } catch (err) {
@@ -45,7 +45,7 @@ const adminController = {
             opening_hours: req.body.opening_hours,
             description: req.body.description,
             image: file ? img.data.link : null,
-            CategoryId: req.body.categoryId,
+            CategoryId: req.body.categoryId
           })
           req.flash('success_messages', 'restaurant was successfully created')
           return res.redirect('/admin/restaurants')
@@ -58,7 +58,7 @@ const adminController = {
           opening_hours: req.body.opening_hours,
           description: req.body.description,
           image: null,
-          CategoryId: req.body.categoryId,
+          CategoryId: req.body.categoryId
         })
         req.flash('success_messages', 'restaurant was successfully created')
         return res.redirect('/admin/restaurants')
@@ -71,7 +71,7 @@ const adminController = {
   getRestaurant: async (req, res) => {
     try {
       const restaurant = await Restaurant.findByPk(req.params.id, {
-        include: [Category],
+        include: [Category]
       })
       return res.render('admin/restaurant', { restaurant: restaurant.toJSON() })
     } catch (err) {
@@ -107,7 +107,7 @@ const adminController = {
             opening_hours: req.body.opening_hours,
             description: req.body.description,
             image: file ? img.data.link : restaurant.image,
-            CategoryId: req.body.categoryId,
+            CategoryId: req.body.categoryId
           })
           req.flash('success_messages', 'restaurant was successfully to update')
           res.redirect('/admin/restaurants')
@@ -121,7 +121,7 @@ const adminController = {
           opening_hours: req.body.opening_hours,
           description: req.body.description,
           image: restaurant.image,
-          CategoryId: req.body.categoryId,
+          CategoryId: req.body.categoryId
         })
         req.flash('success_messages', 'restaurant was successfully to update')
         res.redirect('/admin/restaurants')
@@ -149,7 +149,7 @@ const adminController = {
   },
   toggleAdmin: async (req, res) => {
     try {
-      let user = await User.findByPk(req.params.id)
+      const user = await User.findByPk(req.params.id)
       if (user.email === 'root@example.com') {
         req.flash('error_messages', '禁止變更管理者權限')
         return res.redirect('back')
@@ -161,6 +161,6 @@ const adminController = {
     } catch (err) {
       console.log(err)
     }
-  },
+  }
 }
 module.exports = adminController

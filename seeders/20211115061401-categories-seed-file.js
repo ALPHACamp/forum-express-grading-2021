@@ -11,12 +11,12 @@ module.exports = {
         '墨西哥料理',
         '素食料理',
         '美式料理',
-        '複合式料理',
+        '複合式料理'
       ].map((item, index) => ({
         id: index * 10 + 1,
         name: item,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       })),
       {}
     )
@@ -24,5 +24,5 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Categories', null, {})
-  },
+  }
 }

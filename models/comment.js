@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       text: DataTypes.STRING,
       UserId: DataTypes.INTEGER,
-      RestaurantId: DataTypes.INTEGER,
+      RestaurantId: DataTypes.INTEGER
     },
     {
       sequelize,
-      modelName: 'Comment',
+      modelName: 'Comment'
     }
   )
   return Comment

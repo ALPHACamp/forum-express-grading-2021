@@ -22,7 +22,7 @@ module.exports = {
         UserId: userArray[Math.floor(Math.random() * userArray.length)],
         RestaurantId: restArray[Math.floor(Math.random() * restArray.length)],
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       })),
       {}
     )
@@ -30,5 +30,5 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Comments', null, {})
-  },
+  }
 }

@@ -1,14 +1,14 @@
 const db = require('../models')
 const Category = db.Category
-let categoryController = {
+const categoryController = {
   getCategories: async (req, res) => {
     try {
       categories = await Category.findAll({ raw: true, nest: true })
       if (req.params.categoryId) {
-        let category = await Category.findByPk(req.params.id)
+        const category = await Category.findByPk(req.params.id)
         res.render('/admin/categories', {
           category: category.toJSON(),
-          categories,
+          categories
         })
       }
       return res.render('admin/categories', { categories })
@@ -34,7 +34,7 @@ let categoryController = {
       return res.redirect('back')
     }
     try {
-      let category = await Category.findByPk(req.params.id)
+      const category = await Category.findByPk(req.params.id)
       await category.update(req.body)
       res.redirect('/admin/categories')
     } catch (err) {
@@ -43,13 +43,13 @@ let categoryController = {
   },
   deleteCategory: async (req, res) => {
     try {
-      let category = await Category.findByPk(req.params.id)
+      const category = await Category.findByPk(req.params.id)
       await category.destroy()
       res.redirect('/admin/categories')
     } catch (err) {
       console.log(err)
     }
-  },
+  }
 }
 
 module.exports = categoryController

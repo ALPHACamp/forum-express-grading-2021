@@ -5,6 +5,7 @@ const User = db.User
 const Restaurant = db.Restaurant
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const helper = require('../_helpers')
 
 const userController = {
   signUpPage: (req, res) => {
@@ -34,7 +35,7 @@ const userController = {
           req.body.password,
           bcrypt.genSaltSync(10),
           null
-        ),
+        )
       })
       req.flash('success_messages', '成功註冊帳號！')
       return res.redirect('/signin')
@@ -56,17 +57,20 @@ const userController = {
   },
   getUser: async (req, res) => {
     try {
-      const user = (
-        await User.findByPk(req.params.id, {
-          include: { model: Comment, include: Restaurant },
-        })
-      ).toJSON()
-      return res.render('profile', { user: user })
+      const user = await User.findByPk(req.params.id, {
+        include: { model: Comment, include: Restaurant }
+      })
+      return res.render('profile', { user: user.toJSON() })
     } catch (err) {
       console.log(err)
     }
   },
   editUser: async (req, res) => {
+    console.log(helper.getUser(req).id)
+    if (helper.getUser(req).id !== Number(req.params.id)) {
+      req.flash('error_messages', '禁止修改他人個資！')
+      return res.redirect(`/users/${req.params.id}`)
+    }
     try {
       const user = await User.findByPk(req.params.id)
       return res.render('edit', { user: user.toJSON() })
@@ -98,7 +102,7 @@ const userController = {
     } catch (err) {
       console.log(err)
     }
-  },
+  }
 }
 
 module.exports = userController

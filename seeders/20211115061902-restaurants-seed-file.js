@@ -15,7 +15,7 @@ module.exports = {
         description: faker.lorem.text(),
         createdAt: new Date(),
         updatedAt: new Date(),
-        CategoryId: Math.floor(Math.random() * 6) * 10 + 1, // 加上這行
+        CategoryId: Math.floor(Math.random() * 6) * 10 + 1 // 加上這行
       })),
       {}
     )
@@ -23,5 +23,5 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Restaurants', null, {})
-  },
+  }
 }

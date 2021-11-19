@@ -7,7 +7,7 @@ const commentController = {
       await Comment.create({
         text: req.body.text,
         RestaurantId: req.body.restaurantId,
-        UserId: req.user.id,
+        UserId: req.user.id
       })
       res.redirect(`/restaurants/${req.body.restaurantId}`)
     } catch (err) {
@@ -16,13 +16,13 @@ const commentController = {
   },
   deleteComment: async (req, res) => {
     try {
-      let comment = await Comment.findByPk(req.params.id)
+      const comment = await Comment.findByPk(req.params.id)
       await comment.destroy()
       res.redirect(`/restaurants/${comment.RestaurantId}`)
     } catch (err) {
       console.log(err)
     }
-  },
+  }
 }
 
 module.exports = commentController
