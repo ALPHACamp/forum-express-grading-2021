@@ -139,4 +139,11 @@ module.exports = (app, passport) => {
     upload.single('image'),
     userController.putUser
   )
+
+  app.post('/following/:userId', authenticated, userController.addFollowing)
+  app.delete(
+    '/following/:userId',
+    authenticated,
+    userController.removeFollowing
+  )
 }
