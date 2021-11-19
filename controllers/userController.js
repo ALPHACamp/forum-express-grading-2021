@@ -57,7 +57,6 @@ const userController = {
       const user = await User.findByPk(req.params.id,{
         include: { model: Comment, include: [Restaurant] }
       })
-      console.log(user.toJSON().Comments)
       return res.render('profile', { user: user.toJSON() })
     } catch (err) {
       console.error(err)
