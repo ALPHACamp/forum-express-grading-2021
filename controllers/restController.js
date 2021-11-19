@@ -1,9 +1,11 @@
+const { helpers } = require('faker')
 const db = require('../models')
 const Restaurant = db.Restaurant
 const Comment = db.Comment
 const User = db.User
 const Category = db.Category
 const pageLimit = 10
+const helper = require('../_helpers')
 
 const restController = {
   getRestaurants: async (req, res) => {
@@ -33,7 +35,11 @@ const restController = {
       const next = page + 1 > pages ? pages : page + 1
       const data = result.rows.map(r => ({
         ...r.dataValues,
-        description: r.dataValues.description.substring(0, 50)
+        description: r.dataValues.description.substring(0, 50),
+        isFavorited: helper
+          .getUser(req)
+          .FavoritedRestaurants.map(d => d.id)
+          .includes(r.id)
       }))
       const categories = await Category.findAll({
         raw: true,
@@ -55,11 +61,21 @@ const restController = {
   getRestaurant: async (req, res) => {
     try {
       const restaurant = await Restaurant.findByPk(req.params.id, {
-        include: [Category, { model: Comment, include: [User] }]
+        include: [
+          Category,
+          { model: Comment, include: [User] },
+          { model: User, as: 'FavoritedUsers' }
+        ]
       })
+      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(
+        helper.getUser(req).id
+      )
       const viewCounts = restaurant.viewCounts + 1
       await restaurant.update({ viewCounts })
-      return res.render('restaurant', { restaurant: restaurant.toJSON() })
+      return res.render('restaurant', {
+        restaurant: restaurant.toJSON(),
+        isFavorited
+      })
     } catch (err) {
       console.log(err)
     }
