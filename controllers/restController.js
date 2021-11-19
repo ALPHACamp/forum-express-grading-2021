@@ -75,7 +75,7 @@ const restController = {
         include: [Category],
         order: [['createdAt', 'DESC']],
         raw: true,
-        nest: true,
+        nest: true
       })
       const comments = await Comment.findAll({
         limit: 10,
@@ -86,6 +86,22 @@ const restController = {
       })
       // const [restaurants, comments] = await Promise.all([restaurantsPromise, commentsPromise])
       return res.render('feeds', { restaurants, comments })
+    } catch (err) {
+      console.error(err)
+    }
+  },
+
+  getDashBoard: async (req, res) => {
+    try {
+      const RestaurantId = req.params.id
+      const restaurantPromise = Restaurant
+        .findByPk(RestaurantId, { include: [Category] })
+        .then(result => result.toJSON())
+      const commentCountsPromise = Comment
+        .findAndCountAll({ where: { RestaurantId } })
+        .then(result => result.count)
+      const [restaurant, commentCounts] = await Promise.all([restaurantPromise, commentCountsPromise])
+      return res.render('dashboard', { restaurant, commentCounts })
     } catch (err) {
       console.error(err)
     }
