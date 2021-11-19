@@ -4,6 +4,7 @@ const Comment = db.Comment
 const User = db.User
 const Restaurant = db.Restaurant
 const Favorite = db.Favorite
+const Like = db.Like
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const helper = require('../_helpers')
@@ -100,7 +101,7 @@ const userController = {
         imgur.upload(file.path, async (err, img) => {
           await user.update({
             ...req.body,
-            image: file ? img.data.link : helpers.getUser(req).image
+            image: file ? img.data.link : helper.getUser(req).image
           })
           req.flash('success_messages', '使用者資料編輯成功')
           return res.redirect(`/users/${helper.getUser(req).id}`)
@@ -127,13 +128,36 @@ const userController = {
   },
   removeFavorite: async (req, res) => {
     try {
-      const favorite = await Favorite.findOne({
+      favorite = await Favorite.destroy({
         where: {
           UserId: helper.getUser(req).id,
           RestaurantId: req.params.restaurantId
         }
       })
-      await favorite.destroy()
+      return res.redirect('back')
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  addLike: async (req, res) => {
+    try {
+      await Like.create({
+        UserId: helper.getUser(req).id,
+        RestaurantId: req.params.restaurantId
+      })
+      return res.redirect('back')
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  removeLike: async (req, res) => {
+    try {
+      await Like.destroy({
+        where: {
+          UserId: helper.getUser(req).id,
+          RestaurantId: req.params.restaurantId
+        }
+      })
       return res.redirect('back')
     } catch (err) {
       console.log(err)

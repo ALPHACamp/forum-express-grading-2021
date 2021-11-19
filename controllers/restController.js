@@ -1,4 +1,3 @@
-const { helpers } = require('faker')
 const db = require('../models')
 const Restaurant = db.Restaurant
 const Comment = db.Comment
@@ -39,6 +38,10 @@ const restController = {
         isFavorited: helper
           .getUser(req)
           .FavoritedRestaurants.map(d => d.id)
+          .includes(r.id),
+        isLiked: helper
+          .getUser(req)
+          .LikedRestaurants.map(d => d.id)
           .includes(r.id)
       }))
       const categories = await Category.findAll({
@@ -64,17 +67,22 @@ const restController = {
         include: [
           Category,
           { model: Comment, include: [User] },
-          { model: User, as: 'FavoritedUsers' }
+          { model: User, as: 'FavoritedUsers' },
+          { model: User, as: 'LikedUsers' }
         ]
       })
       const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(
+        helper.getUser(req).id
+      )
+      const isLiked = restaurant.LikedUsers.map(d => d.id).includes(
         helper.getUser(req).id
       )
       const viewCounts = restaurant.viewCounts + 1
       await restaurant.update({ viewCounts })
       return res.render('restaurant', {
         restaurant: restaurant.toJSON(),
-        isFavorited
+        isFavorited,
+        isLiked
       })
     } catch (err) {
       console.log(err)
