@@ -128,7 +128,7 @@ const userController = {
   },
   removeFavorite: async (req, res) => {
     try {
-      favorite = await Favorite.destroy({
+      await Favorite.destroy({
         where: {
           UserId: helper.getUser(req).id,
           RestaurantId: req.params.restaurantId
@@ -159,6 +159,25 @@ const userController = {
         }
       })
       return res.redirect('back')
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  getTopUser: async (req, res) => {
+    try {
+      let users = await User.findAll({
+        include: [{ model: User, as: 'Followers' }]
+      })
+      users = users.map(user => ({
+        ...user.dataValues,
+        FollowerCount: user.Followers.length,
+        isFollowed: helper
+          .getUser(req)
+          .Followings.map(d => d.id)
+          .includes(user.id)
+      }))
+      users = users.sort((a, b) => b.FollowerCount - a.FollowerCount)
+      return res.render('topUser', { users: users })
     } catch (err) {
       console.log(err)
     }

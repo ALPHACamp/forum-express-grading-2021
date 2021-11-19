@@ -2,18 +2,7 @@
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Followship extends Model {
-    static associate(models) {
-      User.belongsToMany(User, {
-        through: models.Followship,
-        foreignKey: 'followingId',
-        as: 'Followers'
-      })
-      User.belongsToMany(User, {
-        through: models.Followship,
-        foreignKey: 'followerId',
-        as: 'Followings'
-      })
-    }
+    static associate(models) {}
   }
   Followship.init(
     {
