@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs')
 
 const db = require('../models')
 const User = db.User
+const Restaurant = db.Restaurant
+const Comment = db.Comment
 
 const userController = {
   signUpPage: (req, res) => {
@@ -18,7 +20,7 @@ const userController = {
       return res.redirect("/signup")
     } else {
       User
-        .findOne({ where: { email }})
+        .findOne({ where: { email } })
         .then(user => {
           if (user) {
             req.flash("error_messages", "信箱重複！")
@@ -52,7 +54,10 @@ const userController = {
 
   getUser: async (req, res) => {
     try {
-      const user = await User.findByPk(req.params.id)
+      const user = await User.findByPk(req.params.id,{
+        include: { model: Comment, include: [Restaurant] }
+      })
+      console.log(user.toJSON().Comments)
       return res.render('profile', { user: user.toJSON() })
     } catch (err) {
       console.error(err)
@@ -73,7 +78,7 @@ const userController = {
       const user = await User.findByPk(req.params.id)
       const { name, email } = req.body
       const { file } = req
-      
+
       if (file) {
         imgur.setClientID(IMGUR_CLIENT_ID)
         imgur.upload(file.path, async (err, img) => {
