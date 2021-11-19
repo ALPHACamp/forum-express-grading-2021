@@ -23,6 +23,7 @@ module.exports = (app, passport) => {
     }
     res.redirect('/signin')
   }
+
   app.get('/', (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
   app.get('/restaurants/feeds', authenticated, restController.getFeeds)
@@ -32,6 +33,13 @@ module.exports = (app, passport) => {
     authenticated,
     restController.getDashBoard
   )
+  app.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
+  app.delete(
+    '/favorite/:restaurantId',
+    authenticated,
+    userController.removeFavorite
+  )
+
   app.get(
     '/signin',
 

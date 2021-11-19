@@ -3,6 +3,7 @@ const db = require('../models')
 const Comment = db.Comment
 const User = db.User
 const Restaurant = db.Restaurant
+const Favorite = db.Favorite
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const helper = require('../_helpers')
@@ -102,13 +103,38 @@ const userController = {
             image: file ? img.data.link : helpers.getUser(req).image
           })
           req.flash('success_messages', '使用者資料編輯成功')
-          return res.redirect(`/users/${req.user.id}`)
+          return res.redirect(`/users/${helper.getUser(req).id}`)
         })
       } else {
         await user.update({ name: req.body.name, email: req.body.email })
         req.flash('success_messages', '使用者資料編輯成功')
         return res.redirect(`/users/${req.params.id}`)
       }
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  addFavorite: async (req, res) => {
+    try {
+      await Favorite.create({
+        UserId: helper.getUser(req).id,
+        RestaurantId: req.params.restaurantId
+      })
+      return res.redirect('back')
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  removeFavorite: async (req, res) => {
+    try {
+      const favorite = await Favorite.findOne({
+        where: {
+          UserId: helper.getUser(req).id,
+          RestaurantId: req.params.restaurantId
+        }
+      })
+      await favorite.destroy()
+      return res.redirect('back')
     } catch (err) {
       console.log(err)
     }
