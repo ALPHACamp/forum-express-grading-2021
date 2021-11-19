@@ -36,11 +36,6 @@ app.use((req, res, next) => {
 })
 
 
-console.log(port)
-console.log(port)
-console.log(port)
-
-
 require('./routes')(app, passport)
 
 app.listen(port, () => {
