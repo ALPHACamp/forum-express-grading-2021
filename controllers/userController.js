@@ -56,6 +56,10 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: async (req, res) => {
+    if (helper.getUser(req).id !== Number(req.params.id)) {
+      req.flash('error_messages', '禁止查看他人個資！')
+      return res.redirect(`/users/${helper.getUser(req).id}`)
+    }
     try {
       const user = await User.findByPk(req.params.id, {
         include: { model: Comment, include: Restaurant }
@@ -66,10 +70,9 @@ const userController = {
     }
   },
   editUser: async (req, res) => {
-    console.log(helper.getUser(req).id)
     if (helper.getUser(req).id !== Number(req.params.id)) {
       req.flash('error_messages', '禁止修改他人個資！')
-      return res.redirect(`/users/${req.params.id}`)
+      return res.redirect(`/users/${helper.getUser(req).id}`)
     }
     try {
       const user = await User.findByPk(req.params.id)
@@ -80,6 +83,10 @@ const userController = {
   },
   putUser: async (req, res) => {
     try {
+      if (helper.getUser(req).id !== Number(req.params.id)) {
+        req.flash('error_messages', '禁止修改他人個資！')
+        return res.redirect(`/users/${helper.getUser(req).id}`)
+      }
       const user = await User.findByPk(req.params.id)
       if (!req.body.name || !req.body.email) {
         req.flash('error_messages', '名字不能空白！')
@@ -90,7 +97,10 @@ const userController = {
       if (file) {
         imgur.setClientID(IMGUR_CLIENT_ID)
         imgur.upload(file.path, async (err, img) => {
-          user.update({ ...req.body, image: file ? img.data.link : null })
+          await user.update({
+            ...req.body,
+            image: file ? img.data.link : helpers.getUser(req).image
+          })
           req.flash('success_messages', '使用者資料編輯成功')
           return res.redirect(`/users/${req.user.id}`)
         })

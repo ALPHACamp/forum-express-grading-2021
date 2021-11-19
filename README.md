@@ -12,6 +12,12 @@ npm install
 ```
 create database forum;
 ```
+```
+npx sequelize db:migrate
+```
+```
+npx sequelize db:seed:all
+```
 ### 執行測試
 ```
 npm run test
