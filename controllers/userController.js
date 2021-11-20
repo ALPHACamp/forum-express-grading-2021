@@ -59,15 +59,39 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: async (req, res) => {
+    let validated = true
     if (helper.getUser(req).id !== Number(req.params.id)) {
-      req.flash('error_messages', '禁止查看他人個資！')
-      return res.redirect(`/users/${helper.getUser(req).id}`)
+      validated = false
     }
     try {
-      const user = await User.findByPk(req.params.id, {
-        include: { model: Comment, include: Restaurant }
+      const userProfile = (
+        await User.findByPk(req.params.id, {
+          include: [
+            { model: Restaurant, as: 'FavoritedRestaurants' },
+            { model: Comment, include: Restaurant },
+            { model: User, as: 'Followers' },
+            { model: User, as: 'Followings' }
+          ]
+        })
+      ).toJSON()
+      let commentedRestaurants = userProfile.Comments
+      let commentRestaurantId = userProfile.Comments.map(i => i.RestaurantId)
+      //刪掉重複評論餐廳
+      for (let i = 0; i < commentRestaurantId.length; i++) {
+        for (let a = i + 1; a < commentRestaurantId.length; a++) {
+          if (commentRestaurantId[i] === commentRestaurantId[a]) {
+            commentRestaurantId.splice(i, 1)
+            commentedRestaurants.splice(i, 1)
+            i--
+            a--
+          }
+        }
+      }
+      return res.render('profile', {
+        userProfile,
+        commentedRestaurants,
+        validated
       })
-      return res.render('profile', { user: user.toJSON() })
     } catch (err) {
       console.log(err)
     }
