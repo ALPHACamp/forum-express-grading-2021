@@ -62,11 +62,13 @@ const restController = {
         // raw: true,
         // nest: true
       }).then(restaurant => {
-        // console.log('restaurant',restaurant)
-        // console.log('**restaurant.toJSON()**',restaurant.toJSON())
+        console.log(restaurant.viewCounts)
+        const viewCounts = restaurant.viewCounts + 1
+        restaurant.update({
+          viewCounts: viewCounts
+        })
         return res.render('restaurant', {
           restaurant: restaurant.toJSON()
-          // restaurant: restaurant
         })
       })
   },
@@ -94,7 +96,7 @@ const restController = {
       })
     })
   },
-  getDashboard: (req, res) => {
+  getDashBoard: (req, res) => {
     return Restaurant.findByPk(req.params.id, {
       include: [
         Category,
@@ -102,7 +104,7 @@ const restController = {
       ]
     })
     .then(restaurant => {
-      console.log(restaurant)
+      // console.log(restaurant)
       return res.render('dashboard', { 
         restaurant: restaurant.toJSON() 
       })
