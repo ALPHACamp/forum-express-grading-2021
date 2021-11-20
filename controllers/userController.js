@@ -6,6 +6,7 @@ const db = require('../models')
 const User = db.User
 const Restaurant = db.Restaurant
 const Comment = db.Comment
+const Favorite = db.Favorite
 
 const userController = {
   signUpPage: (req, res) => {
@@ -54,7 +55,7 @@ const userController = {
 
   getUser: async (req, res) => {
     try {
-      const user = await User.findByPk(req.params.id,{
+      const user = await User.findByPk(req.params.id, {
         include: { model: Comment, include: [Restaurant] }
       })
       return res.render('profile', { user: user.toJSON() })
@@ -99,6 +100,25 @@ const userController = {
     } catch (err) {
       console.error(err)
     }
+  },
+
+  addFavorite: async (req, res) => {
+    await Favorite.create({
+      UserId: req.user.id,
+      RestaurantId: req.params.restaurantId
+    })
+    return res.redirect('back')
+  },
+
+  removeFavorite: async (req, res) => {
+    const favorite = await Favorite.findOne({
+      where: {
+        UserId: req.user.id,
+        RestaurantId: req.params.restaurantId
+      }
+    })
+    await favorite.destroy()
+    return res.redirect('back')
   }
 }
 
