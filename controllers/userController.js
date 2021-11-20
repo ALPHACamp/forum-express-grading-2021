@@ -46,13 +46,13 @@ const userController = {
 
   signIn: (req, res) => {
     req.flash('success_messages', '成功登入！')
-    res.redirect('/restaurants')
+    return res.redirect('/restaurants')
   },
 
   logout: (req, res) => {
     req.flash('success_messages', '登出成功！')
     req.logout()
-    res.redirect('/signin')
+    return res.redirect('/signin')
   },
 
   getUser: async (req, res) => {
@@ -105,40 +105,55 @@ const userController = {
   },
 
   addFavorite: async (req, res) => {
-    await Favorite.create({
-      UserId: helpers.getUser(req).id,
-      RestaurantId: req.params.restaurantId
-    })
-    return res.redirect('back')
+    try {
+      await Favorite.create({
+        UserId: helpers.getUser(req).id,
+        RestaurantId: req.params.restaurantId
+      })
+      return res.redirect('back')
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   removeFavorite: async (req, res) => {
-    const favorite = await Favorite.findOne({
-      where: {
-        UserId: helpers.getUser(req).id,
-        RestaurantId: req.params.restaurantId
-      }
-    })
-    await favorite.destroy()
-    return res.redirect('back')
+    try {
+      await Favorite.destroy({
+        where: {
+          UserId: helpers.getUser(req).id,
+          RestaurantId: req.params.restaurantId
+        }
+      })
+      return res.redirect('back')
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   addLike: async (req, res) => {
-    await Like.create({
-      UserId: helpers.getUser(req).id,
-      RestaurantId: req.params.restaurantId,
-    })
-    return res.redirect('back')
+    try {
+      await Like.create({
+        UserId: helpers.getUser(req).id,
+        RestaurantId: req.params.restaurantId
+      })
+      return res.redirect('back')
+    } catch (err) {
+      console.error(err)
+    }
   },
 
   removeLike: async (req, res) => {
-    await Like.destroy({
-      where: {
-        UserId: helpers.getUser(req).id,
-        RestaurantId: req.params.restaurantId,
-      }
-    })
-    return res.redirect('back')
+    try {
+      await Like.destroy({
+        where: {
+          UserId: helpers.getUser(req).id,
+          RestaurantId: req.params.restaurantId
+        }
+      })
+      return res.redirect('back')
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 
