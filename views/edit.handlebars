@@ -1,0 +1,19 @@
+<form class="form-signin" action="/users/{{user.id}}?_method=PUT" method="POST" style="width: 100%;" enctype="multipart/form-data">
+    <div class="form-label-group">
+        <label for="inputName">Name</label>
+        <input type="text" name="name" class="form-control" placeholder="Name" value="{{user.name}}"required autofocus>
+    </div>
+    
+    <div class="form-label-group">
+        <input type="hidden" name="email" class="form-control" placeholder="Email" value="{{user.email}}">
+    </div>
+
+    <div class="form-group">
+        <label for="image">Image</label>
+        <input type="file" class="form-control-file" id="image" name="image" value="{{user.email}}">
+    </div>
+
+    <br/>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form> 
+
