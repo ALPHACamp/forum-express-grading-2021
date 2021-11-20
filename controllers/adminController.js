@@ -157,7 +157,7 @@ const adminController = {
       return res.render('admin/users', { users })
     } catch (err) {
       console.error(err)
-    } 
+    }
   },
 
   toggleAdmin: async (req, res) => {
