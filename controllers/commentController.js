@@ -1,3 +1,4 @@
+const helpers = require('../_helpers')
 const db = require('../models')
 const Comment = db.Comment
 
@@ -7,7 +8,7 @@ const commentController = {
       await Comment.create({
         text: req.body.text,
         RestaurantId: req.body.restaurantId,
-        UserId: req.user.id
+        UserId: helpers.getUser(req).id
       })
       return res.redirect(`/restaurants/${req.body.restaurantId}`)
     } catch (err) {

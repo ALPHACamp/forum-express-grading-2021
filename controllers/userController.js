@@ -1,3 +1,4 @@
+const helpers = require('../_helpers')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const bcrypt = require('bcryptjs')
@@ -7,6 +8,7 @@ const User = db.User
 const Restaurant = db.Restaurant
 const Comment = db.Comment
 const Favorite = db.Favorite
+const Like = db.Like
 
 const userController = {
   signUpPage: (req, res) => {
@@ -104,7 +106,7 @@ const userController = {
 
   addFavorite: async (req, res) => {
     await Favorite.create({
-      UserId: req.user.id,
+      UserId: helpers.getUser(req).id,
       RestaurantId: req.params.restaurantId
     })
     return res.redirect('back')
@@ -113,11 +115,29 @@ const userController = {
   removeFavorite: async (req, res) => {
     const favorite = await Favorite.findOne({
       where: {
-        UserId: req.user.id,
+        UserId: helpers.getUser(req).id,
         RestaurantId: req.params.restaurantId
       }
     })
     await favorite.destroy()
+    return res.redirect('back')
+  },
+
+  addLike: async (req, res) => {
+    await Like.create({
+      UserId: helpers.getUser(req).id,
+      RestaurantId: req.params.restaurantId,
+    })
+    return res.redirect('back')
+  },
+
+  removeLike: async (req, res) => {
+    await Like.destroy({
+      where: {
+        UserId: helpers.getUser(req).id,
+        RestaurantId: req.params.restaurantId,
+      }
+    })
     return res.redirect('back')
   }
 }
