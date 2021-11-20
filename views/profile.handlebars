@@ -1,0 +1,34 @@
+<div class="row mt-5">
+    <div class="col-md-4">
+        <img src="{{user.image}}" class="img-thumbnail mx-auto d-block">
+    </div>
+    <div class="col-md-8">
+        <div class="h2 mt-3">{{user.name}}</div>
+        <div class="">{{user.email}}</div>
+        <a href="/users/{{user.id}}/edit" class="btn btn-primary mt-3">edit</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mt-5">
+            <div class="card-header">
+                {{comment.length}} 已評論過
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {{#each comment}}
+                    <div class="col-md-2 text-center">
+                        <img src="{{this.Restaurant.image}}" class="img-thumbnail mx-2 my-2"
+                            style="width: 100px; height:100px;" alt="{{this.Restaurant.name}}">
+                        <div class="">{{this.Restaurant.name}}</div>
+                    </div>
+
+                    {{/each}}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
