@@ -33,7 +33,8 @@ const restController = {
       const next = page + 1 > pages ? pages : page + 1
       const data = restaurants.rows.map((r) => ({
         ...r,description: r.description.substring(0, 50),
-        categoryName: r.Category.name
+        categoryName: r.Category.name,
+        isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(r.id)
       }))
       Category.findAll({
         raw: true 
@@ -57,18 +58,23 @@ const restController = {
           Category,
           {
             model: Comment, include: [User]
+          },
+          { 
+            model: User, as: 'FavoritedUsers' 
           }
         ],
-        // raw: true,
-        // nest: true
       }).then(restaurant => {
-        console.log(restaurant.viewCounts)
+        
         const viewCounts = restaurant.viewCounts + 1
         restaurant.update({
           viewCounts: viewCounts
         })
-        return res.render('restaurant', {
-          restaurant: restaurant.toJSON()
+        .then(restaurant => {
+          const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id)
+          return res.render('restaurant', {
+            restaurant: restaurant.toJSON(),
+            isFavorited: isFavorited 
+          })
         })
       })
   },
