@@ -1,6 +1,9 @@
 const bcrypt = require('bcryptjs') 
 const db = require('../models')
 const User = db.User
+const fs = require('fs')
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const userController = {
   signUpPage: (req, res) => {
@@ -45,7 +48,91 @@ const userController = {
    req.flash('success_messages', '登出成功！')
    req.logout()
    res.redirect('/signin')
+  },
+
+  getUser: async (req, res) => {
+     try {
+      const user = (await User.findByPk(req.params.id)).toJSON()
+      return res.render('profile', { user })
+    } catch (err) {
+      console.error(err)
+    }
+  },
+
+  editUser: (req, res) => {
+    return User.findByPk(req.params.id, {raw:true}).then(user => {
+      return res.render('edit', { user } )
+  })},
+
+  // putUser: (req, res) => {
+  //   if (!req.body.name) {
+  //     req.flash('error_messages', "user name didn't exist")
+  //     return res.redirect('back')
+  //   }
+
+  //   const { file } = req
+  //   if (file) {
+  //     fs.readFile(file.path, (err, data) => {
+  //       if (err) console.log('Error: ', err)
+  //       fs.writeFile(`upload/${file.originalname}`, data, () => {
+  //         return User.findByPk(req.params.id)
+  //           .then((user) => {
+  //             user.update({
+  //               name: req.body.name,
+  //               email: req.body.email,
+  //               image: file ? `/upload/${file.originalname}` : user.image
+  //             }).then((user) => {
+  //               req.flash('success_messages', 'user was successfully to update')
+  //               res.redirect(`/users/${user.id}`)
+  //             })
+  //         })
+  //       })
+  //     })
+  //   } else {
+  //     return User.findByPk(req.params.id)
+  //       .then((user) => {
+  //         user.update({
+  //           name: req.body.name,
+  //           email: req.body.email,
+  //           image: user.image
+  //         }).then((user) => {
+  //           req.flash('success_messages', 'restaurant was successfully to update')
+  //           res.redirect(`/users/${user.id}`)
+  //         })
+  //       })
+  //   }
+  // },
+
+  putUser: async (req, res) => {
+    try {
+      const user = await User.findByPk(req.params.id)
+      const { name, email } = req.body
+      const { file } = req
+
+      if (file) {
+        imgur.setClientID(IMGUR_CLIENT_ID)
+        imgur.upload(file.path, async (err, img) => {
+          await user.update({
+            name,
+            email,
+            image: file ? img.data.link : user.image
+          })
+        })
+      } else {
+        await user.update({
+          name,
+          email,
+          image: user.image
+        })
+      }
+      req.flash('success_messages', '使用者資料編輯成功')
+      return res.redirect(`/users/${user.id}`)
+    } catch (err) {
+      console.error(err)
+    }
   }
+
 }
+
 
 module.exports = userController
