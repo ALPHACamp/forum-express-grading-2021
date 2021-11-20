@@ -3,7 +3,7 @@ const Category = db.Category
 const categoryController = {
   getCategories: async (req, res) => {
     try {
-      categories = await Category.findAll({ raw: true, nest: true })
+      const categories = await Category.findAll({ raw: true, nest: true })
       if (req.params.categoryId) {
         const category = await Category.findByPk(req.params.id)
         res.render('/admin/categories', {

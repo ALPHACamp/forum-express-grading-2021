@@ -131,7 +131,7 @@ const userController = {
     try {
       await Favorite.destroy({
         where: {
-          UserId: helper.getUser(req).id,
+          UserId: req.user.id,
           RestaurantId: req.params.restaurantId
         }
       })
