@@ -3,6 +3,7 @@ const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const db = require('../models') 
 const Restaurant = db.Restaurant
+const User = db.User
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -122,6 +123,11 @@ const adminController = {
             res.redirect('/admin/restaurants')
           })
       })
+  },
+
+  getUser: (req, res) => {
+    return User.findAll({ raw: true, nest: true })
+    .then(users => res.render('admin/users', { users }))
   }
 }
 

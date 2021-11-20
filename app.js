@@ -5,13 +5,14 @@ const session = require('express-session')
 const passport = require('./config/passport')
 const methodOverride = require('method-override')
 const helpers = require('./_helpers')
+const handlebarsHelpers = require('./helpers/handlebarsHelpers')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 const app = express()
 const port = process.env.PORT || 3000
 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.engine('handlebars', exphbs({ defaultLayout: 'main', helpers: handlebarsHelpers }))
 app.set('view engine', 'handlebars')
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended: true}))
