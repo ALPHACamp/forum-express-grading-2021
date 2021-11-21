@@ -51,7 +51,7 @@ const userController = {
     return User.findByPk(req.params.id, {
       include: Comment
     }).then(user => {
-      if (!user.Comments.length) {
+      if (!user.Comments) { //如果User沒有Comment,則直接render
         return res.render('profile', { user: user.toJSON() })
       }
       return Comment.findAll({
