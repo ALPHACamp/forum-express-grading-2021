@@ -1,4 +1,5 @@
 const sequelize = require('sequelize')
+const helpers = require('../_helpers')
 const db = require('../models')
 const Restaurant = db.Restaurant
 const Favorite = db.Favorite
@@ -118,6 +119,25 @@ const restController = {
       .then(restaurant => {
         return res.render('dashboard', { restaurant })
       })
+  },
+
+  getTopRestaurant: (req, res) => {
+    return Restaurant.findAll({
+      include: [
+        { model: User, as:'FavoritedUsers' }
+      ]
+    }).then(restaurants => {
+      restaurants = restaurants.map(r => ({
+        ...r.dataValues,
+        description: r.dataValues.description.substring(0, 50),
+        //搭配line:126,取得多對多資料'FavoritedUsers'
+        favoritedCount: r.FavoritedUsers.length,
+        //搭配Passport傳入'使用者收藏餐廳.id'，在與'目標餐廳.id'進行比對
+        isFavorited: helpers.getUser(req).FavoritedRestaurants.map(d => d.id).includes(r.id)
+      }))
+      restaurants = restaurants.sort((a, b) => b.FavoritedUsers.length - a.FavoritedUsers.length).slice(0, 10)
+      return res.render('topRestaurant', { restaurants })
+    })
   }
 }
 
