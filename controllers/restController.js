@@ -1,6 +1,7 @@
 const sequelize = require('sequelize')
 const db = require('../models')
 const Restaurant = db.Restaurant
+const Favorite = db.Favorite
 const Category = db.Category
 const Comment = db.Comment
 const User = db.User
@@ -33,7 +34,9 @@ const restController = {
       const data = result.rows.map(r => ({
         ...r.dataValues,
         description: r.dataValues.description.substring(0, 50),
-        categoryName: r.Category.name
+        categoryName: r.Category.name,
+        //檢查是不是有被使用者收藏
+        isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(r.id)
       }))
       Category.findAll({
         raw: true,
@@ -56,12 +59,15 @@ const restController = {
     return Restaurant.findByPk(req.params.id, {
       include: [ //當項目變多時，需要改成用陣列
         Category,
+        { model: User, as: 'FavoritedUsers' },
         { model: Comment, include: [User] }
       ]
     }).then(restaurant => {
       restaurant.increment('viewCounts')
+      const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id) // 找出收藏此餐廳的 user
       return res.render('restaurant', {
         restaurant: restaurant.toJSON(),
+        isFavorited: isFavorited
       })
     })
   },
