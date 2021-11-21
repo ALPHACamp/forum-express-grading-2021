@@ -67,8 +67,6 @@ const userController = {
   editUser: (req, res) => {
     return User.findByPk(req.params.id)
       .then(user => {
-        Comment.findAll
-
         return res.render('edit', {
           user: user.toJSON()
         })
