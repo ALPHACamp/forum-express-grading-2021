@@ -125,18 +125,15 @@ const userController = {
     })
   },
   removeFavorite: (req, res) => {
-    return Favorite.findOne({
+    return Favorite.destroy({
       where: {
         UserId: req.user.id,
         RestaurantId: req.params.restaurantId
       }
     })
-    .then((favorite) => {
+    .then((restaurant) => {
       // console.log(favorite)
-      favorite.destroy()
-        .then((favorite) => {
-          return res.redirect('back')
-        })
+      return res.redirect('back')
     })
   },
   addLike: (req, res) => {
@@ -166,7 +163,8 @@ const userController = {
       include: [
         { model: User, as: 'Followers' }
       ]
-    }).then(users => {
+    })
+    .then(users => {
       // 整理 users 資料
       users = users.map(user => ({
         ...user.dataValues,
@@ -177,6 +175,7 @@ const userController = {
       }))
       // 依追蹤者人數排序清單
       users = users.sort((a, b) => b.FollowerCount - a.FollowerCount)
+      console.log(users)
       return res.render('topUser', { users: users })
     })
   },
