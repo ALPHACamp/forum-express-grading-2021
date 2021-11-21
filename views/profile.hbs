@@ -5,8 +5,20 @@
       <div class="mt-4 ml-4">
         <h2>{{user.name}}</h2>
         <p>{{user.email}}</p>
+        <p><b>{{#if comments.length}} {{comments.length}} {{else}} 0 {{/if}}</b>已評論餐廳</p>
         <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
       </div>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-head bg-light border pt-2 " style="font-size:x-large; height: 60px;">{{#if comments.length}} {{comments.length}} {{else}} 0 {{/if}}已評論餐廳</div>
+    <div class="card-body">
+      {{#each comments}}
+      <a href="/restaurants/{{this.Restaurant.id}}">
+        <img class="mx-2" src="{{this.Restaurant.image}}" style="width: 70px; height: 70px">
+      </a>
+      {{/each}}
     </div>
   </div>
 </div>

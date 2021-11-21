@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs')
 const helpers = require('../_helpers')
 const db = require('../models')
 const User = db.User
+const Comment = db.Comment
+const Restaurant = db.Restaurant
 
 const userController = {
   signUpPage: (req, res) => {
@@ -46,9 +48,23 @@ const userController = {
   },
 
   getUser: (req, res) => {
-    return User.findByPk(req.params.id).then(user => {
-      return res.render('profile', { user: user.toJSON() })
+    return User.findByPk(req.params.id, {
+      include: Comment
+    }).then(user => {
+      if (!user.Comments.length) {
+        return res.render('profile', { user: user.toJSON() })
+      }
+      return Comment.findAll({
+        raw: true,
+        nest: true,
+        where: {UserId: req.params.id},
+        include: Restaurant,
+        group: ['RestaurantId'] //'DISTINCT'也可去除重複資料，但無法使用複雜操作
+        }).then(comments => {
+          return res.render('profile', { comments, user: user.toJSON()})
+      })
     })
+    .catch(err => console.log(err))
   },
 
   editUser: (req, res) => {
