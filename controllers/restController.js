@@ -1,3 +1,4 @@
+const sequelize = require('sequelize')
 const db = require('../models')
 const Restaurant = db.Restaurant
 const Category = db.Category
@@ -88,6 +89,25 @@ const restController = {
       })
     })
   },
+
+  getDashBoard: (req, res) => {
+    //其它方法: findAndCount()
+    return Restaurant.findByPk(req.params.id, {
+      raw: true,
+      nest: true,
+      include: [
+        Category,
+        { model: Comment, attributes: []}
+      ],
+      attributes: ['name',
+        //新增欄位'計算評論總數'
+        [sequelize.fn('COUNT', sequelize.col('comments.id')), 'totalComment']
+      ]
+    })
+      .then(restaurant => {
+        return res.render('dashboard', { restaurant })
+      })
+  }
 }
 
 module.exports = restController
