@@ -27,7 +27,9 @@ passport.deserializeUser((id, cb) => {
     include: [
       //撈出使用者收藏餐廳清單
       { model: Restaurant, as: 'FavoritedRestaurants' },
-      { model: Restaurant, as: 'LikedRestaurants' }
+      { model: Restaurant, as: 'LikedRestaurants' },
+      { model: User, as: 'Followers' },
+      { model: User, as: 'Followings' }
     ]
   }).then(user => {
     user = user.toJSON()
