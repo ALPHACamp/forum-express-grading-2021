@@ -65,24 +65,6 @@ const userController = {
    res.redirect('/signin')
   },
 
-  // getUser: async (req, res) => {
-  //    try {
-  //     const user = (await User.findByPk(req.params.id,
-  //       { include: { model: Comment, include: { model: Restaurant, attribute: ['id', 'image'] } } }
-  //     )).toJSON()
-
-      
-
-  //     // 因應測試檔若user.Comments不存在，執行removeDBLComment會報錯，因此新增判斷式
-  //     user.Comments ? user.Comments = removeDBLComment(user.Comments) : ''
-  //     user.Comments ? user.commentCount = user.Comments.length : ''
-      
-  //     return res.render('profile', { user })
-  //   } catch (err) {
-  //     console.error(err)
-  //   }
-  // },
-
   getUser: async (req, res) => {
     try {
       const user = (await User.findByPk(req.params.id)).toJSON()
@@ -173,6 +155,5 @@ const userController = {
   }
 
 }
-
 
 module.exports = userController
