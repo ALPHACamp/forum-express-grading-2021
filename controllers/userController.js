@@ -57,10 +57,11 @@ const userController = {
 
   getUser: async (req, res) => {
     try {
+      const isYou = helpers.getUser(req).id === Number(req.params.id)
       const user = await User.findByPk(req.params.id, {
         include: { model: Comment, include: [Restaurant] }
       })
-      return res.render('profile', { user: user.toJSON() })
+      return res.render('profile', { user: user.toJSON(), isYou })
     } catch (err) {
       console.error(err)
     }
@@ -68,6 +69,10 @@ const userController = {
 
   editUser: async (req, res) => {
     try {
+      if (helpers.getUser(req).id !== Number(req.params.id)) {
+        return res.render('error403')
+      }
+
       const user = await User.findByPk(req.params.id)
       return res.render('edit', { user: user.toJSON() })
     } catch (err) {
@@ -77,6 +82,10 @@ const userController = {
 
   putUser: async (req, res) => {
     try {
+      if (helpers.getUser(req).id !== Number(req.params.id)) {
+        return res.render('error403')
+      }
+
       const user = await User.findByPk(req.params.id)
       const { name, email } = req.body
       const { file } = req
