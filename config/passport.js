@@ -35,10 +35,17 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((id, cb) => {
   User.findByPk(id, {
     include: [
+      //以id as UserId來固定 Restaurant table的 UserId, 所以可以找出所有*id* Favorite 的 restaurants
       { model: Restaurant, as: 'FavoritedRestaurants' },
-      { model: Restaurant, as: 'LikedRestaurants' }
+      //以id as UserId來固定 Restaurant table的 UserId, 所以可以找出所有*id* Likes 的 restaurants
+      { model: Restaurant, as: 'LikedRestaurants' },
+      //以id as followingId 來固定 User table 的 followingId, 所以可以找出所有在追蹤*id*的users
+      { model: User, as: 'Followers' }, 
+      //以id as followingId 來固定 User table 的 followerId, 所以可以找出*id*在追蹤的所有users
+      { model: User, as: 'Followings' }
     ]
   }).then(user => {
+    // console.log(user.toJSON())
     user = user.toJSON()
     return cb(null, user)
   })
