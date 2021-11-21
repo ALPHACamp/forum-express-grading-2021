@@ -59,6 +59,7 @@ const restController = {
         { model: Comment, include: [User] }
       ]
     }).then(restaurant => {
+      restaurant.increment('viewCounts')
       return res.render('restaurant', {
         restaurant: restaurant.toJSON(),
       })
@@ -99,7 +100,7 @@ const restController = {
         Category,
         { model: Comment, attributes: []}
       ],
-      attributes: ['name',
+      attributes: ['name', 'viewCounts',
         //新增欄位'計算評論總數'
         [sequelize.fn('COUNT', sequelize.col('comments.id')), 'totalComment']
       ]
