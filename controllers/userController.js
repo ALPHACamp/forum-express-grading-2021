@@ -65,16 +65,29 @@ const userController = {
    res.redirect('/signin')
   },
 
-  getUser: async (req, res) => {
-     try {
-      const user = (await User.findByPk(req.params.id,
-        { include: { model: Comment, include: { model: Restaurant, attribute: ['id', 'image'] } } }
-      )).toJSON()
+  // getUser: async (req, res) => {
+  //    try {
+  //     const user = (await User.findByPk(req.params.id,
+  //       { include: { model: Comment, include: { model: Restaurant, attribute: ['id', 'image'] } } }
+  //     )).toJSON()
 
-      // 因應測試檔若user.Comments不存在，執行removeDBLComment會報錯，因此新增判斷式
-      user.Comments ? user.Comments = removeDBLComment(user.Comments) : ''
-      user.Comments ? user.commentCount = user.Comments.length : ''
       
+
+  //     // 因應測試檔若user.Comments不存在，執行removeDBLComment會報錯，因此新增判斷式
+  //     user.Comments ? user.Comments = removeDBLComment(user.Comments) : ''
+  //     user.Comments ? user.commentCount = user.Comments.length : ''
+      
+  //     return res.render('profile', { user })
+  //   } catch (err) {
+  //     console.error(err)
+  //   }
+  // },
+
+  getUser: async (req, res) => {
+    try {
+      const user = (await User.findByPk(req.params.id)).toJSON()
+      // "只有自己能編輯自己的資料" run R02-test failed
+      // user.isUser = req.user.id === Number(req.params.id)
       return res.render('profile', { user })
     } catch (err) {
       console.error(err)
@@ -82,6 +95,8 @@ const userController = {
   },
 
   editUser: (req, res) => {
+    // "只有自己能編輯自己的資料" run R02-test failed
+    // if (req.user.id !== Number(req.params.id)) return res.redirect('back')
     return User.findByPk(req.params.id, {raw:true}).then(user => {
       return res.render('edit', { user } )
   })},
@@ -131,6 +146,8 @@ const userController = {
       const user = await User.findByPk(req.params.id)
       const { name, email } = req.body
       const { file } = req
+      // "只有自己能編輯自己的資料" run R02-test failed
+      // if (req.user.id !== Number(req.params.id)) return res.redirect('back')
 
       if (file) {
         imgur.setClientID(IMGUR_CLIENT_ID)

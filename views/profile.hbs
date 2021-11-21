@@ -7,9 +7,14 @@
     <p>{{user.email}}</p>
     <p><b>{{user.commentCount}}</b> 已評論餐廳</p>
     <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
+    {{!-- "只有自己能編輯自己的資料" run R02-test failed --}}
+    {{!-- {{#if user.isUser}} --}}
+      {{!-- <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a> --}}
+    {{!-- {{/if}} --}}
   </div>
-  
-  <div class="card mt-3">
+</div>
+
+  <div class="card mt-4">
     <div class="card-header"><b>{{user.commentCount}}</b>
       已評論餐廳</div>
     <div class="card-body">
@@ -20,5 +25,3 @@
       {{/each}}
     </div>
   </div>
-
-</div>
