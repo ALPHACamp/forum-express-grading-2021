@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs')
 const { rawListeners } = require('superagent')
 const db = require('../models')
-const user = require('../models/user')
 const User = db.User
+const Comment = db.Comment
+const Restaurant = db.Restaurant
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
@@ -51,7 +52,11 @@ const userController = {
   },
 
   getUser: (req, res) => {
-    return User.findByPk(req.params.id)
+    return User.findByPk(req.params.id,{
+      include: [
+        { model: Comment, include: [Restaurant]}
+      ]
+    })
       .then(user => {
         return res.render('profile', {
           user: user.toJSON()
@@ -62,6 +67,8 @@ const userController = {
   editUser: (req, res) => {
     return User.findByPk(req.params.id)
       .then(user => {
+        Comment.findAll
+
         return res.render('edit', {
           user: user.toJSON()
         })
