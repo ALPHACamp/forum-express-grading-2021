@@ -13,21 +13,11 @@ const app = express()
 const port = process.env.PORT || 3000
 
 const hbs = handlebars.create({
-  helpers: {
-    ifCond: function (a, b, options) {
-      if (a === b) {
-        return options.fn(this)
-      }
-      return options.inverse(this)
-    }
-  }
+  defaultLayout: 'main',
+  helpers: require('./config/handlebars-helpers')
 })
 app.engine('handlebars', hbs.engine)
-// app.engine('handlebars', handlebars({
-//   defaultLayout: 'main',
-//   helpers: require('./config/handlebars-helpers')
-// }))
-// app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
+
 app.set('view engine', 'handlebars')
 
 app.use(express.urlencoded({extended: true}))
