@@ -86,6 +86,7 @@ const userController = {
       return res.render('edit', { user } )
   })},
 
+  // 參考 "U113:上傳餐廳照片: https://lighthouse.alphacamp.co/courses/118/units/25563" 教案實作，但測試沒有通過，之後有時間再 debug ------------------
   // putUser: (req, res) => {
   //   if (!req.body.name) {
   //     req.flash('error_messages', "user name didn't exist")
