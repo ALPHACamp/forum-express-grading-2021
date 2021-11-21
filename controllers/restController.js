@@ -62,6 +62,7 @@ const restController = {
         { model: Comment, include: [User] }
       ]
     }).then(restaurant => {
+      restaurant.increment('countViews')
       return res.render('restaurant', {
         restaurant: restaurant.toJSON()
       })
