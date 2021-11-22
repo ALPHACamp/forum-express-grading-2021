@@ -36,9 +36,9 @@ module.exports = (app, passport) => {
   //刪除餐廳資料
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
   //顯示使用者清單
-  app.get('/admin/users', authenticatedAdmin, adminController.getUser)
+  app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   //更改使用者權限
-  
+  app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)
   //註冊、登入、登出
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)

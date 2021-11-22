@@ -19,10 +19,9 @@
       <td>{{this.email}}</td>
       <td>{{{showRole this.isAdmin}}}</td>
       <td>
-        <button type="submit" class="btn btn-link">{{{setRole this.isAdmin}}}</button>
-        {{!-- <form action="/admin/restaurants/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-link">Delete</button>
-        </form> --}}
+        <form action="/admin/users/{{this.id}}/toggleAdmin?_method=PUT" method="POST" style="display: inline;">
+          <button type="submit" class="btn btn-link">{{{setRole this.isAdmin}}}</button>
+        </form>
       </td>
     </tr>
     {{/each}}

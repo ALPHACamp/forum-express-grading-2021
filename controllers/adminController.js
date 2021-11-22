@@ -125,11 +125,36 @@ const adminController = {
       })
   },
 
-  getUser: (req, res) => {
+  getUsers: (req, res) => {
     return User.findAll({ raw: true, nest: true })
     .then(users => res.render('admin/users', { users }))
+  },
+
+  toggleAdmin: async (req, res) => {
+    //判斷是否能變更管理權限 (自己不能變更自己)
+    // if (Number(req.params.id) === req.user.id) {
+    //   req.flash('error_messages','禁止變更管理者權限')
+    //   return res.redirect('/admin/users')
+    // }
+    //變更管理權限
+    User.findByPk(req.params.id)
+    .then(async (user) => {
+      if (user.email === 'root@example.com') {
+        req.flash('error_messages','禁止變更管理者權限')
+        return res.redirect('back')
+      }
+      user.isAdmin ? await user.update({isAdmin: 0 }) : await user.update({isAdmin: 1 })
+      req.flash('success_messages','使用者權限變更成功')
+      return res.redirect('/admin/users')
+    })
   }
 }
 
 
 module.exports = adminController
+
+// if (user.isAdmin) {
+//   await user.update({isAdmin: 0 })
+// } else {
+//   await user.update({isAdmin: 1 })
+// }
