@@ -137,13 +137,13 @@ const adminController = {
     //   return res.redirect('/admin/users')
     // }
     //變更管理權限
-    User.findByPk(req.params.id)
+    return User.findByPk(req.params.id)
     .then(async (user) => {
       if (user.email === 'root@example.com') {
         req.flash('error_messages','禁止變更管理者權限')
         return res.redirect('back')
       }
-      user.isAdmin ? await user.update({isAdmin: 0 }) : await user.update({isAdmin: 1 })
+      user.isAdmin ? await user.update({isAdmin: false }) : await user.update({isAdmin: true })
       req.flash('success_messages','使用者權限變更成功')
       return res.redirect('/admin/users')
     })
