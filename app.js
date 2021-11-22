@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 app.use(methodOverride('_method'))
 app.use('/upload', express.static(__dirname + '/upload'))
 
-require('./routes')(app, passport)
+require('./routes')(app)
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
