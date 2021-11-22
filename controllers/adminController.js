@@ -24,7 +24,7 @@ const adminController = {
   postRestaurant: async (req, res) => {
     adminService.postRestaurant(req, res, data => {
       if (data.status === 'error') {
-        req.flash('error_messages', "name didn't exist")
+        req.flash('error_messages', data.message)
         return res.redirect('back')
       }
       req.flash('success_messages', data['message'])
@@ -38,56 +38,20 @@ const adminController = {
     })
   },
   editRestaurant: async (req, res) => {
-    try {
-      const restaurant = await Restaurant.findByPk(req.params.id, { raw: true })
-      const categories = await Category.findAll({ raw: true, nest: true })
-      return res.render('admin/create', { restaurant, categories })
-    } catch (err) {
-      console.log(err)
-    }
+    adminService.editRestaurant(req, res, data => {
+      return res.render('admin/create', data)
+    })
   },
 
   putRestaurant: async (req, res) => {
-    if (!req.body.name) {
-      req.flash('error_messages', "name didn't exist")
-      return res.redirect('back')
-    }
-
-    const { file } = req
-    try {
-      if (file) {
-        imgur.setClientID(IMGUR_CLIENT_ID)
-        imgur.upload(file.path, async (err, img) => {
-          const restaurant = await Restaurant.findByPk(req.params.id)
-          await restaurant.update({
-            name: req.body.name,
-            tel: req.body.tel,
-            address: req.body.address,
-            opening_hours: req.body.opening_hours,
-            description: req.body.description,
-            image: file ? img.data.link : restaurant.image,
-            CategoryId: req.body.categoryId
-          })
-          req.flash('success_messages', 'restaurant was successfully to update')
-          res.redirect('/admin/restaurants')
-        })
-      } else {
-        const restaurant = await Restaurant.findByPk(req.params.id)
-        await restaurant.update({
-          name: req.body.name,
-          tel: req.body.tel,
-          address: req.body.address,
-          opening_hours: req.body.opening_hours,
-          description: req.body.description,
-          image: restaurant.image,
-          CategoryId: req.body.categoryId
-        })
-        req.flash('success_messages', 'restaurant was successfully to update')
-        res.redirect('/admin/restaurants')
+    adminService.putRestaurant(req, res, data => {
+      if (data.status === 'error') {
+        req.flash('error_messages', data.message)
+        return res.redirect('back')
       }
-    } catch (err) {
-      console.log(err)
-    }
+      req.flash('success_messages', data.message)
+      return res.redirect(`/admin/restaurants/${req.params.id}`)
+    })
   },
   deleteRestaurant: async (req, res) => {
     adminService.deleteRestaurant(req, res, data => {

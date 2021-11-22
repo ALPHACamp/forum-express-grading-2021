@@ -14,5 +14,10 @@ router.post(
   upload.single('image'),
   adminController.postRestaurant
 )
+router.put(
+  '/admin/restaurants/:id',
+  upload.single('image'),
+  adminController.putRestaurant
+)
 
 module.exports = router

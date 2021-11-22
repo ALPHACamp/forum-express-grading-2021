@@ -81,20 +81,19 @@ const adminService = {
       console.log(err)
     }
   },
-  editRestaurant: async (req, res) => {
+  editRestaurant: async (req, res, cb) => {
     try {
       const restaurant = await Restaurant.findByPk(req.params.id, { raw: true })
       const categories = await Category.findAll({ raw: true, nest: true })
-      return res.render('admin/create', { restaurant, categories })
+      cb({ restaurant, categories })
     } catch (err) {
       console.log(err)
     }
   },
 
-  putRestaurant: async (req, res) => {
+  putRestaurant: async (req, res, cb) => {
     if (!req.body.name) {
-      req.flash('error_messages', "name didn't exist")
-      return res.redirect('back')
+      return cb({ status: 'error', message: "name didn't exist" })
     }
 
     const { file } = req
@@ -113,7 +112,10 @@ const adminService = {
             CategoryId: req.body.categoryId
           })
           req.flash('success_messages', 'restaurant was successfully to update')
-          res.redirect('/admin/restaurants')
+          cb({
+            status: 'success',
+            message: 'restaurant was successfully to update'
+          })
         })
       } else {
         const restaurant = await Restaurant.findByPk(req.params.id)
@@ -127,7 +129,10 @@ const adminService = {
           CategoryId: req.body.categoryId
         })
         req.flash('success_messages', 'restaurant was successfully to update')
-        res.redirect('/admin/restaurants')
+        cb({
+          status: 'success',
+          message: 'restaurant was successfully to update'
+        })
       }
     } catch (err) {
       console.log(err)
