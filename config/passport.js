@@ -23,6 +23,7 @@ passport.use(new LocalStrategy(
                 return cb(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤'))
             if (!bcrypt.compareSync(password, user.password)) 
                 return cb(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤！'))
+            user = user.toJSON()
             return cb(null, user)
         })
     }

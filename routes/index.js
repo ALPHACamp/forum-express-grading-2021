@@ -6,19 +6,23 @@ const commentController = require('../controllers/commentController.js')
 
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
+const helpers = require("../_helpers");
 
 
 
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    // if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated(req)) {
       return next()
     }
     res.redirect('/signin')
   }
   const authenticatedAdmin = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      if (req.user.isAdmin) { 
+    // if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated(req)) {
+      // if (req.user.isAdmin) { 
+      if (helpers.getUser(req).isAdmin) {
         return next() 
       }
       return res.redirect('/')

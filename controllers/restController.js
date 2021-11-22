@@ -1,5 +1,6 @@
 const db = require('../models')
 const restaurant = require('../models/restaurant')
+const helpers = require('../_helpers')
 const Restaurant = db.Restaurant
 const Category = db.Category
 const Comment = db.Comment
@@ -127,7 +128,7 @@ const restController = {
         {
           ...restaurant.dataValues,
           favoritedCount: restaurant.FavoritedUsers.length,
-          isFavorited: restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id)
+          isFavorited: restaurant.FavoritedUsers.map(d => d.id).includes(helpers.getUser(req).id)
         }
        )
       )
