@@ -8,10 +8,15 @@ module.exports = (sequelize, DataTypes) => {
       Restaurant.belongsTo(models.Category)
       Restaurant.hasMany(models.Comment)
       Restaurant.belongsToMany(models.User, {
-      through: models.Favorite,
-      foreignKey: 'RestaurantId',
-      as: 'FavoritedUsers'
-    })
+        through: models.Favorite,
+        foreignKey: 'RestaurantId',
+        as: 'FavoritedUsers'
+      })
+      Restaurant.belongsToMany(models.User, {
+        through: models.Like,
+        foreignKey: 'RestaurantId',
+        as: 'LikedUsers'
+      })
     }
   };
   Restaurant.init({
