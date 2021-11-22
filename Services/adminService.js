@@ -130,11 +130,11 @@ const adminService = {
       console.log(err)
     }
   },
-  deleteRestaurant: async (req, res) => {
+  deleteRestaurant: async (req, res, cb) => {
     try {
       const restaurant = await Restaurant.findByPk(req.params.id)
       await restaurant.destroy()
-      return res.redirect('/admin/restaurants')
+      cb({ status: 'success', message: '' })
     } catch (err) {
       console.log(err)
     }
