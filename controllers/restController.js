@@ -102,15 +102,8 @@ const restController = {
 
   getDashBoard: async (req, res) => {
     try {
-      const RestaurantId = req.params.id
-      const restaurantPromise = Restaurant
-        .findByPk(RestaurantId, { include: [Category] })
-        .then(result => result.toJSON())
-      const commentCountsPromise = Comment
-        .findAndCountAll({ where: { RestaurantId } })
-        .then(result => result.count)
-      const [restaurant, commentCounts] = await Promise.all([restaurantPromise, commentCountsPromise])
-      return res.render('dashboard', { restaurant, commentCounts })
+      const restaurant = await Restaurant.findByPk(req.params.id, { include: [Category, Comment] })
+      return res.render('dashboard', { restaurant: restaurant.toJSON() })
     } catch (err) {
       console.error(err)
     }
