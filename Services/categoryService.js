@@ -4,10 +4,10 @@ const categoryService = {
   getCategories: async (req, res, cb) => {
     try {
       const categories = await Category.findAll({ raw: true, nest: true })
-      if (req.params.categoryId) {
-        const category = await Category.findByPk(req.params.id)
-        cb({
-          category: category.toJSON(),
+      if (req.params.id) {
+        const category = (await Category.findByPk(req.params.id)).toJSON()
+        return cb({
+          category,
           categories
         })
       }
@@ -16,27 +16,25 @@ const categoryService = {
       console.log(err)
     }
   },
-  postCategory: async (req, res) => {
+  postCategory: async (req, res, cb) => {
     try {
       if (!req.body.name) {
-        req.flash('error_messages', "name didn't exist")
-        return res.redirect('back')
+        return cb({ status: 'error', message: "name didn't exist" })
       }
       await Category.create({ name: req.body.name })
-      return res.redirect('/admin/categories')
+      return cb({ status: 'success', message: 'create category successfully' })
     } catch (err) {
       console.log(err)
     }
   },
-  putCategory: async (req, res) => {
+  putCategory: async (req, res, cb) => {
     if (!req.body.name) {
-      req.flash('error_messages', "name didn't exist")
-      return res.redirect('back')
+      return cb({ status: 'error', message: "name didn't exist" })
     }
     try {
       const category = await Category.findByPk(req.params.id)
       await category.update(req.body)
-      res.redirect('/admin/categories')
+      return cb({ status: 'success', message: '' })
     } catch (err) {
       console.log(err)
     }

@@ -46,7 +46,7 @@ const adminService = {
             image: file ? img.data.link : null,
             CategoryId: req.body.categoryId
           })
-          cb({
+          return cb({
             status: 'success',
             message: 'restaurant was successfully created'
           })
@@ -61,7 +61,7 @@ const adminService = {
           image: null,
           CategoryId: req.body.categoryId
         })
-        cb({
+        return cb({
           status: 'success',
           message: 'restaurant was successfully created'
         })
@@ -85,7 +85,7 @@ const adminService = {
     try {
       const restaurant = await Restaurant.findByPk(req.params.id, { raw: true })
       const categories = await Category.findAll({ raw: true, nest: true })
-      cb({ restaurant, categories })
+      return cb({ restaurant, categories })
     } catch (err) {
       console.log(err)
     }
@@ -112,7 +112,7 @@ const adminService = {
             CategoryId: req.body.categoryId
           })
           req.flash('success_messages', 'restaurant was successfully to update')
-          cb({
+          return cb({
             status: 'success',
             message: 'restaurant was successfully to update'
           })
@@ -129,7 +129,7 @@ const adminService = {
           CategoryId: req.body.categoryId
         })
         req.flash('success_messages', 'restaurant was successfully to update')
-        cb({
+        return cb({
           status: 'success',
           message: 'restaurant was successfully to update'
         })
@@ -142,7 +142,7 @@ const adminService = {
     try {
       const restaurant = await Restaurant.findByPk(req.params.id)
       await restaurant.destroy()
-      cb({ status: 'success', message: '' })
+      return cb({ status: 'success', message: '' })
     } catch (err) {
       console.log(err)
     }
