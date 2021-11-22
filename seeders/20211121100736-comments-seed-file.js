@@ -9,7 +9,7 @@ module.exports = {
           id: index * 10 + 1,
           text: item,
           UserId: Math.floor(Math.random() * 2) + 1,
-          RestaurantId: Math.floor(Math.random() * 30)  + 53,
+          RestaurantId: Math.floor(Math.random() * 50)  + 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         })
