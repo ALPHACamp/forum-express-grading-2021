@@ -2,15 +2,21 @@ const db = require('../models')
 const Restaurant = db.Restaurant
 const User = db.User
 const Category = db.Category
-const adminService = require('../Services/adminService')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
-const adminController = {
-  getRestaurants: async (req, res) => {
-    adminService.getRestaurants(req, res, data => {
-      return res.render('restaurants', data)
-    })
+const adminService = {
+  getRestaurants: async (req, res, cb) => {
+    try {
+      const restaurants = await Restaurant.findAll({
+        raw: true,
+        nest: true,
+        include: [Category]
+      })
+      return cb({ restaurants })
+    } catch (err) {
+      console.log(err)
+    }
   },
   createRestaurant: async (req, res) => {
     try {
@@ -157,4 +163,4 @@ const adminController = {
     }
   }
 }
-module.exports = adminController
+module.exports = adminService
