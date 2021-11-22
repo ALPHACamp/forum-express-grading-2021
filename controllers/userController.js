@@ -4,9 +4,11 @@ const User = db.User
 const Restaurant = db.Restaurant
 const Comment = db.Comment
 const Favorite = db.Favorite
+const Like = db.Like
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const helpers = require('../_helpers')
 
 // 去除評論中重複的餐廳
 const removeDBLComment = (rawData) => {
@@ -178,6 +180,24 @@ const userController = {
             return res.redirect('back')
           })
       })
+  },
+
+  addLike: async (req, res) => {
+    return Like.create({
+      UserId: helpers.getUser(req).id,
+      RestaurantId: req.params.restaurantId
+    }).then(like => {
+      return res.redirect('back')
+    })
+  },
+
+  removeLike: (req, res) => {
+    return Like.destroy({
+      where: {
+        UserId: helpers.getUser(req).id,
+        RestaurantId: req.params.restaurantId
+      }
+    }).then(like => res.redirect('back'))
   }
 
 }
