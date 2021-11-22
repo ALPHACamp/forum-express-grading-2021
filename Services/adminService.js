@@ -27,10 +27,9 @@ const adminService = {
     }
   },
 
-  postRestaurant: async (req, res) => {
+  postRestaurant: async (req, res, cb) => {
     if (!req.body.name) {
-      req.flash('error_messages', "name didn't exist")
-      return res.redirect('back')
+      return cb({ status: 'error', message: "name didn't exist" })
     }
 
     const { file } = req
@@ -47,8 +46,10 @@ const adminService = {
             image: file ? img.data.link : null,
             CategoryId: req.body.categoryId
           })
-          req.flash('success_messages', 'restaurant was successfully created')
-          return res.redirect('/admin/restaurants')
+          cb({
+            status: 'success',
+            message: 'restaurant was successfully created'
+          })
         })
       } else {
         await Restaurant.create({
@@ -60,8 +61,10 @@ const adminService = {
           image: null,
           CategoryId: req.body.categoryId
         })
-        req.flash('success_messages', 'restaurant was successfully created')
-        return res.redirect('/admin/restaurants')
+        cb({
+          status: 'success',
+          message: 'restaurant was successfully created'
+        })
       }
     } catch (err) {
       console.log(err)
