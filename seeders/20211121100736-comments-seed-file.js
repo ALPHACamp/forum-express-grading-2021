@@ -6,10 +6,10 @@ module.exports = {
       ['Good', 'Yummy', 'Delicious', 'Soso', 'Terrible', 'Bad', 'Worst']
         .map((item, index) =>
         ({
-          id: index * 10 + 1,
+          id: index,
           text: item,
           UserId: Math.floor(Math.random() * 2) + 1,
-          RestaurantId: Math.floor(Math.random() * 50)  + 1,
+          RestaurantId: Math.floor(Math.random() * 30)  + 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         })
