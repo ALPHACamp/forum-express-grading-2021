@@ -9,7 +9,7 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const adminController = {
   getRestaurants: async (req, res) => {
     adminService.getRestaurants(req, res, data => {
-      return res.render('restaurants', data)
+      return res.render('admin/restaurants', data)
     })
   },
   createRestaurant: async (req, res) => {
@@ -63,14 +63,9 @@ const adminController = {
   },
 
   getRestaurant: async (req, res) => {
-    try {
-      const restaurant = await Restaurant.findByPk(req.params.id, {
-        include: [Category]
-      })
-      return res.render('admin/restaurant', { restaurant: restaurant.toJSON() })
-    } catch (err) {
-      console.log(err)
-    }
+    adminService.getRestaurant(req, res, data => {
+      return res.render('admin/restaurant', data)
+    })
   },
   editRestaurant: async (req, res) => {
     try {
