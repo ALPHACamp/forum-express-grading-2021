@@ -39,11 +39,11 @@ const categoryService = {
       console.log(err)
     }
   },
-  deleteCategory: async (req, res) => {
+  deleteCategory: async (req, res, cb) => {
     try {
       const category = await Category.findByPk(req.params.id)
       await category.destroy()
-      res.redirect('/admin/categories')
+      return cb({ status: 'success', message: 'delete category successfully' })
     } catch (err) {
       console.log(err)
     }
