@@ -70,7 +70,8 @@ const userController = {
   editUser: async (req, res) => {
     try {
       if (helpers.getUser(req).id !== Number(req.params.id)) {
-        return res.render('error403')
+        req.flash('error_messages', '你無權查看此頁面')
+        return res.redirect('/restaurants')
       }
 
       const user = await User.findByPk(req.params.id)
@@ -83,7 +84,8 @@ const userController = {
   putUser: async (req, res) => {
     try {
       if (helpers.getUser(req).id !== Number(req.params.id)) {
-        return res.render('error403')
+        req.flash('error_messages', '你無權查看此頁面')
+        return res.redirect('/restaurants')
       }
 
       const user = await User.findByPk(req.params.id)
