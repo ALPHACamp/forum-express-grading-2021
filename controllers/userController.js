@@ -9,6 +9,7 @@ const Restaurant = db.Restaurant
 const Comment = db.Comment
 const Favorite = db.Favorite
 const Like = db.Like
+const Followship = db.Followship
 
 const userController = {
   signUpPage: (req, res) => {
@@ -165,6 +166,24 @@ const userController = {
     } catch (err) {
       console.error(err)
     }
+  },
+
+  addFollowing: async (req, res) => {
+    await Followship.create({
+      followerId: helpers.getUser(req).id,
+      followingId: req.params.userId
+    })
+    return res.redirect('back')
+  },
+
+  removeFollowing: async (req, res) => {
+    await Followship.destroy({
+      where: {
+        followerId: helpers.getUser(req).id,
+        followingId: req.params.userId
+      }
+    })
+    return res.redirect('back')
   },
 
   getTopUser: async (req, res) => {
