@@ -6,5 +6,8 @@ module.exports = {
     setRole: function (isAdmin) {
         if (isAdmin) return 'set as user'
         return 'set as admin'
+    },
+    ifCond: function (a, b) {
+        if (a === b) return 'selected'
     }
 }
