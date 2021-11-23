@@ -152,9 +152,3 @@ const adminController = {
 
 
 module.exports = adminController
-
-// if (user.isAdmin) {
-//   await user.update({isAdmin: 0 })
-// } else {
-//   await user.update({isAdmin: 1 })
-// }
