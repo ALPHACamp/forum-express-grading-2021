@@ -60,12 +60,11 @@ const userController = {
     },
     putUser: (req, res) => {
         const { file, user: loginUser } = req
-        const { name, email } = req.body;
+        const { name, email } = req.body
 
-        if (!req.body.name) {
-            req.flash('error_messages', "name didn't exist")
-            console.log(req.body.name)
-            return res.redirect('back')
+        if (loginUser.id !== Number(req.params.id)) {
+            req.flash("error_messages", "無法更改其他使用者的資料")
+            return res.redirect("back")
         }
 
         if (file) {
