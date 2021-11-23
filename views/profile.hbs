@@ -1,0 +1,26 @@
+<div class="d-flex">
+  <div class="col-md-3">
+    <img src="{{user.image}}" alt="user-avatar" style="width:100%;">
+  </div>
+  <div class="card-md-9">
+    <h3>{{user.name}}</h3>
+    <p>{{user.email}}</p>
+    <p><b>{{user.commentCount}}</b> 已評論餐廳</p>
+    {{#if user.isUser}}
+      <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
+    {{/if}}
+  </div>
+  
+  <div class="card mt-3">
+    <div class="card-header"><b>{{user.commentCount}}</b>
+      已評論餐廳</div>
+    <div class="card-body">
+      {{#each user.Comments}}
+      <a href="/restaurants/{{this.Restaurant.id}}">
+        <img class="mx-2" src="{{this.Restaurant.image}}" style="width: 70px; height: 70px">
+      </a>
+      {{/each}}
+    </div>
+  </div>
+
+</div>
