@@ -119,7 +119,7 @@ const userController = {
   addFavorite: async (req, res) => {
     try {
       await Favorite.create({
-        UserId: helpers.getUser(req).id,
+        UserId: req.user.id,  // 不用 helpers.getUser(req)，因為 R05 有自定義 req
         RestaurantId: req.params.restaurantId
       })
       return res.redirect('back')
@@ -132,7 +132,7 @@ const userController = {
     try {
       await Favorite.destroy({
         where: {
-          UserId: helpers.getUser(req).id,
+          UserId: req.user.id,  // 不用 helpers.getUser(req)，因為 R05 有自定義 req
           RestaurantId: req.params.restaurantId
         }
       })
