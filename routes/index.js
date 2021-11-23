@@ -48,4 +48,5 @@ module.exports = (app, passport) => {
   app.get('/logout', userController.logout)
   //餐廳分類
   app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
+  app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)
 }
