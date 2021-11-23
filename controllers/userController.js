@@ -6,6 +6,7 @@ const Comment = db.Comment
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const helpers = require('../_helpers')
 
 // 去除評論中重複的餐廳
 const removeDBLComment = (rawData) => {
@@ -71,6 +72,9 @@ const userController = {
         { include: { model: Comment, include: { model: Restaurant, attribute: ['id', 'image'] } } }
       )).toJSON()
 
+      // user.isUser = req.user.id === Number(req.params.id)
+      user.isUser = helpers.getUser(req).id === Number(req.params.id)
+
       // 因應測試檔若user.Comments不存在，執行removeDBLComment會報錯，因此新增判斷式
       user.Comments ? user.Comments = removeDBLComment(user.Comments) : ''
       user.Comments ? user.commentCount = user.Comments.length : ''
@@ -82,48 +86,10 @@ const userController = {
   },
 
   editUser: (req, res) => {
+    if (helpers.getUser(req).id !== Number(req.params.id)) return res.redirect('back')
     return User.findByPk(req.params.id, {raw:true}).then(user => {
       return res.render('edit', { user } )
   })},
-
-  // putUser: (req, res) => {
-  //   if (!req.body.name) {
-  //     req.flash('error_messages', "user name didn't exist")
-  //     return res.redirect('back')
-  //   }
-
-  //   const { file } = req
-  //   if (file) {
-  //     fs.readFile(file.path, (err, data) => {
-  //       if (err) console.log('Error: ', err)
-  //       fs.writeFile(`upload/${file.originalname}`, data, () => {
-  //         return User.findByPk(req.params.id)
-  //           .then((user) => {
-  //             user.update({
-  //               name: req.body.name,
-  //               email: req.body.email,
-  //               image: file ? `/upload/${file.originalname}` : user.image
-  //             }).then((user) => {
-  //               req.flash('success_messages', 'user was successfully to update')
-  //               res.redirect(`/users/${user.id}`)
-  //             })
-  //         })
-  //       })
-  //     })
-  //   } else {
-  //     return User.findByPk(req.params.id)
-  //       .then((user) => {
-  //         user.update({
-  //           name: req.body.name,
-  //           email: req.body.email,
-  //           image: user.image
-  //         }).then((user) => {
-  //           req.flash('success_messages', 'restaurant was successfully to update')
-  //           res.redirect(`/users/${user.id}`)
-  //         })
-  //       })
-  //   }
-  // },
 
   putUser: async (req, res) => {
     try {
