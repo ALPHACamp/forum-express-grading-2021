@@ -95,8 +95,9 @@ const restController = {
   },
   getDashBoard: async (req, res) => {
     const restaurantId = req.params.id
-    const restaurant = await Restaurant.findByPk(restaurantId, {include:[Category, Comment]})
-    const commentCounts = restaurant.Comments.length
+    const restaurant = await Restaurant.findByPk(restaurantId, {include: Category})
+    const commentData = await Comment.findAndCountAll({where: {RestaurantId: restaurantId}})
+    const commentCounts = commentData.count
     return res.render('dashboard', {
       restaurant: restaurant.toJSON(),
       commentCounts,
