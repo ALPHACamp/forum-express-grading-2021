@@ -48,6 +48,23 @@ let userController = {
     } catch (err) {
       console.log(err)
     }
+  },
+  signUp: async (req, res) => {
+    if (req.body.passwordCheck !== req.body.password) {
+      return res.json({ status: 'error', message: '兩次輸入密碼不同！' })
+    } else {
+      const user = await User.findOne({ where: { email: req.body.email } })
+      if (user) {
+        return res.json({ status: 'error', message: '信箱重複！' })
+      } else {
+        await User.create({
+          name: req.body.name,
+          email: req.body.email,
+          password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
+        })
+        return res.json({ status: 'success', message: '成功註冊帳號！' })
+      }
+    }
   }
 }
 
