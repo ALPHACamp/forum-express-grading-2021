@@ -1,8 +1,7 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
+const user = require('../models/user')
 const User = db.User
-const Comment = db.Comment
-const Restaurant = db.Restaurant
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
@@ -50,34 +49,26 @@ const userController = {
         res.redirect('/signin')
     },
     getUser: (req, res) => {
-        const userId = req.params.id
-        return Comment.findAll({
-            raw: true,
-            nest: true,
-            where: { userId: userId },
-            include: [Restaurant]
+        return User.findByPk(req.params.id).then((user) => {
+            return res.render('profile', {user: user.toJSON()})
         })
-            .then(comments => {
-                return User.findByPk(userId)
-                    .then(user => {
-                        res.render('profile', {
-                            user: user.toJSON(),
-                            comments
-                        })
-                    })
-            })
     },
     editUser: (req, res) => {
-        if (req.user.id !== Number(req.params.id)) {
-            req.flash('error_messages', "無法更改其他使用者的資料")
-            return res.redirect(`/users/${req.user.id}`)
-        }
         return User.findByPk(req.params.id).then((user) => {
             return res.render('edit', { user: user.toJSON() })
         })
     },
     putUser: (req, res) => {
         const { file } = req
+        if (req.params.id !== Number(req.params.id)) {
+            req.flash('error_messages', "can't edit other's profile")
+            return res.redirect(`/users/${req.params.id}`)
+        }
+        if (!req.body.name) {
+            req.flash('error_messages', "name didn't exist")
+            console.log(req.body.name)
+            return res.redirect('back')
+        }
 
         if (file) {
             imgur.setClientID(IMGUR_CLIENT_ID)
