@@ -7,7 +7,10 @@ module.exports = {
         if (isAdmin) return 'set as user'
         return 'set as admin'
     },
-    ifCond: function (a, b) {
-        if (a === b) return 'selected'
+    ifCond: function (a, b, options) {
+        if (a === b) {
+          return options.fn(this)
+          }
+        return options.inverse(this)
     }
 }
