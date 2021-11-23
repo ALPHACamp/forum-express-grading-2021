@@ -68,7 +68,10 @@ const userController = {
             })
     },
     editUser: (req, res) => {
- 
+        if (req.user.id !== Number(req.params.id)) {
+            req.flash('error_messages', "無法更改其他使用者的資料")
+            return res.redirect(`/users/${req.user.id}`)
+        }
         return User.findByPk(req.params.id).then((user) => {
             return res.render('edit', { user: user.toJSON() })
         })
