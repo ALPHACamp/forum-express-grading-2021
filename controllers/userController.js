@@ -55,23 +55,20 @@ const userController = {
     },
     editUser: (req, res) => {
         return User.findByPk(req.params.id).then((user) => {
-            return res.render('profileedit', { user: user.toJSON() })
+            return res.render('edit', { user: user.toJSON() })
         })
     },
     putUser: (req, res) => {
-        const { name, email } = req.body
         const { file, user: loginUser } = req
+        const { name, email } = req.body;
 
-        if (loginUser.id !== Number(req.params.id)) {
-            req.flash("error_messages", "無法更改其他使用者的資料")
-            return res.redirect("back")
+        if (!req.body.name) {
+            req.flash('error_messages', "name didn't exist")
+            console.log(req.body.name)
+            return res.redirect('back')
         }
-        
-        if (!name || !email || !file) {
-            req.flash("error_messages", "使用者資料沒有變更")
-            return res.redirect("back")
-        }
-        if(file) {
+
+        if (file) {
             imgur.setClientID(IMGUR_CLIENT_ID)
             imgur.upload(file.path, (err, img) => {
                 return User.findByPk(req.params.id)
@@ -80,10 +77,11 @@ const userController = {
                             name,
                             email,
                             image: file ? img.data.link : user.image
-                        }).then((user) => {
-                            req.flash('success_messages', '編輯成功')
-                            res.redirect(`/users/${req.params.id}`)
                         })
+                            .then((user) => {
+                                req.flash('success_messages', '使用者資料編輯成功')
+                                res.redirect(`/users/${req.params.id}`)
+                            })
                     })
             })
         } else {
@@ -91,11 +89,10 @@ const userController = {
                 .then((user) => {
                     user.update({
                         name,
-                        email,
-                        image: user.image
+                        email
                     })
                         .then((user) => {
-                            req.flash('success_messages', '編輯成功')
+                            req.flash('success_messages', '使用者資料編輯成功')
                             res.redirect(`/users/${req.params.id}`)
                         })
                 })
