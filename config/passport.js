@@ -5,6 +5,28 @@ const db = require('../models')
 const User = db.User
 const Restaurant = db.Restaurant
 
+//JWT
+const jwt = require('jsonwebtoken')
+const passportJWT = require('passport-jwt')
+const ExtractJwt = passportJWT.ExtractJwt
+const JwtStrategy = passportJWT.Strategy
+
+let jwtOptions = {}
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
+jwtOptions.secretOrKey = process.env.JWT_SECRET
+let strategy = new JwtStrategy(jwtOptions, async function (jwt_payload, next) {
+  const user = await User.findByPk(jwt_payload.id, {
+    include: [
+      { model: db.Restaurant, as: 'FavoritedRestaurants' },
+      { model: db.Restaurant, as: 'LikedRestaurants' },
+      { model: User, as: 'Followers' },
+      { model: User, as: 'Followings' }
+    ]
+  })
+  if (!user) return next(null, false)
+  return next(null, user)
+})
+passport.use(strategy)
 passport.use(
   new LocalStrategy(
     {
