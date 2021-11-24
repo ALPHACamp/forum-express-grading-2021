@@ -16,16 +16,17 @@ app.use(
 		saveUninitialized: false,
 	})
 );
-app.use((req, res, next) => {
-	res.locals.success_messages = req.flash("success_messages");
-	res.locals.error_messages = req.flash("error_messages");
-	next();
-});
 app.use(express.urlencoded({ extended: true }));
 app.engine("hbs", exphbs({ defaultLayout: "main", extname: "hbs" })); // Handlebars 註冊樣板引擎
 app.set("view engine", "hbs"); // 設定使用 Handlebars 做為樣板引擎
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req, res, next) => {
+	res.locals.success_messages = req.flash("success_messages");
+	res.locals.error_messages = req.flash("error_messages");
+	res.locals.user = req.user;
+	next();
+});
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}!`);
 });
