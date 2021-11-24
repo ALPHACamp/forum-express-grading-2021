@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 module.exports = {
     showRole: function (isAdmin) {
         if (isAdmin) return 'admin'
@@ -12,5 +14,8 @@ module.exports = {
           return options.fn(this)
           }
         return options.inverse(this)
+    },
+    moment: function (a) {
+        return moment(a).fromNow()
     }
 }
