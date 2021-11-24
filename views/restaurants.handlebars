@@ -8,6 +8,9 @@
     <li class="nav-item">
         <a class="nav-link {{#ifCond '' categoryId}}active{{/ifCond}}" href="?categoryId=">全部</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/users/top">美食達人</a>
+    </li>
     {{#each categories}}
         <li class="nav-item">
             <a class="nav-link {{#ifCond this.id ../categoryId}}active{{/ifCond}}" href="?categoryId={{this.id}}">{{this.name}}</a>
