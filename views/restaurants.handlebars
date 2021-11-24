@@ -21,7 +21,7 @@
 
 <div class="row">
     {{#each restaurants}}
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card mb-4 shadow-sm">
                 <img class="card-img-top" src="{{this.image}}" alt="Card image cap" width="286px" height="180px">
                 <div class="card-body">
@@ -32,6 +32,7 @@
                     </p>
                     <span class="badge badge-secondary">{{this.categoryName}}</span>
                     <p class="card-text">{{this.description}}</p>
+                    <div class="row">
                     {{#if this.isFavorited }}
                         <form action="/favorite/{{this.id}}?_method=DELETE" method="POST">
                             <button type="submit" class="btn btn-danger">移除最愛</button>
@@ -50,6 +51,7 @@
                             <button type="submit" class="btn btn-primary">Like</button>
                         </form>
                     {{/if}}
+                    </div>
                 </div>
             </div>
         </div>
