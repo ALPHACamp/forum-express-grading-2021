@@ -10,9 +10,9 @@ const { createModelMock, createControllerProxy, mockRequest, mockResponse } = re
 // 建立模擬的 Like 資料
 let mockLikeData = [
   {
-    userId: 1,
-    restaurantId: 2,
-  },
+    UserId: 1,
+    RestaurantId: 2
+  }
 ]
 
 describe('# R04: Like / Unlike', function () {
@@ -20,14 +20,14 @@ describe('# R04: Like / Unlike', function () {
     before(() => {
       // 模擬登入驗證
       this.ensureAuthenticated = sinon
-        .stub(helpers, 'ensureAuthenticated')
-        .returns(true)
+          .stub(helpers, 'ensureAuthenticated')
+          .returns(true)
       this.getUser = sinon.stub(helpers, 'getUser').returns({ id: 1 })
 
       // 建立了一個模擬的 Like table，裡面目前是空的
       this.mockLikeData = []
       this.likeMock = createModelMock('Like', null, this.mockLikeData)
-      
+
       // 連向模擬的 Like table
       this.userController = createControllerProxy('../controllers/userController', {Like: this.likeMock})
     })
@@ -60,8 +60,8 @@ describe('# R04: Like / Unlike', function () {
     before(() => {
       // 模擬登入驗證
       this.ensureAuthenticated = sinon
-        .stub(helpers, 'ensureAuthenticated')
-        .returns(true)
+          .stub(helpers, 'ensureAuthenticated')
+          .returns(true)
       this.getUser = sinon.stub(helpers, 'getUser').returns({ id: 1 })
       // 製作假資料
       // 下個 context 會用這筆資料進行測試
