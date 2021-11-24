@@ -2,6 +2,7 @@ const restController = require('../controllers/restController')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
 const categoryController = require('../controllers/categoryController.js')
+const commentController = require('../controllers/commentController.js')
 const helpers = require('../_helpers')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
@@ -20,10 +21,9 @@ module.exports = (app, passport) => {
     }
     res.redirect('/signin')
   }
-  //瀏覽首頁
+  //瀏覽首頁、餐廳資料
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated,restController.getRestaurants)
-  //使用者瀏覽畫面
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   //瀏覽後台
   app.get('/admin', authenticatedAdmin,(req, res) => res.redirect('/admin/restaurants'))
@@ -54,4 +54,6 @@ module.exports = (app, passport) => {
   app.get('/admin/categories/:id', authenticatedAdmin, categoryController.getCategories)
   app.put('/admin/categories/:id', authenticatedAdmin, categoryController.putCategory)
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
+  //評論相關
+  app.post('/comments', authenticated, commentController.postComment)
 }
