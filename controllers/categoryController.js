@@ -1,5 +1,3 @@
-const db = require('../models')
-const Category = db.Category
 const categoryService = require('../Services/categoryService')
 const categoryController = {
   getCategories: async (req, res) => {

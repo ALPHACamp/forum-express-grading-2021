@@ -147,25 +147,23 @@ const adminService = {
       console.log(err)
     }
   },
-  getUsers: async (req, res) => {
+  getUsers: async (req, res, cb) => {
     try {
-      const users = await User.findAll({ raw: true })
-      return res.render('admin/users', { users })
+      const users = await User.findAll({ raw: true, nest: true })
+      return cb({ status: 'success', message: '', users })
     } catch (err) {
       console.log(err)
     }
   },
-  toggleAdmin: async (req, res) => {
+  toggleAdmin: async (req, res, cb) => {
     try {
       const user = await User.findByPk(req.params.id)
       if (user.email === 'root@example.com') {
-        req.flash('error_messages', '禁止變更管理者權限')
-        return res.redirect('back')
+        return cb({ status: 'error', message: '禁止變更管理者權限' })
       }
       user.isAdmin === false ? (user.isAdmin = true) : (user.isAdmin = false)
       await user.update({ isAdmin: user.isAdmin })
-      req.flash('success_messages', '使用者權限變更成功')
-      res.redirect('/admin/users')
+      return cb({ status: 'success', message: '使用者權限變更成功' })
     } catch (err) {
       console.log(err)
     }

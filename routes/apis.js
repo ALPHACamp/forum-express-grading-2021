@@ -3,6 +3,8 @@ const router = express.Router()
 const adminController = require('../controllers/api/adminController')
 const categoryController = require('../controllers/api/categoryController')
 const userController = require('../controllers/api/userController')
+const restController = require('../controllers/api/restController')
+const commentController = require('../controllers/api/commentController')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 const passport = require('passport')
@@ -17,6 +19,19 @@ const authenticatedAdmin = (req, res, next) => {
     return res.json({ status: 'error', message: 'permission denied' })
   }
 }
+
+router.get('/restaurants', authenticated, restController.getRestaurants)
+router.get('/restaurants/feeds', authenticated, restController.getFeeds)
+router.get('/restaurants/top', authenticated, restController.getTopRestaurant)
+router.get('/restaurants/:id', authenticated, restController.getRestaurant)
+router.get(
+  '/restaurants/:id/dashboard',
+  authenticated,
+  restController.getDashBoard
+)
+
+router.post('/comments', authenticated, commentController.postComment)
+router.delete('/comments/:id', authenticated, commentController.deleteComment)
 
 router.get(
   '/admin/restaurants',
@@ -75,7 +90,28 @@ router.delete(
   authenticatedAdmin,
   categoryController.deleteCategory
 )
+router.get(
+  '/admin/users',
+  authenticated,
+  authenticatedAdmin,
+  adminController.getUsers
+)
+router.put(
+  '/admin/users/:id/toggleAdmin',
+  authenticated,
+  authenticatedAdmin,
+  adminController.toggleAdmin
+)
 
-router.post('/signin', userController.signIn)
-router.post('/signup', userController.signUp)
+router.post('/signin', authenticated, userController.signIn)
+router.post('/signup', authenticated, userController.signUp)
+
+router.get('/users/:id', authenticated, userController.getUser)
+router.put(
+  '/users/:id',
+  authenticated,
+  upload.single('image'),
+  userController.putUser
+)
+
 module.exports = router

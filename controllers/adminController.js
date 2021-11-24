@@ -1,10 +1,5 @@
-const db = require('../models')
-const Restaurant = db.Restaurant
-const User = db.User
 const Category = db.Category
 const adminService = require('../Services/adminService')
-const imgur = require('imgur-node-api')
-const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const adminController = {
   getRestaurants: async (req, res) => {
@@ -61,27 +56,19 @@ const adminController = {
     })
   },
   getUsers: async (req, res) => {
-    try {
-      const users = await User.findAll({ raw: true })
-      return res.render('admin/users', { users })
-    } catch (err) {
-      console.log(err)
-    }
+    adminService.getUsers(req, res, data => {
+      return res.render('admin/users', data)
+    })
   },
   toggleAdmin: async (req, res) => {
-    try {
-      const user = await User.findByPk(req.params.id)
-      if (user.email === 'root@example.com') {
+    adminService.toggleAdmin(req, res, data => {
+      if (data.status === 'error') {
         req.flash('error_messages', '禁止變更管理者權限')
         return res.redirect('back')
       }
-      user.isAdmin === false ? (user.isAdmin = true) : (user.isAdmin = false)
-      await user.update({ isAdmin: user.isAdmin })
       req.flash('success_messages', '使用者權限變更成功')
-      res.redirect('/admin/users')
-    } catch (err) {
-      console.log(err)
-    }
+      return res.redirect('/admin/users')
+    })
   }
 }
 module.exports = adminController

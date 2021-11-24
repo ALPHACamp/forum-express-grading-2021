@@ -1,6 +1,3 @@
-const db = require('../../models')
-const Restaurant = db.Restaurant
-const Category = db.Category
 const adminService = require('../../Services/adminService')
 
 const adminController = {
@@ -31,6 +28,16 @@ const adminController = {
   },
   putRestaurant: async (req, res) => {
     adminService.putRestaurant(req, res, data => {
+      return res.json(data)
+    })
+  },
+  getUsers: async (req, res) => {
+    adminService.getUsers(req, res, data => {
+      return res.json(data)
+    })
+  },
+  toggleAdmin: async (req, res) => {
+    adminService.toggleAdmin(req, res, data => {
       return res.json(data)
     })
   }
