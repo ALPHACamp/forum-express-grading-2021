@@ -27,7 +27,7 @@ const restController = {
             // data for pagination
             const page = Number(req.query.page) || 1
             const pages = Math.ceil(result.count / pageLimit)
-            const totalPage = Array.from({ length: pages }).map((item, index) => index + 1)
+            const totalPage = Array.from({length: pages}).map((item, index) => index + 1)
             const prev = page - 1 < 1 ? 1 : page - 1
             const next = page + 1 > pages ? pages : page + 1
 
@@ -57,7 +57,7 @@ const restController = {
         return Restaurant.findByPk(req.params.id, {
             include: [
                 Category,
-                { model: Comment, include: [User] }
+                {model: Comment, include: [User]}
             ]
         }).then(restaurant => {
             // console.log(restaurant.Comments[0].dataValues)
@@ -87,6 +87,16 @@ const restController = {
                 restaurants: restaurants,
                 comments: comments
             })
+        })
+    },
+    getDashboard: (req, res) => {
+        return Restaurant.findByPk(req.params.id, {
+            include: [
+                Category,
+                { model: Comment, include: [User] }
+            ]
+        }).then(restaurant => {
+            return res.render('dashboard', { restaurant: restaurant.toJSON() })
         })
     }
 }
