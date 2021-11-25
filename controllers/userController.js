@@ -58,7 +58,24 @@ const userController = {
     return User.findByPk(req.params.id)
     .then(user => res.render('edit', { user: user.toJSON() }))
   },
-
+  //使用 async/await 改寫失敗 (圖片無法上傳更新到資料庫內)
+  // putUser: async (req, res) => {
+  //   const userId = req.params.id
+  //   const userData = await User.findByPk(userId)
+  //   const { file } = req
+  //   if (file) {
+  //     imgur.setClientID(IMGUR_CLIENT_ID)
+  //     await imgur.upload(file.path, (err, img) => {
+  //       return userData.update({ image: img.data.link })
+  //     })
+  //   }
+  //   await userData.update({
+  //     name: req.body.name,
+  //     email: req.body.email
+  //   })
+  //   await req.flash('success_messages','使用者資料編輯成功')
+  //   return res.redirect(`/users/${userId}`)
+  // }
   putUser: (req,res) => {
     return User.findByPk(req.params.id)
     .then(user =>{ 
