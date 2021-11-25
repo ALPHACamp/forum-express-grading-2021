@@ -7,7 +7,7 @@ module.exports = {
     }
     return options.inverse(this)
   },
-  moment: function(a) {
+  moment: function (a) {
     return moment(a).fromNow()
   }
 }

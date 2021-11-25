@@ -5,7 +5,6 @@ const Restaurant = db.Restaurant
 const Comment = db.Comment
 const Favorite = db.Favorite
 const Like = db.Like
-const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const helpers = require('../_helpers')
@@ -21,8 +20,8 @@ const userController = {
       res.redirect('/signup')
     }　else {
       // 檢查是否重複註冊email
-      return User.findOne({where:{email: req.body.email}})
-        .then( (user) => {
+      return User.findOne({ where: { email: req.body.email } })
+        .then((user) => {
           if (user) {
             req.flash('error_messages', '這個Email已經註冊過！')
             res.redirect('/signup')
@@ -36,9 +35,9 @@ const userController = {
               .then(user => { res.redirect('/signin') })
           }
         })
-    }  
+    }
   },
-  
+
   signInPage: (req, res) => {
     return res.render('signin')
   },
@@ -54,24 +53,24 @@ const userController = {
 
   getUser: (req, res) => {
     return User.findByPk(req.params.id)
-    .then((user) => {
-      return Comment.findAndCountAll({
-        raw: true,
-        nest: true,
-        where: { UserId: user.id },
-        include: Restaurant
-      }).then((result) => {
-        const commentCount = result.count
-        const commentedRes = Array.from({length: commentCount}).map((_, i) => (result.rows[i].Restaurant))
-        const loginUser = helpers.getUser(req)
-        return res.render('profile', { 
-          user: user.toJSON(),
-          loginUser: loginUser,
-          commentCount,
-          commentedRes
-         })
+      .then((user) => {
+        return Comment.findAndCountAll({
+          raw: true,
+          nest: true,
+          where: { UserId: user.id },
+          include: Restaurant
+        }).then((result) => {
+          const commentCount = result.count
+          const commentedRes = Array.from({ length: commentCount }).map((_, i) => (result.rows[i].Restaurant))
+          const loginUser = helpers.getUser(req)
+          return res.render('profile', {
+            user: user.toJSON(),
+            loginUser: loginUser,
+            commentCount,
+            commentedRes
+          })
+        })
       })
-    })
   },
   editUser: (req, res) => {
     if (helpers.getUser(req).id !== Number(req.params.id)) {
@@ -84,7 +83,6 @@ const userController = {
       })
   },
   putUser: (req, res) => {
-    
     if (!req.body.name) {
       req.flash('error_messages', '請輸入使用者名稱')
       return res.redirect('back')
@@ -108,15 +106,15 @@ const userController = {
       })
     } else {
       return User.findByPk(req.params.id)
-      .then((user) => {
-        return user.update({
-          name: req.body.name,
-          email: req.body.email,
-        }).then((user) => {
-          req.flash('success_messages', '使用者資料編輯成功')
-          return res.redirect(`/users/${req.params.id}`)
+        .then((user) => {
+          return user.update({
+            name: req.body.name,
+            email: req.body.email
+          }).then((user) => {
+            req.flash('success_messages', '使用者資料編輯成功')
+            return res.redirect(`/users/${req.params.id}`)
+          })
         })
-      })   
     }
   },
   addFavorite: (req, res) => {

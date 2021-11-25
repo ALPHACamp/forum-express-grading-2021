@@ -1,6 +1,6 @@
 const db = require('../models')
 const Category = db.Category
-let categoryController = {
+const categoryController = {
   getCategories: (req, res) => {
     return Category.findAll({
       raw: true,
@@ -30,7 +30,7 @@ let categoryController = {
     })
   },
   putCategory: (req, res) => {
-    if(!req.body.name) {
+    if (!req.body.name) {
       req.flash('error_messages', 'name didn\'t exist')
       return res.redirect('back')
     }
@@ -43,14 +43,14 @@ let categoryController = {
     }
     )
   },
-  deleteCategory: (req, res) =>{
+  deleteCategory: (req, res) => {
     return Category.findByPk(req.params.id)
       .then(category => {
         category.destroy()
-        .then(category => {
-          res.redirect('/admin/categories')
-        })
-    })
+          .then(category => {
+            res.redirect('/admin/categories')
+          })
+      })
   }
 }
 

@@ -8,11 +8,11 @@ const helpers = require('../_helpers')
 const { createModelMock, createControllerProxy, mockRequest, mockResponse } = require('../helpers/unitTestHelpers')
 
 // 建立模擬的 Like 資料
-let mockLikeData = [
+const mockLikeData = [
   {
     UserId: 1,
-    RestaurantId: 2,
-  },
+    RestaurantId: 2
+  }
 ]
 
 describe('# R04: Like / Unlike', function () {
@@ -27,9 +27,9 @@ describe('# R04: Like / Unlike', function () {
       // 建立了一個模擬的 Like table，裡面目前是空的
       this.mockLikeData = []
       this.likeMock = createModelMock('Like', null, this.mockLikeData)
-      
+
       // 連向模擬的 Like table
-      this.userController = createControllerProxy('../controllers/userController', {Like: this.likeMock})
+      this.userController = createControllerProxy('../controllers/userController', { Like: this.likeMock })
     })
 
     it(' POST /like/:restaurantId ', async () => {
@@ -69,8 +69,8 @@ describe('# R04: Like / Unlike', function () {
       this.likeMock = createModelMock('Like', {
         id: 1,
         UserId: 1,
-        RestaurantId: 2,
-      }, mockLikeData);
+        RestaurantId: 2
+      }, mockLikeData)
 
       // 連向模擬的 Like table
       this.userController = createControllerProxy('../controllers/userController', { Like: this.likeMock })
