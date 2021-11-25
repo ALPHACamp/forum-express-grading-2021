@@ -1,10 +1,10 @@
 <div class="row mt-3">
     <div class="col-md-4">
-        <img class="img-responsive center-block" src="https://i.epochtimes.com/assets/uploads/2021/08/id13156667-shutterstock_376153318-450x322.jpg" style="width: 300px;margin-bottom: 25px;">
+        <img class="img-responsive center-block" src="{{ user.image }}" style="width: 300px;margin-bottom: 25px;">
     </div>
     <div class="col-md-8">
-        <strong>VV</strong>
-        <p>VV</p>
-        <a type="button" class="btn btn-primary" href="/users/:id/edit">edit</a>
+        <strong>{{ user.name }}</strong>
+        <p>{{ user.email }}</p>
+        <a type="button" class="btn btn-primary" href="/users/{{ user.id }}/edit">edit</a>
     </div>
 </div>
