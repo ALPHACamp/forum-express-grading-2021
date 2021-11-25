@@ -4,6 +4,7 @@ const flash = require('connect-flash')
 const session = require('express-session')
 const passport = require('./config/passport')
 const methodOverride = require('method-override')
+const bodyParser = require('body-parser')
 const helpers = require('./_helpers')
 const handlebarsHelpers = require('./helpers/handlebarsHelpers')
 if (process.env.NODE_ENV !== 'production') {
