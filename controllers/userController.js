@@ -82,7 +82,11 @@ const userController = {
       })
   },
   putUser: (req, res) => {
-    
+    if (helpers.getUser(req).id !== Number(req.params.id)) {
+      req.flash('error_messages', '你沒有訪問此頁面的權限')
+      return res.redirect(`/users/${helpers.getUser(req).id}`)
+    }
+
     if (!req.body.name) {
       req.flash('error_messages', '請輸入使用者名稱')
       return res.redirect('back')
