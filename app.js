@@ -4,7 +4,9 @@ const app = express();
 const port = 3000;
 const db = require("./models"); // 引入資料庫
 const passport = require("./config/passport");
+const methodOverride = require("method-override");
 
+app.use(methodOverride("_method"));
 //
 const flash = require("connect-flash");
 const session = require("express-session");
