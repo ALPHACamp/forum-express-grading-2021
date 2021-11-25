@@ -21,6 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use(express.urlencoded({extended: true}))
+app.use(express.json())
 app.use(methodOverride('_method'))
 app.use('/upload', express.static(__dirname + '/upload'))
 
@@ -39,7 +40,7 @@ app.use((req, res, next) => {
 })
 
 
-require('./routes')(app, passport)
+require('./routes')(app)
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
