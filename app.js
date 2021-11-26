@@ -5,6 +5,9 @@ const port = 3000;
 const db = require("./models"); // 引入資料庫
 const passport = require("./config/passport");
 const methodOverride = require("method-override");
+if (process.env.NODE_ENV !== "production") {
+	require("dotenv").config();
+}
 app.use("/upload", express.static(__dirname + "/upload"));
 app.use(methodOverride("_method"));
 //
