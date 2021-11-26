@@ -14,13 +14,13 @@ const restController = {
     let categoryId = ''
 
     if (req.query.page) {
-      offset = (req.query.page-1) * pageLimit
+      offset = (req.query.page - 1) * pageLimit
     }
     if (req.query.categoryId) {
       categoryId = Number(req.query.categoryId)
       whereQuery.CategoryId = categoryId
     }
-    
+
     return Restaurant.findAndCountAll({
       include: Category,
       where: whereQuery,
@@ -28,29 +28,32 @@ const restController = {
       limit: pageLimit
     }).then(result => {
       const page = Number(req.query.page) || 1
-      const pages = Math.ceil(result.count/ pageLimit)
-      const totalPage = Array.from({length: pages}).map((item, index) => index + 1)
+      const pages = Math.ceil(result.count / pageLimit)
+      const totalPage = Array.from({ length: pages }).map((item, index) => index + 1)
       const prev = page - 1 < 1 ? 1 : page - 1
       const next = page + 1 > pages ? pages : page + 1
-      Category.findAll({raw: true, nest:true})
+      Category.findAll({ raw: true, nest: true })
         .then(categories => {
           const data = result.rows.map(r => ({
-            ...r.dataValues, description: r.dataValues.description.substring(0, 50),
+            ...r.dataValues,
+            description: r.dataValues.description.substring(0, 50),
             categoryName: r.Category.name,
-            isFavorited: helpers.getUser(req).FavoritedRestaurants.map(d => d.id ).includes(r.id),
+            isFavorited: helpers.getUser(req).FavoritedRestaurants.map(d => d.id).includes(r.id),
             isLiked: helpers.getUser(req).LikedRestaurants.map(d => d.id).includes(r.id)
           }))
           return res.render('restaurants', {
             restaurants: data,
-            categories, page: page,
+            categories,
+            page: page,
             categoryId,
             totalPage: totalPage,
             prev: prev,
-            next: next })
-      })
-    }) 
+            next: next
+          })
+        })
+    })
   },
-  getRestaurant: (req, res) =>{
+  getRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id, {
       include: [
         Category,
@@ -63,14 +66,14 @@ const restController = {
     }).then(restaurant => {
       const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(helpers.getUser(req).id)
       const isLiked = restaurant.LikedUsers.map(d => d.id).includes(helpers.getUser(req).id)
-      res.render('restaurant', { 
+      res.render('restaurant', {
         restaurant: restaurant.toJSON(),
         isFavorited,
         isLiked
       })
     })
   },
-  getFeeds: (req, res) =>{
+  getFeeds: (req, res) => {
     return Promise.all([
       Restaurant.findAll({
         limit: 10,
@@ -78,29 +81,29 @@ const restController = {
         nest: true,
         order: [['createdAt', 'DESC']],
         include: [Category]
-    }),
+      }),
       Comment.findAll({
-        limit:10,
+        limit: 10,
         order: [['createdAt', 'DESC']],
-        raw:true,
+        raw: true,
         nest: true,
         include: [Restaurant, User]
       })
-    ]).then(([restaurants, comments]) =>{
-      return res.render('feeds', { 
+    ]).then(([restaurants, comments]) => {
+      return res.render('feeds', {
         restaurants,
-        comments 
+        comments
       })
     })
   },
   getDashBoard: async (req, res) => {
     const restaurantId = req.params.id
-    const restaurant = await Restaurant.findByPk(restaurantId, {include: Category})
-    const commentData = await Comment.findAndCountAll({where: {RestaurantId: restaurantId}})
+    const restaurant = await Restaurant.findByPk(restaurantId, { include: Category })
+    const commentData = await Comment.findAndCountAll({ where: { RestaurantId: restaurantId } })
     const commentCounts = commentData.count
     return res.render('dashboard', {
       restaurant: restaurant.toJSON(),
-      commentCounts,
+      commentCounts
     })
   }
 }

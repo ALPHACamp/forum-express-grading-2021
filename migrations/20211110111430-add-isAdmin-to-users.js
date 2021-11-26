@@ -1,6 +1,4 @@
-'use strict';
-
-const { sequelize } = require("../models");
+'use strict'
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -13,4 +11,4 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn('Users', 'isAdim')
   }
-};
+}

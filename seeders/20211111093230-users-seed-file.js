@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 const bcrypt = require('bcryptjs')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -13,7 +13,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id:2,
+        id: 2,
         email: 'user1@example.com',
         password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
         isAdmin: false,
@@ -22,7 +22,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id:3,
+        id: 3,
         email: 'user2@example.com',
         password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
         isAdmin: false,
@@ -34,6 +34,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Users', null, {});
+    await queryInterface.bulkDelete('Users', null, {})
   }
-};
+}

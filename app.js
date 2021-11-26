@@ -7,14 +7,14 @@ const handlebars = require('express-handlebars')
 const flash = require('connect-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
+const path = require('path')
 const passport = require('./config/passport')
-const db = require('./models')
 const helpers = require('./_helpers')
 
 const app = express()
 const port = process.env.PORT || 3000
 
-app.engine('handlebars', handlebars({ defaultLayout: 'main', helpers: require('./config/handlebars-helpers')}))
+app.engine('handlebars', handlebars({ defaultLayout: 'main', helpers: require('./config/handlebars-helpers') }))
 app.set('view engine', 'handlebars')
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
@@ -28,8 +28,7 @@ app.use((req, res, next) => {
   next()
 })
 app.use(methodOverride('_method'))
-app.use('/upload', express.static(__dirname + '/upload'))
-
+app.use('/upload', express.static(path.join(__dirname, '/upload')))
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

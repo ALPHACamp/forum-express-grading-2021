@@ -1,4 +1,3 @@
-const fs = require('fs')
 const db = require('../models')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -8,7 +7,7 @@ const Category = db.Category
 
 const adminController = {
   getRestaurants: (req, res) => {
-    return Restaurant.findAll({ 
+    return Restaurant.findAll({
       raw: true,
       nest: true,
       include: [Category]
@@ -20,9 +19,9 @@ const adminController = {
   createRestaurant: (req, res) => {
     return Category.findAll({
       raw: true,
-      nest: true,
+      nest: true
     }).then(categories => {
-      return res.render('admin/create', { categories})
+      return res.render('admin/create', { categories })
     })
   },
 
@@ -33,8 +32,11 @@ const adminController = {
     }
     const { file } = req
     if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.setClientID(IMGUR_CLIENT_ID)
       imgur.upload(file.path, (err, img) => {
+        if (err) {
+          return console.log(err)
+        }
         return Restaurant.create({
           name: req.body.name,
           tel: req.body.tel,
@@ -42,11 +44,11 @@ const adminController = {
           opening_hours: req.body.opening_hours,
           description: req.body.description,
           image: file ? img.data.link : null,
-          CategoryId: req.body.categoyId
+          CategoryId: req.body.categoryId
         }).then((restaurant) => {
           req.flash('success_messages', 'restaurant was successfully created')
           return res.redirect('/admin/restaurants')
-        })
+        }).catch(err => console.log(err))
       })
     } else {
       return Restaurant.create({
@@ -58,15 +60,14 @@ const adminController = {
         image: null,
         CategoryId: req.body.categoyId
       }).then(restaurant => {
-        req.flash('success_messages', "restaurant was successfully created")
+        req.flash('success_messages', 'restaurant was successfully created')
         res.redirect('/admin/restaurants')
-      })
+      }).catch(err => console.log(err))
     }
   },
 
-
   getRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id, { 
+    return Restaurant.findByPk(req.params.id, {
       include: [Category]
     }).then(restaurant => {
       return res.render('admin/restaurant', { restaurant: restaurant.toJSON() })
@@ -79,7 +80,7 @@ const adminController = {
       nest: true
     }).then(categories => {
       return Restaurant.findByPk(req.params.id).then(restaurant => {
-        return res.render('admin/create', { 
+        return res.render('admin/create', {
           categories,
           restaurant: restaurant.toJSON()
         })
@@ -95,8 +96,11 @@ const adminController = {
 
     const { file } = req
     if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.setClientID(IMGUR_CLIENT_ID)
       imgur.upload(file.path, (err, img) => {
+        if (err) {
+          return console.log(err)
+        }
         return Restaurant.findByPk(req.params.id)
           .then(restaurant => {
             restaurant.update({
@@ -126,7 +130,7 @@ const adminController = {
             CategoryId: req.body.categoyId
           })
             .then(restaurant => {
-              req.flash('success_messages', "restaurant was successfully updated")
+              req.flash('success_messages', 'restaurant was successfully updated')
               res.redirect('/admin/restaurants')
             })
         })
@@ -149,17 +153,15 @@ const adminController = {
     })
   },
 
-
-  
   toggleAdmin: async (req, res) => {
     let user = await User.findByPk(req.params.id)
-      if (user.email === 'root@example.com') {
-        req.flash('error_messages', '禁止變更管理者權限')
-        return res.redirect('back')
-      }
-      user = await user.update({isAdmin: !user.isAdmin})
-      req.flash('success_messages', '使用者權限變更成功')
-      res.redirect('/admin/users')
+    if (user.email === 'root@example.com') {
+      req.flash('error_messages', '禁止變更管理者權限')
+      return res.redirect('back')
+    }
+    user = await user.update({ isAdmin: !user.isAdmin })
+    req.flash('success_messages', '使用者權限變更成功')
+    res.redirect('/admin/users')
   }
 }
 
