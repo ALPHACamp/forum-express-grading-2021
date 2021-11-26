@@ -34,6 +34,9 @@ const adminController = {
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID)
       imgur.upload(file.path, (err, img) => {
+        if (err) {
+          return console.log(err)
+        }
         return Restaurant.create({
           name: req.body.name,
           tel: req.body.tel,
@@ -41,11 +44,11 @@ const adminController = {
           opening_hours: req.body.opening_hours,
           description: req.body.description,
           image: file ? img.data.link : null,
-          CategoryId: req.body.categoyId
+          CategoryId: req.body.categoryId
         }).then((restaurant) => {
           req.flash('success_messages', 'restaurant was successfully created')
           return res.redirect('/admin/restaurants')
-        })
+        }).catch(err => console.log(err))
       })
     } else {
       return Restaurant.create({
@@ -59,7 +62,7 @@ const adminController = {
       }).then(restaurant => {
         req.flash('success_messages', 'restaurant was successfully created')
         res.redirect('/admin/restaurants')
-      })
+      }).catch(err => console.log(err))
     }
   },
 
@@ -95,6 +98,9 @@ const adminController = {
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID)
       imgur.upload(file.path, (err, img) => {
+        if (err) {
+          return console.log(err)
+        }
         return Restaurant.findByPk(req.params.id)
           .then(restaurant => {
             restaurant.update({
