@@ -3,6 +3,8 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const bcrypt = require('bcryptjs') 
 const db = require('../models')
 const User = db.User
+const Comment = db.Comment
+const Restaurant = db.Restaurant
 
 const userController = {
   signUpPage: (req, res) => {
@@ -50,8 +52,17 @@ const userController = {
   },
     
   getUser: (req, res) => {
-    return User.findByPk(req.params.id)
-    .then(user => res.render('profile', { user: user.toJSON() }))
+    return User.findByPk(req.params.id, {
+      include: { model: Comment, include: [Restaurant] }
+    })
+    .then(user =>{
+      const restaurants = user.toJSON().Comments.map(item => item.Restaurant)
+      return res.render('profile', { 
+        user: user.toJSON(), 
+        commentAmount: user.toJSON().Comments.length,
+        restaurants
+      })
+    })
   },
 
   editUser: (req, res) => {

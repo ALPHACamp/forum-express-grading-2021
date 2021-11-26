@@ -1,10 +1,23 @@
 <div class="row mt-3">
     <div class="col-md-4">
-        <img class="img-responsive center-block" src="{{ user.image }}" style="width: 300px;margin-bottom: 25px;">
+        <img class="img-responsive center-block" src="{{ user.image }}" style="width: 350px;margin-bottom: 25px;">
     </div>
-    <div class="col-md-8">
-        <strong>{{ user.name }}</strong>
+    <div class="col-md-8 pl-5 pt-2">
+        <p><strong>{{ user.name }}</strong></p>
         <p>{{ user.email }}</p>
-        <a type="button" class="btn btn-primary" href="/users/{{ user.id }}/edit">edit</a>
+        <p>{{ commentAmount }} 已評論餐廳</p>
+        <a type="button" class="btn btn-primary mt-5" href="/users/{{ user.id }}/edit">edit</a>
     </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    {{ commentAmount }} 已評論餐廳
+  </div>
+  <div class="card-body">
+    {{#each restaurants}}
+    <a href="/restaurants/{{ this.id }}">
+    <img class="img-responsive center-block" src="{{ this.image }}" style="width: 70px;margin: 10px">
+    </a>
+    {{/each}}
+  </div>
 </div>
