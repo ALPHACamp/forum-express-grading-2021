@@ -7,6 +7,7 @@ const handlebars = require('express-handlebars')
 const flash = require('connect-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
+const path = require('path')
 const passport = require('./config/passport')
 const helpers = require('./_helpers')
 
@@ -27,7 +28,7 @@ app.use((req, res, next) => {
   next()
 })
 app.use(methodOverride('_method'))
-app.use('/upload', express.static(__dirname + '/upload'))
+app.use('/upload', express.static(path.join(__dirname, '/upload')))
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
