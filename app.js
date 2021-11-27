@@ -1,13 +1,37 @@
 const express = require('express')
 const handlebars = require('express-handlebars')
+const db = require('./models')
+const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
+const flash = require('connect-flash')
+//快閃訊息(flash message)」， 這種 message 存在 session 裡面， 通常只會出現一次， 在重新 request 之後就會消失了
+const session = require('express-session')
 
 //用 layouts / main 這個檔案做為預設的版型
 app.engine('handlebars', handlebars({
   defaultLayout: 'main'
 })) // Handlebars 註冊樣板引擎
 app.set('view engine', 'handlebars') // 設定使用 Handlebars 做為樣板引擎
+//都會先經過 app.use() 的處理，而我們把 bodyParser 指定成參數，就表示所有的請求都會先被 bodyParser 進行處理。
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(flash())
+
+// 把 req.flash 放到 res.locals 裡面
+// Express 幫我們開了一條捷徑，他給了一個 view 專用的 res.locals，只要把資料放進 res.locals，
+// 就可以讓 View 也能存取到。
+app.use((req, res, next) => {
+  res.locals.success_messages = req.flash('success_messages')
+  res.locals.error_messages = req.flash('error_messages')
+  next()
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

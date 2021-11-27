@@ -14,6 +14,18 @@
   <main role="main">
     <div class="album py-5 bg-light">
       <div class="container">
+        {{!-- 透過 if 的條件式，限定只有當訊息存在時 (也就是在 controller 裡有特別存入訊息時)，才會去顯示內容 --}}
+        {{#if success_messages}}
+        <div class="alert alert-success" role="alert" style="margin: 30px 0 ;">
+          {{success_messages}}
+        </div>
+        {{/if}}
+        {{#if error_messages}}
+        <div class="alert alert-danger" role="alert" style="margin: 30px 0 ;">
+          {{error_messages}}
+        </div>
+        {{/if}}
+        <!--這裡的body會隨你傳入的是前台的 restaurants.handlebars admin/restaurants.handlebars 而顯示不同內容-->
         {{{body}}}
       </div>
     </div>

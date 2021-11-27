@@ -23,7 +23,7 @@ fs
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js')
   })
   .forEach(file => {
-    const model = sequelize['import'](path.join(__dirname, file))
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
     db[model.name] = model
   })
 
@@ -35,7 +35,10 @@ Object.keys(db).forEach(modelName => {
 })
 
 // 匯出需要的物件
+//db.sequelize 代表連線資料庫的 instance。
+//前者是 instance，後者是 Class
 db.sequelize = sequelize
+//db.Sequelize 存取到 Sequelize 這個 class，代表 Sequelize 函式庫本身
 db.Sequelize = Sequelize
 
 module.exports = db

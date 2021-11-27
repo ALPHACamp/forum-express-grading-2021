@@ -1,6 +1,7 @@
 const restController = require('../controllers/restController.js')
 //從controllers中引入admincontroller，和後在下方設定admin的路由
 const adminController = require('../controllers/adminController.js')
+const userController = require('../controllers/userController.js')
 
 module.exports = app => {
 
@@ -13,4 +14,7 @@ module.exports = app => {
   app.get('/admin', (req, res) => res.redirect('/admin/restaurants'))
   // 在 /admin/restaurants.hbs 底下則交給 adminController.getRestaurants 處理
   app.get('/admin/restaurants', adminController.getRestaurants)
+  app.get('/signup', userController.signUpPage)
+  //userController.signUp 負責的是把表單資料送進資料庫，
+  app.post('/signup', userController.signUp)
 }
