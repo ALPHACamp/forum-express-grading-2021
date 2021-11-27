@@ -59,11 +59,10 @@ const restController = {
         Category,
         { model: Comment, include: [User] }
       ]
-    }).then(restaurant => {
-      return res.render('restaurant', {
-        restaurant: restaurant.toJSON()
-      })
-    })
+    }).then(restaurant => 
+      restaurant.increment({viewCounts: 1})
+      .then(() =>res.render('restaurant', { restaurant: restaurant.toJSON() }))
+    )
   },
   getFeeds: (req, res) => {
     return Promise.all([
@@ -93,7 +92,6 @@ const restController = {
       include: [Comment, Category]
     })
     .then(restaurant => {
-      console.log(restaurant.toJSON())
       return res.render('dashboard', { restaurant: restaurant.toJSON()})
     })
   }
