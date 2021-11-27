@@ -55,14 +55,7 @@ const userController = {
     return User.findByPk(req.params.id, {
       include: { model: Comment, include: [Restaurant] }
     })
-    .then(user =>{
-      const restaurants = user.toJSON().Comments.map(item => item.Restaurant)
-      return res.render('profile', { 
-        user: user.toJSON(), 
-        commentAmount: user.toJSON().Comments.length,
-        restaurants
-      })
-    })
+    .then(user => res.render('profile', { user: user.toJSON() }))
   },
 
   editUser: (req, res) => {

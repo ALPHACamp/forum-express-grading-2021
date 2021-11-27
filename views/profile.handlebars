@@ -5,18 +5,18 @@
     <div class="col-md-8 pl-5 pt-2">
         <p><strong>{{ user.name }}</strong></p>
         <p>{{ user.email }}</p>
-        <p>{{ commentAmount }} 已評論餐廳</p>
+        <p>{{ user.Comments.length }} 已評論餐廳</p>
         <a type="button" class="btn btn-primary mt-5" href="/users/{{ user.id }}/edit">edit</a>
     </div>
 </div>
 <div class="card">
   <div class="card-header">
-    {{ commentAmount }} 已評論餐廳
+    {{ user.Comments.length }} 已評論餐廳
   </div>
   <div class="card-body">
-    {{#each restaurants}}
-    <a href="/restaurants/{{ this.id }}">
-    <img class="img-responsive center-block" src="{{ this.image }}" style="width: 70px;margin: 10px">
+    {{#each user.Comments}}
+    <a href="/restaurants/{{ this.Restaurant.id }}">
+    <img class="img-responsive center-block" src="{{ this.Restaurant.image }}" style="width: 70px;margin: 10px">
     </a>
     {{/each}}
   </div>
