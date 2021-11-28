@@ -1,3 +1,5 @@
+const helpers = require('../_helpers')
+
 const adminController = require('../controllers/adminController.js')
 const restController = require('../controllers/restController.js')
 const userController = require('../controllers/userController.js')
@@ -5,14 +7,14 @@ const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated()) {
       return next()
     }
     res.redirect('/signin')
   }
   const authenticatedAdmin = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      if (req.user.isAdmin) {
+    if (helpers.ensureAuthenticated()) {
+      if (helpers.getUser(req).isAdmin) {
         return next()
       }
       return res.redirect('/')
@@ -31,6 +33,8 @@ module.exports = (app, passport) => {
   app.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
   app.get('/admin/restaurants/:id/edit', authenticatedAdmin, adminController.editRestaurant)
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
+  app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
+  app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)
 
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
