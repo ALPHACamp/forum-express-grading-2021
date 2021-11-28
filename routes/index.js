@@ -7,14 +7,14 @@ const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
-    if (helpers.ensureAuthenticated()) {
+    if (req.isAuthenticated()) {
       return next()
     }
     res.redirect('/signin')
   }
   const authenticatedAdmin = (req, res, next) => {
-    if (helpers.ensureAuthenticated()) {
-      if (helpers.getUser(req).isAdmin) {
+    if (req.isAuthenticated()) {
+      if (req.getUser(req).isAdmin) {
         return next()
       }
       return res.redirect('/')
