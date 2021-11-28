@@ -35,7 +35,24 @@ const userController = {
         }
       })
     }
+  },
+  signInPage: (req, res) => {
+    return res.render('signin')
+  },
+  //signIn 動作裡看起來沒有任何的邏輯，就直接轉址了，
+  //這是因為等下我們會用 Passport 的 middleware 來處理，所以不必自己實作
+  signIn: (req, res) => {
+    req.flash('success_messages', '成功登入！')
+    res.redirect('/restaurants')
+  },
+  //logout 動作也只需要使用 Passport 提供的 req.logout() 就可以了。
+  logout: (req, res) => {
+    req.flash('success_messages', '登出成功！')
+    req.logout()
+    res.redirect('/signin')
   }
+
+
 }
 
 module.exports = userController

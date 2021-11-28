@@ -3,18 +3,50 @@ const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
 
-module.exports = app => {
+module.exports = (app, passport) => {
+
+  const authenticated = (req, res, next) => {
+    //檢查使用者是否有登入，沒有登入的話就把他導回登入頁
+    if (req.isAuthenticated()) {
+      return next()
+    }
+    res.redirect('/signin')
+  }
+  //檢查是不是管理員身分，是的話就導到後台，不是的話導回首頁
+  const authenticatedAdmin = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      if (req.user.isAdmin) {
+        return next()
+      }
+      return res.redirect('/')
+    }
+    res.redirect('/signin')
+  }
 
   //如果使用者訪問首頁，就導向 /restaurants.hbs 的頁面
-  app.get('/', (req, res) => res.redirect('/restaurants'))
+  app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   //在 /restaurants 底下則交給 restController.getRestaurants 這個function來處理
-  app.get('/restaurants', restController.getRestaurants)
+  app.get('/restaurants', authenticated, restController.getRestaurants)
 
   // 連到 /admin 頁面就轉到 /admin/restaurants.hbs
-  app.get('/admin', (req, res) => res.redirect('/admin/restaurants'))
+  app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
   // 在 /admin/restaurants.hbs 底下則交給 adminController.getRestaurants 處理
-  app.get('/admin/restaurants', adminController.getRestaurants)
+  app.get('/admin/restaurants', authenticatedAdmin, adminController.getRestaurants)
   app.get('/signup', userController.signUpPage)
   //userController.signUp 負責的是把表單資料送進資料庫，
   app.post('/signup', userController.signUp)
+  app.get('/signin', userController.signInPage)
+  //當 userController.signIn 收到 request 時，就一定是登入後的使用者了，
+  //這是為什麼剛才在 userController.signIn 沒看到驗證的邏輯。
+  //從index.js這裡路由開始登入動作，成功之後才會導到 userController.signIn 產生成功訊息的flash message
+  //因為在這裡已經驗證過了，所以在userController.signIn沒有再次驗證的必要
+  app.post('/signin', passport.authenticate('local', {
+    failureRedirect: '/signin',
+    failureFlash: true
+  }), userController.signIn)
+  app.get('/logout', userController.logout)
+  //新增一筆餐廳資料 
+  app.get('/admin/restaurants/create', authenticatedAdmin, adminController.createRestaurant)
+  app.post('/admin/restaurants', authenticatedAdmin, adminController.postRestaurant)
+  app.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
 }
