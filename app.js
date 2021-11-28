@@ -8,6 +8,7 @@ const session = require('express-session')
 const passport = require('./config/passport')
 const app = express()
 const port = 3000
+const methodOverride = require('method-override')
 
 
 //用 layouts / main 這個檔案做為預設的版型
@@ -38,6 +39,11 @@ app.use((req, res, next) => {
   res.locals.user = req.user
   next()
 })
+//就可以透過methodoverride的方法
+app.use(methodOverride('_method'))
+//打開 app.js 並加上 /upload 這組路由，這裡因為是靜態檔案，所以不需要像其他的路由一樣寫 controller 邏輯，直接用 express.static 來指定路徑就可以了：
+app.use('/upload', express.static(__dirname + '/upload'))
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

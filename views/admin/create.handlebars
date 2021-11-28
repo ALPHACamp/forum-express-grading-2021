@@ -1,28 +1,49 @@
-<form action="/admin/restaurants" method="POST">
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" class="form-control" name="name" id="name" placeholder="Enter name">
-  </div>
+{{!-- 這邊使用了if來做切換，如果有傳入restaurant變數代表這是一個編輯頁面（已經存在了頁面，把那個存在的頁面變數傳進來），
+這時就會是採用PUT method來做頁面的編輯，如果沒有傳入restaurant，則為新增頁面，使用原本的post method來新增 --}}
+{{#if restaurant}}
+{{!-- 因為在 HTML 的 <form> 裡面，action 這個屬性只能夠填 GET 與 POST，並不支援 PUT 跟 DELETE。
+  但我們還是想要遵守 RESTful 的規範，利用 PUT 跟 DELETE 這兩個 action。
+  因此，就得出了一個折衷的辦法，我們把 form 的 action 填 POST，然後在網址後面加上 _method=PUT，
+  藉此來表示說：「其實我是想用 PUT，但是環境不支援」，當 Server 看到 _method 這個參數時，就能知道我們原本的意圖。 --}}
+  {{!-- 要支援 _method 這種用法，我們需要先安裝 method-override。 --}}
+  <form action="/admin/restaurants/{{restaurant.id}}?_method=PUT" method="POST" enctype="multipart/form-data">
+    {{else}}
+    <form action="/admin/restaurants" method="POST" enctype="multipart/form-data">
+      {{/if}} {{!-- 在每個 input 都加上
+      value="{{restaurant.name}}" 這種類型的標籤，如果在 <input> 寫入 value 屬性，就等於是指定了預設的輸入。在「編輯」的情況下 restaurant
+      變數存在，所以就會取得到內容，在「新增」的情況會是 null，所以就會是空的。 --}}
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" id="name" placeholder="Enter name"
+          value="{{restaurant.name}}">
+      </div>
 
-  <div class="form-group">
-    <label for="tel">Tel</label>
-    <input type="text" class="form-control" name="tel" id="tel" placeholder="Enter tel">
-  </div>
+      <div class="form-group">
+        <label for="tel">Tel</label>
+        <input type="text" class="form-control" name="tel" id="tel" placeholder="Enter tel" value="{{restaurant.name}}">
+      </div>
 
-  <div class="form-group">
-    <label for="address">Address</label>
-    <input type="text" class="form-control" name="address" id="address" placeholder="Enter address">
-  </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" class="form-control" name="address" id="address" placeholder="Enter address"
+          value="{{restaurant.name}}">
+      </div>
 
-  <div class="form-group">
-    <label for="opening_hours">Opening Hours</label>
-    <input type="time" class="form-control" name="opening_hours" id="opening_hours" placeholder="Enter opening_hours">
-  </div>
+      <div class="form-group">
+        <label for="opening_hours">Opening Hours</label>
+        <input type="time" class="form-control" name="opening_hours" id="opening_hours"
+          placeholder="Enter opening_hours" value="{{restaurant.name}}">
+      </div>
 
-  <div class="form-group">
-    <label for="description">Description</label>
-    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-  </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3">{{restaurant.name}}</textarea>
+      </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+      <button type="submit" class="btn btn-primary">Submit</button>
+
+      <div class="form-group">
+        <label for="image">Image</label>
+        <input type="file" class="form-control-file" id="image" name="image">
+      </div>
+    </form>

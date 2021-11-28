@@ -3,6 +3,11 @@ const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
 
+const multer = require('multer')
+const upload = multer({
+  dest: 'temp/'
+})
+
 module.exports = (app, passport) => {
 
   const authenticated = (req, res, next) => {
@@ -47,6 +52,12 @@ module.exports = (app, passport) => {
   app.get('/logout', userController.logout)
   //新增一筆餐廳資料 
   app.get('/admin/restaurants/create', authenticatedAdmin, adminController.createRestaurant)
-  app.post('/admin/restaurants', authenticatedAdmin, adminController.postRestaurant)
+  app.post('/admin/restaurants', authenticatedAdmin, upload.single('image'), adminController.postRestaurant)
   app.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
+  //透過動態路由找到該單個頁面，並且透過authenticatedAdmin驗證是否為管理員，而後使用editRestaurant function
+  //來實現編輯的功能
+  app.get('/admin/restaurants/:id/edit', authenticatedAdmin, adminController.editRestaurant)
+  //編輯單筆餐廳資料
+  app.put('/admin/restaurants/:id', upload.single('image'), authenticatedAdmin, adminController.putRestaurant)
+  app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
 }
