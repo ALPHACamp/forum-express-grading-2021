@@ -77,6 +77,7 @@ module.exports = (app, passport) => {
   //get the signin page
   app.get('/signin', userController.signInPage)
   // use the sign in function
+  // 這行再搞清楚
   app.post('/signin', passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash: true
