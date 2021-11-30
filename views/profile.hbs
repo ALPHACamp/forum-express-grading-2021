@@ -12,3 +12,15 @@
     <a class="btn btn-primary" href="/users/{{user.id}}/edit">Edit</a>
   </div>
 </div>
+{{#if user.Comments}}
+  <div class="commented-restaurant-container mt-5">
+    <h3 class="text-center">Commented Restaurants</h3>
+    <div class="commented-restaurant d-flex flex-wrap justify-content-center">
+      {{#each user.Comments}}
+      <a href="/restaurants/{{this.Restaurant.id}}">
+        <img src="{{this.Restaurant.image}}" class="m-1" alt="restaurant-image" width="100">
+      </a>
+      {{/each}}
+    </div>
+  </div>
+{{/if}}
