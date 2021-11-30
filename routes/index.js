@@ -61,3 +61,8 @@ module.exports = (app, passport) => {
   app.put('/admin/restaurants/:id', upload.single('image'), authenticatedAdmin, adminController.putRestaurant)
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
 }
+module.exports = (app) => {
+  app.get('/', (req, res) => {
+    res.send('Hello World!')
+  })
+}
