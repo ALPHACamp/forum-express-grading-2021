@@ -1,3 +1,6 @@
+const helpers = require('../_helpers')
+
+
 const restController = require('../controllers/restController.js')
 //從controllers中引入admincontroller，和後在下方設定admin的路由
 const adminController = require('../controllers/adminController.js')
@@ -12,15 +15,17 @@ module.exports = (app, passport) => {
 
   const authenticated = (req, res, next) => {
     //檢查使用者是否有登入，沒有登入的話就把他導回登入頁
-    if (req.isAuthenticated()) {
+    //改用 ensureAuthenticated
+    if (helpers.ensureAuthenticated(req)) {
       return next()
     }
     res.redirect('/signin')
   }
   //檢查是不是管理員身分，是的話就導到後台，不是的話導回首頁
   const authenticatedAdmin = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      if (req.user.isAdmin) {
+    // if(req.isAuthenticated)
+    if (helpers.ensureAuthenticated(req)) {
+      if (helpers.getUser(req).isAdmin) {
         return next()
       }
       return res.redirect('/')
@@ -60,9 +65,24 @@ module.exports = (app, passport) => {
   //編輯單筆餐廳資料
   app.put('/admin/restaurants/:id', upload.single('image'), authenticatedAdmin, adminController.putRestaurant)
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
-}
-module.exports = (app) => {
-  app.get('/', (req, res) => {
-    res.send('Hello World!')
-  })
+
+  app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
+  app.put('/admin/users/:id', authenticatedAdmin, adminController.putUsers)
+
+  // user
+  //get the sign up page
+  app.get('/signup', userController.signUpPage)
+  // use sign up function
+  app.post('/signup', userController.signUp)
+  //get the signin page
+  app.get('/signin', userController.signInPage)
+  // use the sign in function
+  app.post('/signin', passport.authenticate('local', {
+    failureRedirect: '/signin',
+    failureFlash: true
+  }), userController.signIn)
+  // logout function
+  // casue logout didn't need to render page, so it only need call the function
+  app.get('/logout', userController.logout)
+
 }
