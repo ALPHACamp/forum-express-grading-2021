@@ -83,7 +83,7 @@ module.exports = (app, passport) => {
     failureFlash: true
   }), userController.signIn)
   // logout function
-  // casue logout didn't need to render page, so it only need call the function
+  // casue logout didn't need to render page, so it only need to call the function
   app.get('/logout', userController.logout)
 
 }
