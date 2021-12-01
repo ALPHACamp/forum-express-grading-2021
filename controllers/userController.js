@@ -120,7 +120,6 @@ const userController = {
       }
     })
       .then((favorite) => {
-        console.log(favorite)
         favorite.destroy()
           .then((restaurant) => {
             return res.redirect('back')
