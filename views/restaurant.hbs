@@ -17,7 +17,10 @@
   </div>
   <div class="col-md-8">
     <p>{{restaurant.description}}</p>
+    <br />
+    <a href="/restaurants/{{restaurant.id}}/dashboard" class="btn btn-primary">Dashboard</a>
   </div>
+  
   <hr>
 </div>
 
@@ -35,6 +38,7 @@
     <footer class="blockquote-footer">{{moment this.createdAt}}</footer>
   </blockquote>
   <hr />
+  
 {{/each}}
 <hr />
 

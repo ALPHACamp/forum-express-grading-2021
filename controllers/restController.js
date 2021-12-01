@@ -56,7 +56,6 @@ const restController = {
         { model: Comment, include: [User] }
       ]
     }).then(restaurant => {
-      console.log(restaurant.Comments[0])
       return res.render('restaurant', {
         restaurant: restaurant.toJSON()
       })
@@ -84,6 +83,25 @@ const restController = {
         comments: comments
       })
     })
+  },
+  getDashBoard: (req, res) => {
+    return Restaurant.findByPk(req.params.id, {
+      nest: true,
+      include: [Category]
+    })
+      .then((restaurant) => {
+        restaurant.update({
+          viewCounts: restaurant.viewCounts + 1,
+          
+        }, { silent: true })
+        Comment.findAndCountAll({      
+          raw: true,
+          nest: true,
+          where: { RestaurantId: restaurant.id }
+        }).then((comments) => {
+          return res.render('dashboard', { restaurant: restaurant.toJSON(), comments})
+        })
+    })   
   }
 }
 
