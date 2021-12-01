@@ -69,6 +69,10 @@ module.exports = (app, passport) => {
   app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   app.put('/admin/users/:id', authenticatedAdmin, adminController.putUsers)
 
+  //顯示使用者清單
+  app.get("/admin/users", authenticatedAdmin, adminController.getUsers)
+  //修改使用者權限 
+  app.put("/admin/users/:id/toggleAdmin", authenticatedAdmin, adminController.toggleAdmin)
   // user
   //get the sign up page
   app.get('/signup', userController.signUpPage)
@@ -85,5 +89,6 @@ module.exports = (app, passport) => {
   // logout function
   // casue logout didn't need to render page, so it only need to call the function
   app.get('/logout', userController.logout)
+
 
 }

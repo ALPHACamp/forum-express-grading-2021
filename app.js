@@ -47,6 +47,8 @@ app.use((req, res, next) => {
 app.use(methodOverride('_method'))
 //打開 app.js 並加上 /upload 這組路由，這裡因為是靜態檔案，所以不需要像其他的路由一樣寫 controller 邏輯，直接用 express.static 來指定路徑就可以了：
 app.use('/upload', express.static(__dirname + '/upload'))
+//R01新增
+app.use(express.static('public'))
 
 
 app.listen(port, () => {

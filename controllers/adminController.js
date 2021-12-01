@@ -6,6 +6,8 @@ const {
   userInfo
 } = require('os')
 const Restaurant = db.Restaurant
+//R01新增
+const User = db.User
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -153,7 +155,40 @@ const adminController = {
             res.redirect('/admin/users')
           })
       })
-  }
+  },
+
+
+  //下面這段流程再疏理一次
+  //顯示使用者清單
+  getUsers: (req, res) => {
+    //convert entity to plain object, sequelize method
+    return User.findAll({
+      raw: true
+    }).then((users) => {
+      return res.render("admin/users", {
+        users: users
+      })
+    })
+  },
+  //新增一個超級使用者，不可被更改，其它admin則可更改他者使用權限
+  toggleAdmin: (req, res) => {
+    return User.findByPk(req.params.id).then((user) => {
+      //dataValues, sequelize methods
+      //是超級使用者的情況
+      const userData = user.dataValues
+      if (userData.email === "root@example.com") {
+        req.flash("error_messages", "禁止變更管理者權限")
+        return res.redirect("back")
+      }
+      //不是超級使用者的情況，可以更改其它使用者的權限
+      user.update({
+        isAdmin: !userData.isAdmin
+      }).then((user) => {
+        req.flash("success_messages", "使用者權限變更成功")
+        res.redirect("/admin/users")
+      })
+    })
+  },
 
 
 }
