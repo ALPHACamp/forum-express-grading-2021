@@ -8,15 +8,32 @@ const commentController = require('../controllers/commentController.js')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 module.exports = (app, passport) => {
+  // const authenticated = (req, res, next) => {
+  //   if (req.isAuthenticated()) {
+  //     return next()
+  //   }
+  //   res.redirect('/signin')
+  // }
+  // const authenticatedAdmin = (req, res, next) => {
+  //   if (req.isAuthenticated()) {
+  //     if (req.user.isAdmin) {
+  //       return next()
+  //     }
+  //     return res.redirect('/')
+  //   }
+  //   res.redirect('/signin')
+  // }
+
+  // for test 
   const authenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated()) {
       return next()
     }
     res.redirect('/signin')
   }
   const authenticatedAdmin = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      if (req.user.isAdmin) {
+    if (helpers.ensureAuthenticated()) {
+      if (getUser(req).isAdmin) {
         return next()
       }
       return res.redirect('/')
@@ -51,6 +68,9 @@ module.exports = (app, passport) => {
 
   app.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
   app.delete('/favorite/:restaurantId', authenticated, userController.removeFavorite)
+
+  app.post('/like/:restaurantId', authenticated, userController.addLike)
+  app.delete('/like/:restaurantId', authenticated, userController.removeLike)
 
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
