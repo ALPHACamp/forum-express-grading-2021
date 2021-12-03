@@ -1,11 +1,11 @@
 <h1>餐廳後台</h1>
-<h1 class="mb-0">餐廳後台</h1>
 <div class="mb-1">
   <a href="/admin/restaurants"><button type="button" class="btn btn-link">Restaurants</button></a>
   <span>|</span>
   <a href="/admin/users"><button type="button" class="btn btn-link">Users</button></a>
+  <span>|</span>
+  <a href='/admin/categories'><button type="button" class="btn btn-link">Categories</button></a>
 </div>
-<br />
 
 <a href='/admin/restaurants/create'>
   <button type="button" class="btn btn-primary">New Restaurant</button>
@@ -19,30 +19,28 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
+      <th scope="col">Category</th>
       <th scope="col">#</th>
     </tr>
   </thead>
   <tbody>
-    {{#each restaurants}}
-    <tr>
-      <th scope="row">{{this.id}}</th>
-      <td>{{this.name}}</td>
-      <td>
-        <button type="button" class="btn btn-link">
-          <a href="/admin/restaurants/{{this.id}}">
-            Show
-          </a>
-        </button>
-        <button type="button" class="btn btn-link">
-          <a href="/admin/restaurants/{{this.id}}/edit">
-            Edit
-          </a>
-        </button>
-        <form action="/admin/restaurants/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-link">Delete</button>
-        </form>
-      </td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
+    <div class="row">
+      {{#each restaurants}}
+      <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+          <img class="card-img-top" src="{{this.image}}" alt="Card image cap" width="286px" height="180px">
+          <div class="card-body">
+            <p class="card-text">
+              <a href="/restaurants/{{this.id}}">
+                {{this.name}}
+              </a>
+            </p>
+            <span class="badge badge-secondary">{{this.categoryName}}</span>
+            <p class="card-text">{{this.description}}</p>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    <br />
+    <br />

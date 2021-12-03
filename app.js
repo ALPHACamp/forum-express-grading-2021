@@ -16,8 +16,10 @@ const methodOverride = require('method-override')
 
 
 //用 layouts / main 這個檔案做為預設的版型
+//使用helpers
 app.engine('handlebars', handlebars({
-  defaultLayout: 'main'
+  defaultLayout: 'main',
+  helpers: require('./config/handlebars-helpers')
 })) // Handlebars 註冊樣板引擎
 app.set('view engine', 'handlebars') // 設定使用 Handlebars 做為樣板引擎
 //都會先經過 app.use() 的處理，而我們把 bodyParser 指定成參數，就表示所有的請求都會先被 bodyParser 進行處理。

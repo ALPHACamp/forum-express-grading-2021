@@ -5,6 +5,7 @@ const restController = require('../controllers/restController.js')
 //從controllers中引入admincontroller，和後在下方設定admin的路由
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
+const categoryController = require('../controllers/categoryController.js')
 
 const multer = require('multer')
 const upload = multer({
@@ -37,6 +38,7 @@ module.exports = (app, passport) => {
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   //在 /restaurants 底下則交給 restController.getRestaurants 這個function來處理
   app.get('/restaurants', authenticated, restController.getRestaurants)
+  app.get('/restaurants/:id', authenticated, restController.getRestaurant)
 
   // 連到 /admin 頁面就轉到 /admin/restaurants.hbs
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
@@ -69,10 +71,19 @@ module.exports = (app, passport) => {
   app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   app.put('/admin/users/:id', authenticatedAdmin, adminController.putUsers)
 
+
   //顯示使用者清單
   app.get("/admin/users", authenticatedAdmin, adminController.getUsers)
   //修改使用者權限 
   app.put("/admin/users/:id/toggleAdmin", authenticatedAdmin, adminController.toggleAdmin)
+  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
+  app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)
+  app.get('/admin/categories/:id', authenticatedAdmin, categoryController.getCategories)
+  app.put('/admin/categories/:id', authenticatedAdmin, categoryController.putCategory)
+  app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
+
+
+
   // user
   //get the sign up page
   app.get('/signup', userController.signUpPage)
