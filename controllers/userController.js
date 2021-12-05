@@ -18,7 +18,7 @@ const userController = {
     if (req.body.password !== req.body.passwordCheck) {
       req.flash('error_messages', '密碼與檢查密碼不一致！')
       res.redirect('/signup')
-    } else {
+    } else {  
       // 檢查是否重複註冊email
       return User.findOne({ where: { email: req.body.email } })
         .then((user) => {
