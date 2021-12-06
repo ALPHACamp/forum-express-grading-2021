@@ -56,7 +56,9 @@ const userController = {
   //userController.getUser
   getUser: (req, res) => {
     //找到現在正在使用中的使用者，其在資料庫中的資料，並且選渲染其個人頁面
-    return User.findByPk(req.params.id)
+    return User.findByPk(req.params.id, {
+        raw: true
+      })
       .then((user) => {
         return res.render('profile', {
           user: user
@@ -65,7 +67,9 @@ const userController = {
   },
   //userController.editUser
   editUser: (req, res) => {
-    return User.findByPk(req.params.id)
+    return User.findByPk(req.params.id, {
+        raw: true
+      })
       .then((user) => {
         return res.render('edit', {
           user: user
