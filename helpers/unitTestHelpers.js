@@ -77,13 +77,11 @@ const createModelMock = (name, defaultValue, data, joinedTableName) => {
         return Promise.resolve(mockModel.build(data))
       } else if (query === 'findAll') {
         // 回傳模擬資料
-        <<
-        << << < HEAD
+        HEAD
         if (!data) {
           return mockModel.build([defaultValue]);
-        } ===
-        === = >>>
-        >>> > origin / R02 - test
+        }
+        origin / R02 - test
         return Promise.resolve(data ? data.map(d => mockModel.build(d)) : [])
       } else if (query === 'destroy') {
         // destroy 可以從 where 取得要刪除的資料
