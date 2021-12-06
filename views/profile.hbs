@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="card mt-1">
+    <div class="d-flex">
+      <img class="m-4" src="{{userProfile.image}}" style="width: 250px; height: 250px">
+      <div class="mt-4 ml-2">
+        <h2>{{userProfile.name}}</h2>
+        <p>{{userProfile.email}}</p>
+        <p>{{userProfile.Comments.length}} 已評論餐廳</p>
+        <p>{{userProfile.FavoritedRestaurants.length}} 已收藏餐廳</p>
+        <p>{{userProfile.Followings.length}} 已追蹤人數</p>
+        <p>{{userProfile.Followers.length}} 被追蹤人數</p>
+        <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2 mx-auto d-flex justify-content-between">
+    <div class="card col-5">
+      <h3 class="mx-auto mb-3 mt-2">{{userProfile.Comments.length}}已評論餐廳</h3>
+      <div class="d-flex-wrap">
+        {{#each commentedRestaurants}}
+        <a href="/restaurants/{{this.RestaurantId}}" class="ml-2">
+          <img src="{{this.Restaurant.image}}" alt="" style="width: 70px; height: 70px; border-radius:50%">
+        </a>
+        {{/each}}
+      </div>
+    </div>
+    <div class="card col-6">
+      <h3 class="mx-auto mb-3 mt-2">{{userProfile.FavoritedRestaurants.length}} 以收藏餐廳</h3>
+      <div class="d-flex-wrap">
+        {{#each userProfile.FavoritedRestaurants}}
+        <a href="/restaurants/{{this.id}}" class="ml-2">
+          <img src="{{this.image}}" alt="" style="width: 70px; height: 70px; border-radius:50%">
+        </a>
+        {{/each}}
+      </div>
+    </div>
+    <div class="card col-5 mt-2">
+      <h3 class="mx-auto mb-3 mt-2">{{userProfile.Followers.length}} 被追蹤人數</h3>
+      <div class="d-flex-wrap">
+        {{#each userProfile.Followers}}
+        <a href="/users/{{this.id}}" class="ml-2">
+          <img src="{{this.image}}" alt="" style="width: 70px; height: 70px; border-radius:50%">
+        </a>
+        {{/each}}
+      </div>
+    </div>
+    <div class="card col-6 mt-2">
+      <h3 class="mx-auto mb-3 mt-2">{{userProfile.Followings.length}} 已追蹤人數</h3>
+      <div class="d-flex-wrap">
+        {{#each userProfile.Followings}}
+        <a href="/users/{{this.id}}" class="ml-2">
+          <img src="{{this.image}}" alt="" style="width: 70px; height: 70px; border-radius:50%">
+        </a>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+</div>

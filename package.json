@@ -2,6 +2,9 @@
   "name": "forum-express-grading",
   "version": "2.0.0",
   "main": "_helpers.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
@@ -12,9 +15,25 @@
     "url": "git+https://github.com/ALPHACamp/forum-express-grading.git"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-handlebars": "^5.3.4",
+    "express-session": "^1.17.2",
+    "faker": "^5.5.3",
+    "imgur-node-api": "^0.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
+    "moment": "^2.29.1",
+    "multer": "^1.4.3",
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.12",
+    "passport": "^0.5.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.7.1",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0"
   },
