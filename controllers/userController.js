@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
 const imgur = require('imgur-node-api')
-const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const IMGUR_CLIENT_ID = '114844ca1961335'
 
 const userController = {
   //負責 render 註冊的頁面
