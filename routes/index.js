@@ -6,6 +6,8 @@ const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
 const categoryController = require('../controllers/categoryController.js')
+const commentController = require('../controllers/commentController.js')
+
 
 const multer = require('multer')
 const upload = multer({
@@ -39,6 +41,10 @@ module.exports = (app, passport) => {
   //在 /restaurants 底下則交給 restController.getRestaurants 這個function來處理
   app.get('/restaurants', authenticated, restController.getRestaurants)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
+  app.post('/comments', authenticated, commentController.postComment)
+  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+
+
 
   // 連到 /admin 頁面就轉到 /admin/restaurants.hbs
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
@@ -70,6 +76,8 @@ module.exports = (app, passport) => {
 
   app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   app.put('/admin/users/:id', authenticatedAdmin, adminController.putUsers)
+
+
 
 
   //顯示使用者清單

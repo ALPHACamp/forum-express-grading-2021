@@ -24,6 +24,7 @@ const adminController = {
       })
     })
   },
+  //渲染前端頁面
   createRestaurant: (req, res) => {
     Category.findAll({
       raw: true,
@@ -84,7 +85,7 @@ const adminController = {
       })
     })
   },
-
+  //前端渲染
   editRestaurant: (req, res) => {
     Category.findAll({
       raw: true,
