@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const userController = {
   //負責 render 註冊的頁面
@@ -50,9 +52,74 @@ const userController = {
     req.flash('success_messages', '登出成功！')
     req.logout()
     res.redirect('/signin')
+  },
+  //userController.getUser
+  getUser: (req, res) => {
+    //找到現在正在使用中的使用者，其在資料庫中的資料，並且選渲染其個人頁面
+    return User.findByPk(req.params.id)
+      .then((user) => {
+        return res.render('profile', {
+          user: user
+        })
+      })
+  },
+  //userController.editUser
+  editUser: (req, res) => {
+    return User.findByPk(req.params.id)
+      .then((user) => {
+        return res.render('edit', {
+          user: user
+        })
+      })
+  },
+  putUser: (req, res) => {
+    if (!req.body.name) {
+      req.flash('error_messages', "name didn't exist")
+      return res.redirect('back')
+    }
+    //更新姓名、email、圖片
+    const {
+      file
+    } = req
+
+    if (file) {
+      //這行再複習
+      imgur.setClientID(IMGUR_CLIENT_ID)
+      imgur.upload(file.path, (err, img) => {
+        return User.findByPk(req.params.id)
+          .then((user) => {
+            user.update({
+                name: req.body.name,
+                email: req.body.email,
+                image: file ? img.data.link : user.image
+              })
+              .then((user) => {
+                req.flash('success_messages', '使用者資料編輯成功')
+                res.redirect(`/users/${req.params.id}`)
+              })
+
+          })
+      })
+
+    } else {
+      return User.findByPk(req.params.id)
+        .then((user) => {
+          user.update({
+              name: req.body.name,
+              email: req.body.email,
+              image: user.image
+            })
+            .then((user) => {
+              req.flash('success_messages', '使用者資料編輯成功')
+              res.redirect(`/users/${req.params.id}`)
+
+            })
+        })
+    }
+
   }
-
-
 }
+
+
 
 module.exports = userController
