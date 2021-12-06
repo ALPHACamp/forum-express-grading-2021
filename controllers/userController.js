@@ -41,7 +41,7 @@ const userController = {
   signInPage: (req, res) => {
     return res.render('signin')
   },
-  //signIn 動作裡看起來沒有任何的邏輯，就直接轉址了，
+  //signIn 動作裡看起來沒有任何的邏輯，就直接轉址了
   //這是因為等下我們會用 Passport 的 middleware 來處理，所以不必自己實作
   signIn: (req, res) => {
     req.flash('success_messages', '成功登入！')
