@@ -40,9 +40,12 @@ module.exports = (app, passport) => {
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   //在 /restaurants 底下則交給 restController.getRestaurants 這個function來處理
   app.get('/restaurants', authenticated, restController.getRestaurants)
+  //確保 '/restaurants/feeds' 在 '/restaurants/:id'，避免feeds 被當成 :id 而導向單一餐廳頁面
+  app.get('/restaurants/feeds', authenticated, restController.getFeeds)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   app.post('/comments', authenticated, commentController.postComment)
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+
 
 
 

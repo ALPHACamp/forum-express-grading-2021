@@ -74,9 +74,65 @@ const restController = {
         restaurant: restaurant.toJSON(),
       })
     })
+  },
+  // getFeeds: (req, res) => {
+  //   return Restaurant.findAll({
+  //     limit: 10,
+  //     raw: true,
+  //     nest: true,
+  //     order: [
+  //       ['createdAt', 'DESC']
+  //     ],
+  //     include: [Category]
+  //   }).then(restaurants => {
+  //     Comment.findAll({
+  //       limit: 10,
+  //       raw: true,
+  //       nest: true,
+  //       order: [
+  //         ['createdAt', 'DESC']
+  //       ],
+  //       include: [User, Restaurant]
+  //     }).then(comments => {
+  //       return res.render('feeds', {
+  //         restaurants: restaurants,
+  //         comments: comments
+  //       })
+  //     })
+  //   })
+  // },
+
+  //Promise.all 接受的參數是一個陣列，
+  //把 Restaurant.findAll() 和 Comment.findAll() 原封不動地放入陣列裡。Promise.all 會同時執行陣列中的程序。
+  //等到 Restaurant.findAll() 和 Comment.findAll() 兩個都執行完以後，才會進入到最後的 then，把資料回傳給前端。
+
+  getFeeds: (req, res) => {
+    return Promise.all(
+      [Restaurant.findAll({
+          limit: 10,
+          raw: true,
+          nest: true,
+          order: [
+            ['createdAt', 'DESC']
+          ],
+          include: [Category]
+        }),
+        Comment.findAll({
+          limit: 10,
+          raw: true,
+          nest: true,
+          order: [
+            ['createdAt', 'DESC']
+          ],
+          include: [User, Restaurant]
+        }).then(comments => {
+          return res.render('feeds', {
+            comments: comments,
+            restaurants: restaurants
+          })
+        })
+      ])
   }
-
-
 }
 
 module.exports = restController
