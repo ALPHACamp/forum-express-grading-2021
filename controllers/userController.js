@@ -4,6 +4,9 @@ const User = db.User
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = '114844ca1961335'
 
+const Comment = db.Comment
+const Restaurant = db.Restaurant
+
 const userController = {
   //負責 render 註冊的頁面
   signUpPage: (req, res) => {
@@ -57,7 +60,12 @@ const userController = {
   getUser: (req, res) => {
     //找到現在正在使用中的使用者，其在資料庫中的資料，並且選渲染其個人頁面
     return User.findByPk(req.params.id, {
-        raw: true
+        raw: true,
+        nest: true,
+        include: [{
+          model: Comment,
+          include: [Restaurant]
+        }]
       })
       .then((user) => {
         return res.render('profile', {
@@ -120,6 +128,7 @@ const userController = {
             })
         })
     }
+
 
   }
 }
