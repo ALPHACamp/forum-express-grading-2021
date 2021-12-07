@@ -77,8 +77,7 @@ const createModelMock = (name, defaultValue, data, joinedTableName) => {
         return Promise.resolve(mockModel.build(data))
       } else if (query === 'findAll') {
         // 回傳模擬資料
-        HEAD
-        HEAD
+
 
         if (!data) {
           return mockModel.build([defaultValue]);

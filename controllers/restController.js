@@ -134,7 +134,7 @@ const restController = {
       ])
   },
 
-  getDashboard: (req, res) => {
+  getDashBoard: (req, res) => {
     return Restaurant.findByPk(req.params.id, {
       include: [
         Category,
@@ -144,6 +144,7 @@ const restController = {
         }
       ]
     }).then(restaurant => {
+
       return res.render('dashboard', {
         restaurant: restaurant.toJSON()
       })
