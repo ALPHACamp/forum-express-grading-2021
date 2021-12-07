@@ -43,8 +43,10 @@ module.exports = (app, passport) => {
   //確保 '/restaurants/feeds' 在 '/restaurants/:id'，避免feeds 被當成 :id 而導向單一餐廳頁面
   app.get('/restaurants/feeds', authenticated, restController.getFeeds)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
+  app.get('/restaurants/:id/dashboard', authenticated, restController.getDashboard)
   app.post('/comments', authenticated, commentController.postComment)
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+
 
 
 
