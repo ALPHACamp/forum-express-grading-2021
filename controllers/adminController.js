@@ -1,5 +1,6 @@
 const db = require("../models");
 const Restaurant = db.Restaurant;
+const User = db.User;
 const fs = require("fs");
 const imgur = require("imgur-node-api");
 const IMGUR_CLIENT_ID = "1008769e45080ff";
@@ -119,6 +120,35 @@ const adminController = {
 			restaurant.destroy().then((restaurant) => {
 				res.redirect("/admin/restaurants");
 			});
+		});
+	},
+	getUsers: (req, res) => {
+		return User.findAll({ raw: true }).then((users) => {
+			return res.render("admin/users", { users });
+		});
+	},
+	toggleAdmin: (req, res) => {
+		console.log(req.params.id);
+		return User.findByPk(req.params.id).then((user) => {
+			if (user.isAdmin) {
+				// console.log("this is an admin");
+				if (user.name === "admin") {
+					req.flash("error_messages", "禁止變更管理者權限");
+					return res.redirect("back");
+				}
+				user.update({
+					isAdmin: false,
+				});
+				req.flash("success_messages", "使用者權限變更成功");
+				return res.redirect("back");
+			} else {
+				// console.log("this is a user");
+				user.update({
+					isAdmin: true,
+				});
+				req.flash("success_messages", "使用者權限變更成功");
+				return res.redirect("/admin/users");
+			}
 		});
 	},
 };

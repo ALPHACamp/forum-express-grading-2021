@@ -5,6 +5,7 @@ const port = process.env.PORT || 3000;
 const db = require("./models"); // 引入資料庫
 const passport = require("./config/passport");
 const methodOverride = require("method-override");
+const helpers = require("./_helpers");
 if (process.env.NODE_ENV !== "production") {
 	require("dotenv").config();
 }
@@ -29,7 +30,8 @@ app.use(passport.session());
 app.use((req, res, next) => {
 	res.locals.success_messages = req.flash("success_messages");
 	res.locals.error_messages = req.flash("error_messages");
-	res.locals.user = req.user;
+	// res.locals.user = req.user;
+	res.locals.user = helpers.getUser(req); // 取代 req.user
 	next();
 });
 app.listen(port, () => {
