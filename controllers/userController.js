@@ -2,10 +2,12 @@ const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const bcrypt = require('bcryptjs') 
 const db = require('../models')
+const helper = require('../_helpers')
 const User = db.User
 const Comment = db.Comment
 const Restaurant = db.Restaurant
 const Favorite = db.Favorite
+const Like = db.Like
 
 const userController = {
   signUpPage: (req, res) => {
@@ -132,6 +134,22 @@ const userController = {
             return res.redirect('back')
           })
       })
+  },
+  addLike: (req, res) => {
+    return Like.create({
+      UserId: helper.getUser(req).id,
+      RestaurantId: req.params.restaurantId
+    })
+    .then(() => res.redirect('back'))
+  },
+  removeLike: (req, res) => {
+    return Like.destroy({
+      where: {
+        UserId: helper.getUser(req).id,
+        RestaurantId: req.params.restaurantId  
+      }
+    })
+    .then(() => res.redirect('back'))
   }
 }
   
