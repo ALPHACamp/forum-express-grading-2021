@@ -15,6 +15,7 @@ const port = process.env.PORT || 3000
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main', helpers: handlebarsHelpers }))
 app.set('view engine', 'handlebars')
+app.use(express.static('public'))
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended: true}))
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
