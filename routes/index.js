@@ -71,10 +71,28 @@ module.exports = (app, passport) => {
 		authenticatedAdmin,
 		categoryController.getCategories
 	);
-
+	app.post(
+		"/admin/categories",
+		authenticatedAdmin,
+		categoryController.postCategory
+	);
+	app.post(
+		"/admin/categories/:id",
+		authenticatedAdmin,
+		categoryController.putCategory
+	);
+	app.get(
+		"/admin/categories/:id",
+		authenticatedAdmin,
+		categoryController.getCategories
+	);
+	app.put(
+		"/admin/categories/:id",
+		authenticatedAdmin,
+		categoryController.putCategory
+	);
 	app.get("/signup", userController.signUpPage);
 	app.post("/signup", userController.signUp);
-
 	app.get("/signin", userController.signInPage);
 	app.post(
 		"/signin",
