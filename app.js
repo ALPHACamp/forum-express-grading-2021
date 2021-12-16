@@ -23,7 +23,14 @@ app.use(
 	})
 );
 app.use(express.urlencoded({ extended: true }));
-app.engine("hbs", exphbs({ defaultLayout: "main", extname: "hbs" })); // Handlebars 註冊樣板引擎
+app.engine(
+	"hbs",
+	exphbs({
+		defaultLayout: "main",
+		extname: "hbs",
+		helpers: require("./config/handlebars-helpers"),
+	})
+); // Handlebars 註冊樣板引擎
 app.set("view engine", "hbs"); // 設定使用 Handlebars 做為樣板引擎
 app.use(passport.initialize());
 app.use(passport.session());
