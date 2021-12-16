@@ -1,11 +1,50 @@
-const express = require('express')
-const app = express()
-const port = 3000
-
+const express = require("express");
+const exphbs = require("express-handlebars"); // 引入 handlebars
+const app = express();
+const port = process.env.PORT || 3000;
+const db = require("./models"); // 引入資料庫
+const passport = require("./config/passport");
+const methodOverride = require("method-override");
+const helpers = require("./_helpers");
+if (process.env.NODE_ENV !== "production") {
+	require("dotenv").config();
+}
+app.use("/upload", express.static(__dirname + "/upload"));
+app.use(methodOverride("_method"));
+//
+const flash = require("connect-flash");
+const session = require("express-session");
+app.use(flash());
+app.use(
+	session({
+		secret: "123",
+		resave: false,
+		saveUninitialized: false,
+	})
+);
+app.use(express.urlencoded({ extended: true }));
+app.engine(
+	"hbs",
+	exphbs({
+		defaultLayout: "main",
+		extname: "hbs",
+		helpers: require("./config/handlebars-helpers"),
+	})
+); // Handlebars 註冊樣板引擎
+app.set("view engine", "hbs"); // 設定使用 Handlebars 做為樣板引擎
+app.use(passport.initialize());
+app.use(passport.session());
+app.use((req, res, next) => {
+	res.locals.success_messages = req.flash("success_messages");
+	res.locals.error_messages = req.flash("error_messages");
+	// res.locals.user = req.user;
+	res.locals.user = helpers.getUser(req); // 取代 req.user
+	next();
+});
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+	console.log(`Example app listening on port ${port}!`);
+});
 
-require('./routes')(app)
+require("./routes")(app, passport);
 
-module.exports = app
+module.exports = app;
