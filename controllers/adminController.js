@@ -1,6 +1,7 @@
+const fs = require('fs')
 const res = require('express/lib/response')
 const db = require('../models')
-const fs = require('fs')
+
 const Restaurant = db.Restaurant
 
 const adminController = {
