@@ -31,6 +31,16 @@ const adminController = {
         req.flash('success_messages', 'restaurant was successfully created')
         res.redirect('/admin/restaurants')
       })
+  },
+
+  //瀏覽特定餐廳
+  getRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id, { raw: true })
+      .then(restaurant => {
+        return res.render('admin/restaurant', {
+          restaurant: restaurant
+        })
+      })
   }
 }
 module.exports = adminController
