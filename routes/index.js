@@ -3,11 +3,35 @@ const adminController = require("../controllers/adminControllers")
 const userController = require("../controllers/userController")
 
 module.exports = (app, passport) => {
-  app.get("/admin/restaurants", adminController.getRestaurants)
-  app.get("/admin", (req, res) => {
+  // Authorization Authentication Middleware
+  const authenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next()
+    }
+    return res.redirect("/signin")
+  }
+
+  const authenticatedAdmin = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      if (req.user.isAdmin) {
+        return next()
+      }
+      return res.redirect("/")
+    }
+    return res.redirect("/signin")
+  }
+
+  // Admin path
+  app.get(
+    "/admin/restaurants",
+    authenticatedAdmin,
+    adminController.getRestaurants
+  )
+  app.get("/admin", authenticatedAdmin, (req, res) => {
     return res.render("admin/restaurants")
   })
 
+  // User sign in & up & User logout
   app.get("/signin", userController.signInPage)
   app.post(
     "/signin",
@@ -17,15 +41,15 @@ module.exports = (app, passport) => {
     }),
     userController.signIn
   )
-
   app.get("/logout", userController.logout)
-
   app.get("/signup", userController.signUpPage)
   app.post("/signup", userController.signUp)
 
-  app.get("/restaurants", restController.getRestaurants)
+  // Restaurants path
+  app.get("/restaurants", authenticated, restController.getRestaurants)
 
-  app.get("/", (req, res) => {
+  // Home page
+  app.get("/", authenticated, (req, res) => {
     res.render("restaurants")
   })
 }
