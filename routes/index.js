@@ -1,10 +1,15 @@
 const restController = require("../controllers/restControllers")
+const adminController = require("../controllers/adminControllers")
 
 module.exports = (app) => {
+  app.get("/admin/restaurants", adminController.getRestaurants)
+  app.get("/admin", (req, res) => {
+    return res.render("admin/restaurants")
+  })
+
   app.get("/restaurants", restController.getRestaurants)
 
   app.get("/", (req, res) => {
-    const msg = "/////"
-    res.render("restaurants", { msg })
+    res.render("restaurants")
   })
 }
