@@ -8,6 +8,8 @@ const exphbs = require("express-handlebars")
 app.engine("hbs", exphbs.engine({ extname: ".hbs" }))
 app.set("view engine", "hbs")
 
+app.use(express.urlencoded({ extended: true }))
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
