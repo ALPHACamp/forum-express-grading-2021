@@ -3,6 +3,7 @@ const app = express()
 const port = 3000
 const db = require("./models")
 const exphbs = require("express-handlebars")
+const methodOverride = require("method-override")
 const session = require("express-session")
 const passport = require("./config/passport")
 const flash = require("connect-flash")
@@ -33,6 +34,8 @@ app.use((req, res, next) => {
   res.locals.user = req.user
   next()
 })
+
+app.use(methodOverride())
 
 require("./routes")(app, passport)
 
