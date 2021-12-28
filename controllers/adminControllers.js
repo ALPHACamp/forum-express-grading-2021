@@ -9,6 +9,15 @@ const adminController = {
     })
   },
 
+  // View one restaurant detail
+  getRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id, { raw: true }).then(
+      (restaurant) => {
+        return res.render("admin/restaurant", { restaurant })
+      }
+    )
+  },
+
   // Create page
   createRestaurant: (req, res) => {
     return res.render("admin/create")
