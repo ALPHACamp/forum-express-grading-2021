@@ -23,6 +23,16 @@ module.exports = (app, passport) => {
 
   // Admin path
   app.get(
+    "/admin/restaurants/create",
+    authenticatedAdmin,
+    adminController.createRestaurant
+  )
+  app.post(
+    "/admin/restaurants",
+    authenticatedAdmin,
+    adminController.postRestaurant
+  )
+  app.get(
     "/admin/restaurants",
     authenticatedAdmin,
     adminController.getRestaurants
