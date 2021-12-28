@@ -4,7 +4,7 @@ const port = 3000
 const exphbs = require("express-handlebars")
 
 // Set view engine to handlebars
-app.engine("hbs", exphbs.engine({ defaultLayout: "main", extname: ".hbs" }))
+app.engine("hbs", exphbs.engine({ extname: ".hbs" }))
 app.set("view engine", "hbs")
 
 app.listen(port, () => {

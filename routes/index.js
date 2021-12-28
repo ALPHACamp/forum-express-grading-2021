@@ -1,5 +1,10 @@
+const restController = require("../controllers/restControllers")
+
 module.exports = (app) => {
+  app.get("/restaurants", restController.getRestaurants)
+
   app.get("/", (req, res) => {
-    res.render("index")
+    const msg = "/////"
+    res.render("restaurants", { msg })
   })
 }
