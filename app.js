@@ -1,6 +1,9 @@
 const express = require("express")
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 const db = require("./models")
 const exphbs = require("express-handlebars")
 const methodOverride = require("method-override")
@@ -16,7 +19,7 @@ app.set("view engine", "hbs")
 app.use(express.urlencoded({ extended: true }))
 app.use(
   session({
-    secret: "secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
   })
@@ -34,9 +37,6 @@ app.use((req, res, next) => {
   res.locals.user = req.user
   next()
 })
-
-// Set static file path
-app.use("/upload", express.static(__dirname + "/upload"))
 
 // Override HTTP method
 app.use(methodOverride("_method"))
