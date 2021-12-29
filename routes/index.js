@@ -1,6 +1,8 @@
 const restController = require("../controllers/restControllers")
 const adminController = require("../controllers/adminControllers")
 const userController = require("../controllers/userController")
+const multer = require("multer")
+const upload = multer({ dest: "temp/" })
 
 module.exports = (app, passport) => {
   // Authorization Authentication Middleware
@@ -31,6 +33,7 @@ module.exports = (app, passport) => {
   app.put(
     "/admin/restaurants/:id",
     authenticatedAdmin,
+    upload.single("image"),
     adminController.putRestaurant
   )
 
@@ -48,6 +51,7 @@ module.exports = (app, passport) => {
   app.post(
     "/admin/restaurants",
     authenticatedAdmin,
+    upload.single("image"),
     adminController.postRestaurant
   )
   app.get(

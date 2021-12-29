@@ -1,3 +1,4 @@
+const fs = require("fs")
 const db = require("../models")
 const Restaurant = db.Restaurant
 
@@ -26,25 +27,51 @@ const adminController = {
   // Create restaurant
   postRestaurant: (req, res) => {
     const { name, tel, address, opening_hours, description } = req.body
+    const { file } = req // equal to const file = req.file
 
     if (!name) {
       req.flash("error_messages", "Missing restaurant's name!")
       return res.redirect("back")
     }
-    return Restaurant.create({
-      name,
-      tel,
-      address,
-      opening_hours,
-      description
-    }).then((restaurant) => {
-      restaurant = restaurant.toJSON()
-      req.flash(
-        "success_messages",
-        `${restaurant.name} was successfully created!`
-      )
-      return res.redirect("/admin/restaurants")
-    })
+
+    if (file) {
+      fs.readFile(file.path, (err, data) => {
+        if (err) console.log("Error: ", err)
+        fs.writeFile(`upload/${file.originalname}`, data, () => {
+          return Restaurant.create({
+            name,
+            tel,
+            address,
+            opening_hours,
+            description,
+            image: file ? `/upload/${file.originalname}` : null
+          }).then((restaurant) => {
+            restaurant = restaurant.toJSON()
+            req.flash(
+              "success_messages",
+              `${restaurant.name} was successfully created!`
+            )
+            return res.redirect("/admin/restaurants")
+          })
+        })
+      })
+    } else {
+      return Restaurant.create({
+        name,
+        tel,
+        address,
+        opening_hours,
+        description,
+        image: null
+      }).then((restaurant) => {
+        restaurant = restaurant.toJSON()
+        req.flash(
+          "success_messages",
+          `${restaurant.name} was successfully created!`
+        )
+        return res.redirect("/admin/restaurants")
+      })
+    }
   },
 
   // Edit restaurant
@@ -59,28 +86,57 @@ const adminController = {
   // Put restaurant
   putRestaurant: (req, res) => {
     const { name, tel, address, opening_hours, description } = req.body
+    const { file } = req
+
     if (!name) {
       req.flash("error_messages", "Missing restaurant's name!")
       return res.redirect("back")
     }
 
-    return Restaurant.findByPk(req.params.id).then((restaurant) => {
-      restaurant
-        .update({
-          name,
-          tel,
-          address,
-          opening_hours,
-          description
+    if (file) {
+      fs.readFile(file.path, (err, data) => {
+        if (err) console.log("Error: ", err)
+        fs.writeFile(`upload/${file.originalname}`, data, () => {
+          return Restaurant.findByPk(req.params.id).then((restaurant) => {
+            restaurant
+              .update({
+                name,
+                tel,
+                address,
+                opening_hours,
+                description,
+                image: file ? `/upload/${file.originalname}` : restaurant.image
+              })
+              .then((restaurant) => {
+                req.flash(
+                  "success_messages",
+                  `${restaurant.name} was update successfully.`
+                )
+                return res.redirect("/admin/restaurants")
+              })
+          })
         })
-        .then((restaurant) => {
-          req.flash(
-            "success_messages",
-            `${restaurant.name} was update successfully.`
-          )
-          return res.redirect("/admin/restaurants")
-        })
-    })
+      })
+    } else {
+      return Restaurant.findByPk(req.params.id).then((restaurant) => {
+        restaurant
+          .update({
+            name,
+            tel,
+            address,
+            opening_hours,
+            description,
+            image: restaurant.image
+          })
+          .then((restaurant) => {
+            req.flash(
+              "success_messages",
+              `${restaurant.name} was update successfully.`
+            )
+            return res.redirect("/admin/restaurants")
+          })
+      })
+    }
   },
 
   // Delete restaurant

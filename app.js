@@ -35,6 +35,9 @@ app.use((req, res, next) => {
   next()
 })
 
+// Static
+app.use("/upload", express.static(__dirname + "/upload"))
+
 // Override HTTP method
 app.use(methodOverride("_method"))
 
