@@ -24,6 +24,7 @@
     "nodemon": "^2.0.12",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
+    "pg": "^8.7.1",
     "sequelize": "^6.12.3",
     "sequelize-cli": "^6.3.0"
   },
