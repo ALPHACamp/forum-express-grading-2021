@@ -45,6 +45,42 @@ const adminController = {
       )
       return res.redirect("/admin/restaurants")
     })
+  },
+
+  // Edit restaurant
+  editRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id, { raw: true }).then(
+      (restaurant) => {
+        return res.render("admin/create", { restaurant })
+      }
+    )
+  },
+
+  // Put restaurant
+  putRestaurant: (req, res) => {
+    const { name, tel, address, opening_hours, description } = req.body
+    if (!name) {
+      req.flash("error_messages", "Missing restaurant's name!")
+      return res.redirect("back")
+    }
+
+    return Restaurant.findByPk(req.params.id).then((restaurant) => {
+      restaurant
+        .update({
+          name,
+          tel,
+          address,
+          opening_hours,
+          description
+        })
+        .then((restaurant) => {
+          req.flash(
+            "success_messages",
+            `${restaurant.name} was update successfully.`
+          )
+          return res.redirect("/admin/restaurants")
+        })
+    })
   }
 }
 

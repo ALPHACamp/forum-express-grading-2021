@@ -23,6 +23,18 @@ module.exports = (app, passport) => {
 
   // Admin path
   app.get(
+    "/admin/restaurants/:id/edit",
+    authenticatedAdmin,
+    adminController.editRestaurant
+  )
+
+  app.put(
+    "/admin/restaurants/:id",
+    authenticatedAdmin,
+    adminController.putRestaurant
+  )
+
+  app.get(
     "/admin/restaurants/create",
     authenticatedAdmin,
     adminController.createRestaurant
@@ -42,9 +54,7 @@ module.exports = (app, passport) => {
     authenticatedAdmin,
     adminController.getRestaurants
   )
-  app.get("/admin", authenticatedAdmin, (req, res) => {
-    return res.render("admin/restaurants")
-  })
+  app.get("/admin", authenticatedAdmin, adminController.getRestaurants)
 
   // User sign in & up & User logout
   app.get("/signin", userController.signInPage)
