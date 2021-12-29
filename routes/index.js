@@ -27,6 +27,12 @@ module.exports = (app, passport) => {
   // Admin manage user authorization
   app.get("/admin/users", authenticatedAdmin, adminController.getUsers)
 
+  app.put(
+    "/admin/users/:id/toggleAdmin",
+    authenticatedAdmin,
+    adminController.toggleAdmin
+  )
+
   // Admin edit restaurant
   app.get(
     "/admin/restaurants/:id/edit",

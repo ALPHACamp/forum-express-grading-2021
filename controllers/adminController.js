@@ -7,12 +7,32 @@ const Restaurant = db.Restaurant
 const adminController = {
   // Show all users
   getUsers: (req, res) => {
-    User.findAll({ raw: true, nest: true }).then((users) => {
+    return User.findAll({ raw: true }).then((users) => {
       return res.render("admin/users", { users })
     })
   },
 
   // Toggle user
+  toggleAdmin: (req, res) => {
+    User.findByPk(req.params.id).then((user) => {
+      const { isAdmin, email } = user.toJSON()
+      // Forbid alter superuser
+      if (email === "root@example.com") {
+        req.flash("error_messages", "禁止變更管理者權限")
+        return res.redirect("back")
+      }
+
+      // Toggle user authorization
+      user
+        .update({
+          isAdmin: !isAdmin
+        })
+        .then(() => {
+          req.flash("success_messages", "使用者權限變更成功")
+          return res.redirect("/admin/users")
+        })
+    })
+  },
 
   // View all restaurants
   getRestaurants: (req, res) => {
