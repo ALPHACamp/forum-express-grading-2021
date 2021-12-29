@@ -1,5 +1,5 @@
-const restController = require("../controllers/restControllers")
-const adminController = require("../controllers/adminControllers")
+const restController = require("../controllers/restController")
+const adminController = require("../controllers/adminController")
 const userController = require("../controllers/userController")
 const helpers = require("../_helpers")
 const multer = require("multer")
@@ -24,7 +24,10 @@ module.exports = (app, passport) => {
     return res.redirect("/signin")
   }
 
-  // Admin path
+  // Admin manage user authorization
+  app.get("/admin/users", authenticatedAdmin, adminController.getUsers)
+
+  // Admin edit restaurant
   app.get(
     "/admin/restaurants/:id/edit",
     authenticatedAdmin,
@@ -38,23 +41,28 @@ module.exports = (app, passport) => {
     adminController.putRestaurant
   )
 
+  // Admin delete restaurant
   app.delete(
     "/admin/restaurants/:id",
     authenticatedAdmin,
     adminController.deleteRestaurant
   )
 
+  // Admin create restaurant
   app.get(
     "/admin/restaurants/create",
     authenticatedAdmin,
     adminController.createRestaurant
   )
+
   app.post(
     "/admin/restaurants",
     authenticatedAdmin,
     upload.single("image"),
     adminController.postRestaurant
   )
+
+  // Admin view restaurants
   app.get(
     "/admin/restaurants/:id",
     authenticatedAdmin,
@@ -65,6 +73,7 @@ module.exports = (app, passport) => {
     authenticatedAdmin,
     adminController.getRestaurants
   )
+
   app.get("/admin", authenticatedAdmin, adminController.getRestaurants)
 
   // User sign in & up & User logout
@@ -81,7 +90,7 @@ module.exports = (app, passport) => {
   app.get("/signup", userController.signUpPage)
   app.post("/signup", userController.signUp)
 
-  // Restaurants path
+  // User view restaurants
   app.get("/restaurants", authenticated, restController.getRestaurants)
 
   // Home page

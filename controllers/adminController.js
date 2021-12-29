@@ -1,9 +1,19 @@
 const imgur = require("imgur-node-api")
 const fs = require("fs")
 const db = require("../models")
+const User = db.User
 const Restaurant = db.Restaurant
 
 const adminController = {
+  // Show all users
+  getUsers: (req, res) => {
+    User.findAll({ raw: true, nest: true }).then((users) => {
+      return res.render("admin/users", { users })
+    })
+  },
+
+  // Toggle user
+
   // View all restaurants
   getRestaurants: (req, res) => {
     Restaurant.findAll({ raw: true, nest: true }).then((restaurants) => {
