@@ -35,7 +35,8 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(methodOverride())
+// Override HTTP method
+app.use(methodOverride("_method"))
 
 require("./routes")(app, passport)
 
