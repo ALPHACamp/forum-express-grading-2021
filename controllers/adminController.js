@@ -5,6 +5,7 @@ const imgur = require('imgur-node-api')
 
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const Restaurant = db.Restaurant
+const User = db.User
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -12,6 +13,19 @@ const adminController = {
       .then(restaurants => {
         return res.render('admin/restaurants', { restaurants: restaurants })
       })
+  },
+
+  //顯示使用者清單
+  getUsers: (req, res) => {
+    return User.findAll({ raw: true })
+      .then(users => {
+        return res.render('admin/users', { users: users })
+      })
+  },
+
+  //修改使用者權限
+  toggleAdmin: {
+
   },
 
   //新增
