@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
@@ -23,11 +22,6 @@ module.exports = (app, passport) => {
 
   app.get('/', authenticated, (req, res) => {
     res.redirect('/restaurants')
-=======
-module.exports = (app) => {
-  app.get('/', (req, res) => {
-    res.send('Hello World!')
->>>>>>> origin/R01-test
   })
   app.get('/restaurants', authenticated, restController.getRestaurants)
 
