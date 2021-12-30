@@ -34,6 +34,8 @@ module.exports = (app, passport) => {
 
   //瀏覽使用者
   app.get('/admin/users', authenticated, adminController.getUsers)
+  //修改使用者權限
+  app.put('/admin/users/:id', authenticatedAdmin, adminController.toggleAdmin)
 
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
@@ -46,9 +48,7 @@ module.exports = (app, passport) => {
 
   // 修改後台新增餐廳的路由
   app.post('/admin/restaurants', authenticatedAdmin, upload.single('image'), adminController.postRestaurant)
-
   app.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
-
   app.get('/admin/restaurants/:id/edit', authenticatedAdmin, adminController.editRestaurant)
 
   // 修改後台編輯餐廳的路由

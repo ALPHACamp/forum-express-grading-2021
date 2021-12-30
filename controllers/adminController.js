@@ -6,6 +6,7 @@ const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 const Restaurant = db.Restaurant
 const User = db.User
+const superuser = 'root@example.com'
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -24,8 +25,26 @@ const adminController = {
   },
 
   //修改使用者權限
-  toggleAdmin: {
-
+  toggleAdmin: (req, res) => {
+    return User.findByPk(req.params.id)
+      .then((user) => {
+        if (user.email === superuser) {
+          req.flash('error_messages', '禁止變更管理者權限')
+          res.redirect('back')
+        } else {
+          if (!user.isAdmin) {
+            user.update({
+              isAdmin: true
+            })
+          } else {
+            user.update({
+              isAdmin: false
+            })
+          }
+          req.flash('success_messages', '使用者權限變更成功')
+          res.redirect('/admin/users')
+        }
+      })
   },
 
   //新增
