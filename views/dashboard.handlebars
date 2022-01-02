@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>{{restaurant.name}}</h1>
+    <p>[{{restaurant.Category.name}}]</p>
+  </div>
+  <br />
+  <div class="col-md-12">
+      <ul>
+          <li>評論數：{{restaurant.Comments.length}}</li>
+          <li>瀏覽數：{{restaurant.viewCounts}}</li>
+          <li>收藏數：</li>
+      </ul>
+  </div>
+  <a href="/restaurants/{{restaurant.id}}" >回上一頁</a>
+</div>
