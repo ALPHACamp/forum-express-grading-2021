@@ -4,8 +4,20 @@ const adminController = require('../controllers/api/adminController.js')
 const userController = require('../controllers/api/userController.js')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
+const passport = require('../config/passport')
 
-router.get('/admin/restaurants', adminController.getRestaurants)
+const authenticated = passport.authenticate('jwt', { session: false })
+
+const authenticatedAdmin = (req, res, next) => {
+  if (req.user) {
+    if (req.user.isAdmin) { return next() }
+    return res.json({ status: 'error', message: 'permission denied' })
+  } else {
+    return res.json({ status: 'error', message: 'permission denied' })
+  }
+}
+
+router.get('/admin/restaurants', authenticated, authenticatedAdmin, adminController.getRestaurants)
 router.get('/admin/restaurants/:id', adminController.getRestaurant)
 router.get('/admin/categories', adminController.getCategories)
 router.delete('/admin/restaurants/:id', adminController.deleteRestaurant)
