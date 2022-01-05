@@ -59,7 +59,14 @@ module.exports = (app, passport) => {
 
   //瀏覽分類
   app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
+  app.get('/admin/categories/:id', authenticatedAdmin, categoryController.getCategories)
 
   //新增分類
   app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)
+
+  //編輯分類
+  app.put('/admin/categories/:id', authenticatedAdmin, categoryController.putCategory)
+
+  //刪除分類
+  app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
 }
