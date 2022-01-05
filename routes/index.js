@@ -69,4 +69,7 @@ module.exports = (app, passport) => {
 
   //刪除分類
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
+
+  //前台瀏覽餐廳個別資料
+  app.get('/restaurants/:id', authenticated, restController.getRestaurant)
 }
