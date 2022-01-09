@@ -76,4 +76,7 @@ module.exports = (app, passport) => {
 
   //新增評論
   app.post('/comments', authenticated, commentController.postComment)
+
+  //刪除評論
+  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
 }
