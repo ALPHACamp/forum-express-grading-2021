@@ -6,6 +6,7 @@ const userController = require('../controllers/userController.js')
 const categoryController = require('../controllers/categoryController.js')
 const commentController = require('../controllers/commentController.js')
 const multer = require('multer')
+const { authenticate } = require('passport')
 const upload = multer({ dest: 'temp/' })
 
 module.exports = (app, passport) => {
@@ -79,4 +80,9 @@ module.exports = (app, passport) => {
 
   //刪除評論
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+
+  //瀏覽Profile
+  app.get('/users/:id', authenticated, userController.getUser)
+  app.get('/users/:id/edit', authenticated, userController.editUser)
+  app.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
 }

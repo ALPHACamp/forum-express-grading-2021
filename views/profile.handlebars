@@ -1,0 +1,21 @@
+<div class="row">
+  {{#if user}}
+  <div class="col-md-4">
+    <img class="img-responsive center-block" src="{{user.image}}" style="width: 250px">
+    <div class="well">
+    </div>
+  </div>
+  <div class="col-md-8">
+    <ul class="list-unstyled">
+      <li>{{user.name}}</li>
+      <li>{{user.email}}</li>
+      <li>
+        <a href="/users/{{user.id}}/edit">
+          <button type="button" class="btn btn-primary">Edit</button>
+        </a>
+      </li>
+      {{/if}}
+    </ul>
+  </div>
+  <hr>
+</div>
