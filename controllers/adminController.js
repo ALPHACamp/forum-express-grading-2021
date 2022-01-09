@@ -8,7 +8,7 @@ const Restaurant = db.Restaurant
 const User = db.User
 const Category = db.Category
 
-const SUPER_USER = process.env.SUPER_USER
+// const SUPER_USER = process.env.SUPER_USER
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -34,7 +34,7 @@ const adminController = {
   toggleAdmin: (req, res, next) => {
     return User.findByPk(req.params.id)
       .then((user) => {
-        if (user.email === SUPER_USER) {
+        if (user.email === 'root@example.com') {
           req.flash('error_messages', '禁止變更管理者權限')
           res.redirect('back')
         } else if (!user) {
