@@ -4,8 +4,10 @@ const res = require('express/lib/response')
 const db = require('../models')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
-const User = db.User
 
+const User = db.User
+const Comment = db.Comment
+const Restaurant = db.Restaurant
 
 const userController = {
   signUpPage: (req, res) => {
@@ -53,15 +55,22 @@ const userController = {
   },
 
   getUser: (req, res) => {
-    return User.findByPk(req.params.id, { raw: true }).then(user => {
-      return res.render('profile', { user: user })
+    return User.findByPk(req.params.id, {
+      include: [
+        { model: Comment, include: [Restaurant] }
+      ]
     })
+      .then(user => {
+        // console.log(user.Comments.length)
+        return res.render('profile', { user: user.toJSON() })
+      })
   },
 
   editUser: (req, res) => {
-    return User.findByPk(req.params.id, { raw: true }).then(user => {
-      return res.render('edit', { user: user })
-    })
+    return User.findByPk(req.params.id, { raw: true })
+      .then(user => {
+        return res.render('edit', { user: user })
+      })
   },
 
   putUser: (req, res) => {

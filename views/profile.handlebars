@@ -1,15 +1,16 @@
 <div class="row">
   {{#if user}}
-  <div class="col-md-4">
-    <img class="img-responsive center-block" src="{{user.image}}" style="width: 250px">
+  <div class="col-md-4 pl-0 mb-3">
+    <img class="img-responsive center-block w-100 h-100" src="{{user.image}}">
     <div class="well">
     </div>
   </div>
   <div class="col-md-8">
     <ul class="list-unstyled">
-      <li>{{user.name}}</li>
-      <li>{{user.email}}</li>
-      <li>
+      <li class="mb-2">{{user.name}}</li>
+      <li class="mb-2">{{user.email}}</li>
+      <li class="mb-2">{{user.Comments.length}} 已評論餐廳</li>
+      <li class="mb-2 mt-5">
         <a href="/users/{{user.id}}/edit">
           <button type="button" class="btn btn-primary">Edit</button>
         </a>
@@ -18,4 +19,20 @@
     </ul>
   </div>
   <hr>
+
+  <div class="card w-100">
+    {{#if user}}
+    <div class="card-header">
+      {{user.Comments.length}} 已評論餐廳
+    </div>
+    {{/if}}
+    <div class="card-body">
+      {{#each user.Comments}}
+      <a href="/restaurants/{{this.Restaurant.id}}">
+        <img class="img-responsive center-block mr-3" src="{{this.Restaurant.image}}" style="width: 100px">
+      </a>
+      {{/each}}
+    </div>
+  </div>
+
 </div>
