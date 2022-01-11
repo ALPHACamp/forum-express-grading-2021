@@ -35,6 +35,15 @@ module.exports = (app, passport) => {
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   app.get('/restaurants/:id/dashboard', authenticated, restController.getDashBoard)
 
+  //評論
+  app.post('/comments', authenticated, commentController.postComment)
+  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+
+  //瀏覽Profile
+  app.get('/users/:id', authenticated, userController.getUser)
+  app.get('/users/:id/edit', authenticated, userController.editUser)
+  app.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
+
   app.get('/admin', authenticated, (req, res) =>
     res.redirect('/admin/restaurants'))
 
@@ -44,13 +53,6 @@ module.exports = (app, passport) => {
   app.get('/admin/users', authenticated, adminController.getUsers)
   //修改使用者權限
   app.put('/admin/users/:id', authenticatedAdmin, adminController.toggleAdmin)
-
-  app.get('/signup', userController.signUpPage)
-  app.post('/signup', userController.signUp)
-
-  app.get('/signin', userController.signInPage)
-  app.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
-  app.get('/logout', userController.logout)
 
   app.get('/admin/restaurants/create', authenticatedAdmin, adminController.createRestaurant)
 
@@ -77,14 +79,10 @@ module.exports = (app, passport) => {
   //刪除分類
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
 
-  //新增評論
-  app.post('/comments', authenticated, commentController.postComment)
+  app.get('/signup', userController.signUpPage)
+  app.post('/signup', userController.signUp)
+  app.get('/signin', userController.signInPage)
+  app.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
+  app.get('/logout', userController.logout)
 
-  //刪除評論
-  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
-
-  //瀏覽Profile
-  app.get('/users/:id', authenticated, userController.getUser)
-  app.get('/users/:id/edit', authenticated, userController.editUser)
-  app.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
 }
