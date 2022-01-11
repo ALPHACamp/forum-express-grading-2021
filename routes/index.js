@@ -75,6 +75,7 @@ module.exports = (app, passport) => {
   //前台瀏覽餐廳個別資料,feed先寫在 /restaurants/:id 前,才能解析到 feeds
   app.get('/restaurants/feeds', authenticated, restController.getFeeds)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
+  app.get('/restaurants/:id/dashboard', authenticated, restController.getDashBoard)
 
   //新增評論
   app.post('/comments', authenticated, commentController.postComment)
