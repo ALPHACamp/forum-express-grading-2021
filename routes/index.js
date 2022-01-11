@@ -72,7 +72,8 @@ module.exports = (app, passport) => {
   //刪除分類
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
 
-  //前台瀏覽餐廳個別資料
+  //前台瀏覽餐廳個別資料,feed先寫在 /restaurants/:id 前,才能解析到 feeds
+  app.get('/restaurants/feeds', authenticated, restController.getFeeds)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
 
   //新增評論
