@@ -73,35 +73,50 @@ const userController = {
       })
   },
 
-  putUser: (req, res) => {
+  putUser: (req, res, next) => {
 
     const { file } = req
+
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID);
       imgur.upload(file.path, (err, img) => {
-        return User.findByPk(req.params.id)
-          .then((user) => {
-            user.update({
-              name: req.body.name,
-              email: req.body.email,
-              image: file ? img.data.link : user.image
-            }).then((user) => {
+        if (err) {
+          console.log(err)
+        } else {
+          return User.findByPk(req.params.id)
+            .then((user) => {
+              if (!user) {
+                return Promise.reject(new Error('user 不存在'))
+              }
+              return user.update({
+                name: req.body.name,
+                email: req.body.email,
+                image: file ? img.data.link : user.image
+              })
+            })
+            .then(() => {
               req.flash('success_messages', '使用者資料編輯成功')
               res.redirect(`/users/${req.params.id}`)
             })
-          })
+            .catch(next)
+        }
       })
     } else {
       return User.findByPk(req.params.id)
         .then((user) => {
-          user.update({
+          if (!user) {
+            return Promise.reject(new Error('user 不存在'))
+          }
+          return user.update({
             name: req.body.name,
             email: req.body.email,
             image: user.image
-          }).then((user) => {
-            req.flash('success_messages', '使用者資料編輯成功')
-            res.redirect(`/users/${req.params.id}`)
           })
+            .then(() => {
+              req.flash('success_messages', '使用者資料編輯成功')
+              res.redirect(`/users/${req.params.id}`)
+            })
+            .catch(next)
         })
     }
   },
