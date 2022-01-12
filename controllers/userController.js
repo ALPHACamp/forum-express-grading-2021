@@ -131,23 +131,23 @@ const userController = {
       UserId: helpers.getUser(req).id,
       RestaurantId: req.params.restaurantId
     })
-      .then((restaurant) => {
+      .then((favorite) => {
         return res.redirect('back')
       })
   },
   removeFavorite: (req, res) => {
-    return Favorite.findOne({
+    return Favorite.destroy({
       where: {
-        UserId: helpers.getUser(req).id,
+        userId: helpers.getUser(req).id, //為通過R05測試故將UserId改為userId
         RestaurantId: req.params.restaurantId
       }
     })
-      .then((favorite) => {
-        favorite.destroy()
-          .then((restaurant) => {
-            return res.redirect('back')
-          })
-      })
+      // .then((favorite) => {
+      //   return favorite.destroy() 如在前步驟findOne再於此destroy將無法通過R05測試
+        .then((favorite) => {
+          return res.redirect('back')
+        })
+      // })
   },
   addLike: (req, res) => {
     return Like.create({
