@@ -10,6 +10,8 @@ const User = db.User
 const Comment = db.Comment
 const Restaurant = db.Restaurant
 const Favorite = db.Favorite
+const Like = db.Like
+const helpers = require('../_helpers')
 
 const userController = {
   signUpPage: (req, res) => {
@@ -148,6 +150,30 @@ const userController = {
           })
           .catch(next)
       })
+  },
+
+  addLike: (req, res, next) => {
+    return Like.create({
+      UserId: helpers.getUser(req).id,
+      RestaurantId: req.params.restaurantId
+    })
+      .then((restaurant) => {
+        return res.redirect('back')
+      })
+      .catch(next)
+  },
+
+  removeLike: (req, res, next) => {
+    return Like.destroy({
+      where: {
+        UserId: helpers.getUser(req).id,
+        RestaurantId: req.params.restaurantId
+      }
+    })
+      .then((restaurant) => {
+        return res.redirect('back')
+      })
+      .catch(next)
   }
 }
 
