@@ -31,6 +31,7 @@ module.exports = (app, passport) => {
   app.get('/restaurants', authenticated, restController.getRestaurants)
 
   //前台瀏覽餐廳個別資料,feed先寫在 /restaurants/:id 前,才能解析到 feeds
+  app.get('/restaurants/top', authenticated, restController.getTopRestaurant)
   app.get('/restaurants/feeds', authenticated, restController.getFeeds)
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   app.get('/restaurants/:id/dashboard', authenticated, restController.getDashBoard)
@@ -67,17 +68,10 @@ module.exports = (app, passport) => {
 
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
 
-  //瀏覽分類
   app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
   app.get('/admin/categories/:id', authenticatedAdmin, categoryController.getCategories)
-
-  //新增分類
   app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)
-
-  //編輯分類
   app.put('/admin/categories/:id', authenticatedAdmin, categoryController.putCategory)
-
-  //刪除分類
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
 
   app.get('/signup', userController.signUpPage)
@@ -92,4 +86,5 @@ module.exports = (app, passport) => {
   app.delete('/like/:restaurantId', authenticated, userController.removeLike)
   app.post('/following/:userId', authenticated, userController.addFollowing)
   app.delete('/following/:userId', authenticated, userController.removeFollowing)
+
 }

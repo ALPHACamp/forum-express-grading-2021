@@ -128,7 +128,7 @@ const userController = {
 
   addFavorite: (req, res, next) => {
     return Favorite.create({
-      UserId: req.user.id,
+      UserId: helpers.getUser(req).id,
       RestaurantId: req.params.restaurantId
     })
       .then((restaurant) => {
@@ -138,19 +138,15 @@ const userController = {
   },
 
   removeFavorite: (req, res, next) => {
-    return Favorite.findOne({
+    return Favorite.destroy({
       where: {
         UserId: req.user.id,
-        RestaurantId: req.params.restaurantId
-      }
+        RestaurantId: req.params.restaurantId,
+      },
+    }).then((favorite) => {
+      return res.redirect('back')
     })
-      .then((favorite) => {
-        favorite.destroy()
-          .then((restaurant) => {
-            return res.redirect('back')
-          })
-          .catch(next)
-      })
+      .catch(next)
   },
 
   addLike: (req, res, next) => {

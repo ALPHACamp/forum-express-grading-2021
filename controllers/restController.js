@@ -4,6 +4,9 @@ const Category = db.Category
 const Comment = db.Comment
 const User = db.User
 const pageLimit = 10
+const Favorite = db.Favorite
+
+const helpers = require('../_helpers')
 
 const restController = {
   getRestaurants: (req, res) => {
@@ -23,14 +26,13 @@ const restController = {
       offset: offset,
       limit: pageLimit
     }).then(result => {
-      // data for pagination
+      //data for pagination
       const page = Number(req.query.page) || 1
       const pages = Math.ceil(result.count / pageLimit)
       const totalPage = Array.from({ length: pages }).map((item, index) => index + 1)
       const prev = page - 1 < 1 ? 1 : page - 1
       const next = page + 1 > pages ? pages : page + 1
 
-      // clean up restaurant data
       const data = result.rows.map(r => ({
         ...r.dataValues,
         description: r.dataValues.description.substring(0, 50),
@@ -54,7 +56,7 @@ const restController = {
       })
     })
   },
-
+  //前台瀏覽個別餐廳
   getRestaurant: (req, res) => {
     return Restaurant.findByPk(req.params.id, {
       include: [
@@ -63,7 +65,7 @@ const restController = {
         { model: User, as: 'LikedUsers' },
         { model: Comment, include: [User] }
       ]
-    }).then((restaurant) => {
+    }).then(restaurant => {
       const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id)
       const isLiked = restaurant.LikedUsers.map(d => d.id).includes(req.user.id)
       restaurant.increment('viewCounts')
@@ -111,6 +113,26 @@ const restController = {
         restaurant: restaurant.toJSON(),
       })
     })
+  },
+
+  getTopRestaurant: (req, res, next) => {
+    const id = helpers.getUser(req).id ? helpers.getUser(req).id : req.user.id
+    return Restaurant.findAll({
+      include: [
+        { model: User, as: 'FavoritedUsers' }
+      ]
+    })
+      .then((restaurants) => {
+        restaurants = restaurants.map(restaurant => ({
+          ...restaurant.dataValues,
+          description: restaurant.dataValues.description.substring(0, 50),
+          favoritedCount: restaurant.FavoritedUsers.length,
+          isFavorited: restaurant.FavoritedUsers.map(d => d.id).includes(id)
+        }))
+        const data = restaurants.sort((a, b) => b.favoritedCount - a.favoritedCount).slice(0, 10)
+        return res.render('topRestaurant', { restaurants: data })
+      })
+      .catch(next)
   }
 }
 
