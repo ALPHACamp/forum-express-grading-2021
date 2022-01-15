@@ -43,6 +43,5 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-require('./routes')(app, passport) // 把 passport 傳入 routes
+require('./routes')(app)
 
-module.exports = app
