@@ -1,6 +1,7 @@
 const express = require('express')
 const handlebars = require('express-handlebars')
 const db = require('./models')
+const bodyParser = require('body-parser')
 const flash = require('connect-flash')
 const session = require('express-session')
 const passport = require('./config/passport')
@@ -19,7 +20,8 @@ app.engine('handlebars', handlebars({
 
 app.set('view engine', 'handlebars')
 
-app.use(express.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 
