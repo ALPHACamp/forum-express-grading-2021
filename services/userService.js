@@ -42,6 +42,9 @@ const userController = {
   },
 
   getUser: (req, res, callback) => {
+    if (req.user.id !== Number(req.params.id)) {
+      return res.redirect('back')
+    }
     return User.findByPk(req.params.id, {
       include: [
         { model: Comment, include: [Restaurant] }
@@ -54,6 +57,9 @@ const userController = {
   },
 
   editUser: (req, res, callback) => {
+    if (req.user.id !== Number(req.params.id)) {
+      return res.redirect('back')
+    }
     return User.findByPk(req.params.id, { raw: true })
       .then(user => {
         return callback({ user: user })
