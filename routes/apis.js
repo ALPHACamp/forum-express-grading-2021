@@ -47,6 +47,8 @@ router.get('/restaurants/feeds', authenticated, restController.getFeeds)
 router.get('/restaurants/:id', authenticated, restController.getRestaurant)
 router.get('/restaurants/:id/dashboard', authenticated, restController.getDashBoard)
 
+router.post('/comments', authenticated, commentController.postComment)
+router.delete('/comments/:id', authenticated, authenticatedAdmin, commentController.deleteComment)
 
 // JWT signin
 router.post('/signin', userController.signIn)
