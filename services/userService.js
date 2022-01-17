@@ -68,6 +68,10 @@ const userController = {
 
   putUser: (req, res, callback, next) => {
 
+    if (req.user.id !== Number(req.params.id)) {
+      return res.redirect('back')
+    }
+
     const { file } = req
 
     if (file) {
