@@ -5,9 +5,11 @@ const passport = require('../config/passport')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
 
+const restController = require('../controllers/api/restController.js')
 const userController = require('../controllers/api/userController.js')
 const adminController = require('../controllers/api/adminController.js')
 const categoryController = require('../controllers/api/categoryController.js')
+const commentController = require('../controllers/api/commentController.js')
 
 const authenticated = passport.authenticate('jwt', { session: false })
 
@@ -35,6 +37,16 @@ router.get('/admin/categories', authenticated, authenticatedAdmin, categoryContr
 router.post('/admin/categories', authenticated, authenticatedAdmin, categoryController.postCategory)
 router.put('/admin/categories/:id', authenticated, authenticatedAdmin, categoryController.putCategory)
 router.delete('/admin/categories/:id', authenticated, authenticatedAdmin, categoryController.deleteCategory)
+
+router.get('/', authenticated, (req, res) => res.redirect('/api/restaurants'))
+router.get('/restaurants', authenticated, restController.getRestaurants)
+
+//前台瀏覽餐廳個別資料,feed先寫在 /restaurants/:id 前,才能解析到 feeds
+router.get('/restaurants/top', authenticated, restController.getTopRestaurant)
+router.get('/restaurants/feeds', authenticated, restController.getFeeds)
+router.get('/restaurants/:id', authenticated, restController.getRestaurant)
+router.get('/restaurants/:id/dashboard', authenticated, restController.getDashBoard)
+
 
 // JWT signin
 router.post('/signin', userController.signIn)
