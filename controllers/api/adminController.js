@@ -32,6 +32,30 @@ const adminController = {
     adminService.putRestaurant(req, res, (data) => {
       return res.json(data)
     })
+  },
+
+  getUsers: (req, res) => {
+    adminService.getUsers(req, res, (data) => {
+      return res.json(data)
+    })
+  },
+
+  toggleAdmin: (req, res) => {
+    adminService.toggleAdmin(req, res, (data) => {
+      return res.json(data)
+    })
+  },
+
+  createRestaurant: (req, res) => {
+    adminService.createRestaurant(req, res, (data) => {
+      return res.json(data)
+    })
+  },
+
+  editRestaurant: (req, res) => {
+    adminService.editRestaurant(req, res, (data) => {
+      return res.json(data)
+    })
   }
 }
 module.exports = adminController

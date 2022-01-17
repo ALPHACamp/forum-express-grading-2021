@@ -118,6 +118,56 @@ const adminService = {
         })
     }
   },
+
+  getUsers: (req, res, callback) => {
+    return User.findAll({ raw: true })
+      .then(users => {
+        callback({ users: users })
+      })
+  },
+
+  toggleAdmin: (req, res, next, callback) => {
+    return User.findByPk(req.params.id)
+      .then((user) => {
+        if (user.email === 'root@example.com') {
+          callback({ status: 'error', message: "禁止變更管理者權限" })
+        } else if (!user) {
+          callback({ status: 'error', message: "找不到使用者" })
+        } else {
+          user.update({
+            isAdmin: !user.isAdmin
+          })
+            .then(() => {
+              callback({ status: 'success', message: '使用者權限變更成功' })
+            })
+        }
+      })
+      .catch(next)
+  },
+
+  //新增
+  createRestaurant: (req, res, callback) => {
+    Category.findAll({
+      raw: true,
+      nest: true
+    }).then(categories => {
+      callback({ categories: categories })
+    })
+  },
+
+  editRestaurant: (req, res, callback) => {
+    Category.findAll({
+      raw: true,
+      nest: true
+    }).then(categories => {
+      return Restaurant.findByPk(req.params.id).then(restaurant => {
+        callback({
+          categories: categories,
+          restaurant: restaurant.toJSON()
+        })
+      })
+    })
+  },
 }
 
 module.exports = adminService
